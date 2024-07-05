@@ -1,0 +1,162 @@
+/* Global Styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Main content should take all available space */
+main {
+    flex: 1;
+}
+
+/* Navigation Menu Styles */
+.navbar {
+    background-color: #f8f9fa;
+    padding: 10px 0;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-nav .nav-link {
+    color: #333;
+    font-size: 16px;
+    padding: 10px 20px;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #007bff;
+}
+
+/* Header Styles */
+.header18 {
+    background-image: url('assets/images/photo-1552423314-cf29ab68ad73-h_lvs99w48.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+}
+
+.header18 .mbr-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.header18 .mbr-section-title {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.header18 .mbr-text {
+    font-size: 1.2rem;
+}
+
+/* Article Styles */
+.article2 {
+    padding: 50px 0;
+}
+
+.article2 .image-wrapper img {
+    width: 100%;
+    height: auto;
+}
+
+.article2 .text-wrapper h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.article2 .text-wrapper p {
+    font-size: 1rem;
+}
+
+.article2 .btn {
+    font-size: 1rem;
+}
+
+/* Footer Styles */
+.footer4 {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer4 .mbr-text {
+    font-size: 0.9rem;
+}
+
+.ceklis, .silang {
+    text-decoration: none; /* Menghilangkan garis bawah */
+    font-size: 24px; /* Ukuran font lebih besar */
+    padding: 5px 10px; /* Padding untuk membuatnya lebih besar */
+    border-radius: 5px; /* Tepi bulat */
+    cursor: pointer; /* Cursor pointer menunjukkan bisa diklik */
+    transition: background-color 0.3s, color 0.3s; 
+    display: inline-block;
+}
+
+.ceklis {
+    color: #28a745; /* Warna hijau */
+    background-color: #dff0d8; /* Latar belakang hijau muda */
+}
+
+.silang {
+    color: #dc3545; /* Warna merah */
+    background-color: #f8d7da; /* Latar belakang merah muda */
+}
+
+.ceklis:hover, .silang:hover {
+    color: #fff; /* Warna teks menjadi putih saat hover */
+    background-color: #555; /* Latar belakang menjadi gelap saat hover */
+}
+
+.column-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-row.selected {
+    background-color: #d3d3d3; /* Warna latar belakang untuk baris yang dipilih */
+}
+
+@media print {
+    /* Sembunyikan elemen yang tidak perlu saat mencetak */
+    .header09, .slider3, .report-filter-form, .filter-button-container {
+        display: none;
+    }
+
+    /* Pastikan tabel yang dipilih terlihat */
+    #kasTable, #zakat-table, #kegiatan-table, #infak_anak_yatim-table {
+        display: table !important;
+    }
+
+    /* Atur margin dan padding untuk tampilan cetak */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-fluid {
+        width: 100%;
+    }
+}

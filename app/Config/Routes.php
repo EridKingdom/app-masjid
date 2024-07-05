@@ -1,0 +1,58 @@
+<?php
+
+use CodeIgniter\Router\RouteCollection;
+use App\Controllers\Pages;
+use App\Controllers\Login;
+use App\Controllers\TbMasjid;
+
+/**
+ * @var RouteCollection $routes
+ */
+$routes->get('/', 'Pages::index');
+$routes->get('delails/(:segment)', 'Pages::details/$1');
+
+
+
+$routes->get('/login', 'Login::index');
+$routes->get('/registrasi', 'Login::registrasi');
+$routes->get('/donasi', 'Login::donasi');
+$routes->get('/TbMasjid', 'TbMasjid::index');
+$routes->get('/TbMasjid/(:segment)', 'TbMasjid::details/$1');
+$routes->get('/zakat', 'Pages::zakat');
+$routes->get('/masjid', 'Pages::masjid');
+$routes->get('/infakyatim', 'Pages::infakyatim');
+$routes->get('profile/(:num)', 'Profile::index/$1');
+$routes->get('profile', 'Profile::index');
+$routes->get('profil', 'Profil::index');
+$routes->get('/profil/(:num)', 'Profil::index/$1');
+$routes->get('waktusholat', 'Profil::waktusholat');
+$routes->get('/waktusholat/(:num)', 'Profil::waktusholat/$1');
+$routes->post('uang/handleFormData/(:num)', 'Uang::handleFormData/$1');
+$routes->get('/uangkas', 'Uang::index');
+$routes->get('/uangkas/(:num)', 'Uang::index/$1');
+$routes->post('uang/handleFormData', 'Uang::handleFormData');
+$routes->get('/viewkasmasjid/(:num)', 'Uang::viewkasmasjid/$1');
+$routes->get('/viewzakat/(:num)', 'Zakat2::viewzakat/$1');
+$routes->get('/viewyatim/(:num)', 'Yatim::viewyatim/$1');
+$routes->get('/zakat2', 'zakat2::index');
+$routes->get('/zakat2/(:num)', 'zakat2::index/$1');
+$routes->get('/zakatview', 'zakat2::viewzakat');
+$routes->get('/yatim', 'yatim::index');
+$routes->get('/yatim/(:num)', 'yatim::index/$1');
+$routes->get('/laporan', 'laporan::index');
+$routes->get('/laporan/(:num)', 'laporan::index/$1');
+$routes->get('/editProfile', 'editP::index');
+$routes->post('/laporan/getData', 'Laporan::getData');
+$routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
+$routes->post('/login/auth', 'Login::auth');
+
+$routes->get('/buat-postingan', 'Posting::create');
+$routes->post('/store-postingan', 'Posting::store');
+
+$routes->get('profile/(:segment)', 'Profile::details/$1');
+
+$routes->get('errors/custom_error', function () {
+    return view('errors/custom_error', ['message' => 'ID masjid tidak ditemukan dalam sesi']);
+});
+
+$routes->setAutoRoute(true);
