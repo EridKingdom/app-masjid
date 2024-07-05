@@ -297,7 +297,7 @@ if ($id_user) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addForm" method="POST" action="/uang/handleFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="addForm" method="POST" action="/uang/handleFormData/<?= $masjid['id'] ?>">
                     <div class="mb-3">
                         <label for="tgl" class="form-label">Tanggal</label>
                         <input type="date" class="form-control" id="tgl" name="tgl" required>
