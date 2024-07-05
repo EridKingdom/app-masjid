@@ -8,7 +8,7 @@
             <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Registrasi akun masjid</h1>
             </div>
-            <form class="user" method="post" action="<?= base_url('/login/registrasi'); ?>">
+            <form class="user" method="post" action="<?= base_url('/login/registrasi'); ?>" enctype="multipart/form-data">
                 <div class="form-group row">
                     <div class="form-group">
                         <input type="text" class="form-control form-control-user" name="nama_masjid" placeholder="Nama Masjid/Musholla">
@@ -52,23 +52,23 @@
                 <hr>
                 <div class="masukanfile">
                     <p for="inputTakmirPdf">Upload Surat Takmir PDF</p>
-                    <input type="file" class="form-control-file" id="inputTakmirPdf">
+                    <input type="file" class="form-control-file" id="inputTakmirPdf" name="surat_takmir[]">
                 </div>
                 <div class="masukanfile">
                     <p for="inputTakmirPdf">Upload Sertifikat PDF</p>
-                    <input type="file" class="form-control-file" id="inputSertifikat">
+                    <input type="file" class="form-control-file" id="inputSertifikat" name="sertifikat[]">
                 </div>
                 <div class="masukangambar">
                     <p for="inputTakmirPdf">Upload profil JPG</p>
-                    <input type="file" class="form-control-file" id="inputGambar1">
+                    <input type="file" class="form-control-file" id="sampul" name="sampul[]">
                 </div>
                 <div class="masukangambar">
                     <p for="inputTakmirPdf">Upload Gambar 1 JPG</p>
-                    <input type="file" class="form-control-file" id="inputGambar2">
+                    <input type="file" class="form-control-file" id="inputGambar1" name="gambar1[]">
                 </div>
                 <div class="masukangambar">
                     <p for="inputTakmirPdf">Upload Gambar 2 JPG</p>
-                    <input type="file" class="form-control-file" id="inputGambar3">
+                    <input type="file" class="form-control-file" id="inputGambar2" name="gambar2[]">
                 </div>
                 <hr>
                 <div class="form-group">

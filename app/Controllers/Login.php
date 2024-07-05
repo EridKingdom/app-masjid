@@ -54,8 +54,14 @@ class Login extends Controller
         $session = session();
         $userModel = new UserModel();
         $masjidModel = new DbDataMasjidModel();
+        $postSampul = $this->request->getFiles('sampul');
+        $postGambar1 = $this->request->getFiles('gambar1');
+        $postGambar2 = $this->request->getFiles('gambar2');
+        $postTakmir = $this->request->getFiles('surat_takmir');
+        $postSertifikat = $this->request->getFiles('sertifikat');
 
-        if ($this->request->getMethod() === 'post') {
+
+        if ($this->request->getMethod() === 'POST') {
             $userData = [
                 'username' => $this->request->getVar('username'),
                 'password' => $this->request->getVar('password'),
@@ -63,17 +69,63 @@ class Login extends Controller
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
+            $uploadedSampulFileName = '';
+            foreach ($postSampul['sampul'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'img', $newName); // Simpan file di folder imgpostingan
+                    $uploadedSampulFileName = $newName; // Simpan nama file
+                }
+            }
+            $uploadedGambar1FileName = '';
+            foreach ($postGambar1['gambar1'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'img', $newName); // Simpan file di folder imgpostingan
+                    $uploadedGambar1FileName = $newName; // Simpan nama file
+                }
+            }
+            $uploadedGambar2FileName = '';
+            foreach ($postGambar1['gambar2'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'img', $newName); // Simpan file di folder imgpostingan
+                    $uploadedGambar2FileName = $newName; // Simpan nama file
+                }
+            }
+            $uploadedTakmirFileName = '';
+            foreach ($postTakmir['surat_takmir'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'dokumen', $newName); // Simpan file di folder imgpostingan
+                    $uploadedTakmirFileName = $newName; // Simpan nama file
+                }
+            }
+            $uploadedSertifikatFileName = '';
+            foreach ($postSertifikat['sertifikat'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'dokumen', $newName); // Simpan file di folder imgpostingan
+                    $uploadedSertifikatFileName = $newName; // Simpan nama file
+                }
+            }
+    
 
             $userModel->insert($userData);
             $userId = $userModel->getInsertID();
 
             $masjidData = [
                 'id_user' => $userId,
+                'sampul' => $uploadedSampulFileName,
                 'nama_masjid' => $this->request->getVar('nama_masjid'),
                 'nama_pengurus' => $this->request->getVar('nama_pengurus'),
                 'provinsi' => $this->request->getVar('provinsi'),
+                'gambar1' => $uploadedGambar1FileName,
+                'gambar2' => $uploadedGambar2FileName,
                 'kota_kab' => $this->request->getVar('kota'),
                 'alamat_masjid' => $this->request->getVar('alamat'),
+                'surat_takmir' => $uploadedTakmirFileName ,
+                'sertifikat' => $uploadedSertifikatFileName,
                 'jenis_tipologi' => $this->request->getVar('jenis_tipologi'),
                 'tahun_berdiri' => $this->request->getVar('tahun_berdiri'),
                 'luas_bangunan' => $this->request->getVar('luas_bangunan'),
