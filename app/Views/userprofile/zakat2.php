@@ -203,6 +203,7 @@ if ($id_user) {
                 <h5 class="modal-title" id="editModalLabel">Edit Data Zakat</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            
             <div class="modal-body">
                 <form id="editForm" method="POST" action="/zakat2/updateFormData/<?= $masjid['id_masjid'] ?>">
                     <input type="hidden" id="editId" name="id_zakat">
