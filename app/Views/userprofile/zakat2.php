@@ -129,7 +129,7 @@ if ($id_user) {
                     <tbody id="zakat-table-body">
     <?php $i = 1; ?>
     <?php foreach ($zakat as $k) : ?>
-        <tr data-id="<?= esc($k['id_masjid']); ?>">
+        <tr data-id="<?= esc($k['id_zakat']); ?>">
             <th scope="row"><?= $i++; ?></th>
             <td><?= esc($k['tgl']); ?></td>
             <td><?= esc($k['keterangan']); ?></td>
@@ -205,7 +205,7 @@ if ($id_user) {
             </div>
             <div class="modal-body">
                 <form id="editForm" method="POST" action="/zakat2/updateFormData/<?= $masjid['id_masjid'] ?>">
-                    <input type="hidden" id="editId" name="id">
+                    <input type="hidden" id="editId" name="id_zakat">
                     <div class="mb-3">
                         <label for="editTgl" class="form-label">Tanggal</label>
                         <input type="date" class="form-control" id="editTgl" name="tgl" required>
@@ -283,6 +283,8 @@ if ($id_user) {
         Array.from(rows).forEach(function(row) {
             row.addEventListener('click', function() {
                 const checkbox = row.querySelector('.row-checkbox');
+                const checkedRow = document.querySelector('input.row-checkbox:checked');
+                if(checkedRow) checkedRow.checked = false;
                 if (checkbox) {
                     checkbox.checked = !checkbox.checked;
                 }
@@ -307,9 +309,9 @@ if ($id_user) {
                 const row = checkedRow.closest('tr');
                 const cells = row.getElementsByTagName('td');
                 document.getElementById('editId').value = row.dataset.id;
-                document.getElementById('editTgl').value = cells[1].textContent.trim();
-                document.getElementById('editKeterangan').value = cells[2].textContent.trim();
-                document.getElementById('editNominal').value = cells[3].textContent.trim().replace(/[^0-9,-]+/g, "");
+                document.getElementById('editTgl').value = cells[0].textContent.trim();
+                document.getElementById('editKeterangan').value = cells[1].textContent.trim();
+                document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
                 editModal.show();
             } else {
                 alert('Please select a row to edit.');

@@ -20,7 +20,7 @@ class zakat2 extends BaseController
     {
         if ($id !== null) {
             $masjid = $this->dbdatamasjidModel->find($id);
-            $zakat = $this->zakatModel->select('id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
+            $zakat = $this->zakatModel->select('id_zakat, id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
 
             // Debugging
             error_log(print_r($masjid, true));
@@ -71,7 +71,7 @@ class zakat2 extends BaseController
 
     public function updateFormData($id_masjid)
     {
-        $id = $this->request->getVar('id');
+        $id = $this->request->getVar('id_zakat');
         $data = [
             'tgl' => $this->request->getVar('tgl'),
             'keterangan' => $this->request->getVar('keterangan'),
