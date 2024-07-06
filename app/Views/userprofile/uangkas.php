@@ -1,9 +1,7 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
-
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
-
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -84,6 +82,7 @@ $errorMessage = '';
 
 // Proses form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_transaksi = $_POST['id_transaksi'] ?? null;
     $tanggal = $_POST['tgl'] ?? null;
     $keterangan = $_POST['keterangan'] ?? null;
     $jenis_kas = $_POST['jenis_kas'] ?? null;
@@ -102,10 +101,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'id_masjid' => $id_user // Asumsikan id_user adalah id_masjid
         ];
 
-        if ($builder->insert($data)) {
-            $successMessage = 'Data berhasil disimpan.';
+        if ($id_transaksi) {
+            // Update existing record
+            $builder->where('id_transaksi', $id_transaksi);
+            if ($builder->update($data)) {
+                $successMessage = 'Data berhasil diperbarui.';
+            } else {
+                $errorMessage = 'Gagal memperbarui data.';
+            }
         } else {
-            $errorMessage = 'Gagal menyimpan data.';
+            // Insert new record
+            if ($builder->insert($data)) {
+                $successMessage = 'Data berhasil disimpan.';
+            } else {
+                $errorMessage = 'Gagal menyimpan data.';
+            }
         }
     } else {
         $errorMessage = 'Semua field harus diisi!';
@@ -145,7 +155,6 @@ if ($id_user) {
 </section>
 
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
-
     <div class="row justify-content-center">
         <div class="card col-md-20 col-lg-9">
             <br>
@@ -188,12 +197,12 @@ if ($id_user) {
                 </thead>
                 <tbody id="uangkas-table-body">
                     <?php foreach ($kas_masjid as $k) : ?>
-                        <tr class="table-row">
+                        <tr class="table-row" data-id="<?= esc($k['id_transaksi']); ?>">
                             <td><input type="checkbox" class="selectRow"></td> <!-- Checkbox untuk setiap baris -->
-                            <td><?= $k['tgl']; ?></td>
-                            <td><?= $k['keterangan']; ?></td>
-                            <td><?= $k['jenis_kas']; ?></td>
-                            <td><?= $k['nominal']; ?></td>
+                            <td><?= esc($k['tgl']); ?></td>
+                            <td><?= esc($k['keterangan']); ?></td>
+                            <td><?= esc($k['jenis_kas']); ?></td>
+                            <td><?= esc($k['nominal']); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     <?php
@@ -273,17 +282,54 @@ if ($id_user) {
 
                     displayRows(currentPage);
                     setupPagination();
+
+                    // Event listener for Add button
+                    const addButton = document.getElementById('addButton');
+                    const addModal = new bootstrap.Modal(document.getElementById('addModal'));
+
+                    addButton.addEventListener('click', function() {
+                        addModal.show();
+                    });
+
+                    // Event listener for Edit button
+                    const editButton = document.querySelector('.btn-primary.edit');
+                    const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+
+                    editButton.addEventListener('click', function() {
+                        const checkedRow = document.querySelector('input.selectRow:checked');
+                        if (checkedRow) {
+                            const row = checkedRow.closest('tr');
+                            const cells = row.getElementsByTagName('td');
+                            document.getElementById('editId').value = row.dataset.id;
+                            document.getElementById('editTgl').value = cells[1].textContent.trim();
+                            document.getElementById('editKeterangan').value = cells[2].textContent.trim();
+                            document.getElementById('editJenisKas').value = cells[3].textContent.trim().toLowerCase();
+                            document.getElementById('editNominal').value = cells[4].textContent.trim().replace(/[^0-9,-]+/g, "");
+                            editModal.show();
+                        } else {
+                            alert('Please select a row to edit.');
+                        }
+                    });
+
+                    // Add event listener to rows for checkbox toggle
+                    Array.from(rows).forEach(function(row) {
+                        row.addEventListener('click', function() {
+                            const checkbox = row.querySelector('.selectRow');
+                            const checkedRow = document.querySelector('input.selectRow:checked');
+                            if(checkedRow) checkedRow.checked = false;
+                            if (checkbox) {
+                                checkbox.checked = !checkbox.checked;
+                            }
+                        });
+                    });
                 });
             </script>
             <div style="text-align: right;">
                 <h4>Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
                 <button class="btn btn-primary" id="addButton">Tambah</button>
-                <button class="btn btn-primary">Edit</button>
+                <button class="btn btn-primary edit">Edit</button>
                 <button class="btn btn-primary">Hapus</button>
             </div>
-
-
-
         </div>
     </div>
 </section>
@@ -324,6 +370,43 @@ if ($id_user) {
     </div>
 </div>
 
+<!-- Modal Form for Editing Data -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Data Kas Masjid</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="POST" action="/uang/updateFormData/<?= $masjid['id'] ?>">
+                    <input type="hidden" id="editId" name="id_transaksi">
+                    <div class="mb-3">
+                        <label for="editTgl" class="form-label">Tanggal</label>
+                        <input type="date" class="form-control" id="editTgl" name="tgl" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editKeterangan" class="form-label">Keterangan</label>
+                        <input type="text" class="form-control" id="editKeterangan" name="keterangan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editJenisKas" class="form-label">Jenis Kas</label>
+                        <select class="form-control" id="editJenisKas" name="jenis_kas" required>
+                            <option value="masuk">Masuk</option>
+                            <option value="keluar">Keluar</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editNominal" class="form-label">Nominal</label>
+                        <input type="number" class="form-control" id="editNominal" name="nominal" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const rows = document.querySelectorAll('#uangkas-table-body tr');
@@ -338,7 +421,6 @@ if ($id_user) {
             rows.forEach((row, index) => {
                 row.style.display = (index >= start && index < end) ? '' : 'none';
             });
-
         }
 
         function setupPagination() {
@@ -364,14 +446,6 @@ if ($id_user) {
 
         displayRows(currentPage);
         setupPagination();
-
-        // Event listener for Add button
-        const addButton = document.getElementById('addButton');
-        const addModal = new bootstrap.Modal(document.getElementById('addModal'));
-
-        addButton.addEventListener('click', function() {
-            addModal.show();
-        });
     });
 </script>
 

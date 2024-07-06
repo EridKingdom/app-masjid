@@ -84,4 +84,21 @@ class uang extends BaseController
             return redirect()->back()->with('error', 'Gagal menyimpan data.');
         }
     }
+    public function updateFormData($id_masjid)
+    {
+        $id_transaksi = $this->request->getVar('id_transaksi');
+        $data = [
+            'tgl' => $this->request->getVar('tgl'),
+            'keterangan' => $this->request->getVar('keterangan'),
+            'jenis_kas' => $this->request->getVar('jenis_kas'),
+            'nominal' => $this->request->getVar('nominal')
+        ];
+
+        if ($id_transaksi) {
+            $this->kasmasjidModel->update($id_transaksi, $data);
+            return redirect()->to('/uangkas/' . $id_masjid)->with('success', 'Data berhasil diperbarui.');
+        } else {
+            return redirect()->to('/uangkas/' . $id_masjid)->with('error', 'ID transaksi tidak ditemukan.');
+        }
+    }
 }
