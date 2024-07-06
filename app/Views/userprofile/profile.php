@@ -18,7 +18,7 @@
                 if ($id_user) {
                     $db = \Config\Database::connect();
                     // Pastikan kolom yang digunakan dalam query sesuai dengan kolom yang ada di tabel db_data_masjid
-                    $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3, sampul FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+                    $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3, sampul, kota_kab FROM db_data_masjid WHERE id_user = ?", [$id_user]);
                     $result = $query->getRowArray();
                     if ($result) {
                         $masjid = $result;
@@ -137,18 +137,30 @@ echo "<script>var files = " . json_encode($files) . ";</script>";
             </table>
             <script>
                 function fetchPrayerTimes() {
-                    const proxyURL = "https://cors-anywhere.herokuapp.com/";
-                    const apiURL = "https://api.myquran.com/v1/sholat/jadwal/2610/";
-                    fetch(proxyURL + apiURL)
+                    const apiURLLocation = "https://api.myquran.com/v2/sholat/kota/cari/";
+                    const apiURLPrayer = "https://api.myquran.com/v2/sholat/jadwal/";
+                    const todayDate = new Date();
+                    const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
+                    const kota = '<?= $masjid['kota_kab'] ?>';
+                    if (!kota) kota = 'Kota Padang';
+                    fetch(apiURLLocation + kota)
                         .then(response => response.json())
                         .then(data => {
-                            displayPrayerTimes(data);
+                            var idKota = data.status ? data.data[0].id : '0314';
+                            fetch(apiURLPrayer + idKota + '/' + formatDate)
+                                .then(response => response.json())
+                                .then(d => {
+                                    if (d.status) {
+                                        displayPrayerTimes(d.data);
+                                    }
+                                });
+
                         })
                         .catch(error => console.error('Error fetching prayer times:', error));
                 }
 
                 function displayPrayerTimes(data) {
-                    const times = data.data.jadwal;
+                    const times = data.jadwal;
                     document.getElementById('subuh-time').textContent = times.subuh;
                     document.getElementById('zuhur-time').textContent = times.dzuhur;
                     document.getElementById('asar-time').textContent = times.ashar;

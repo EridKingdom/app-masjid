@@ -125,9 +125,9 @@
             const sidebarToggler = document.querySelector('.sidebar-toggler');
             const sidebar = document.querySelector('.sidebar'); // Pastikan selector ini sesuai dengan sidebar Anda
 
-            sidebarToggler.addEventListener('click', function() {
-                sidebar.classList.toggle('active'); // 'active' adalah class yang menunjukkan sidebar
-            });
+            // sidebarToggler.addEventListener('click', function() {
+            //     sidebar.classList.toggle('active'); // 'active' adalah class yang menunjukkan sidebar
+            // });
         });
     </script>
 
