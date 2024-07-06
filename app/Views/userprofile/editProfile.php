@@ -117,7 +117,7 @@ if ($id_user) {
                     <h3 class="text-center mb-3">Edit Profil Masjid</h3>
                     <form method="POST" action="<?= base_url('editP/updateProfile'); ?>" enctype="multipart/form-data">
                         <div class="mb-3 text-center">
-                            <input hidden value="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" type="file" class="form-control text-center" id="fotoProfil" name="fotoProfil" accept="image/*">
+                            <input hidden name="sampul" value="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" type="file" class="form-control text-center" id="fotoProfil" name="fotoProfil" accept="image/*">
                             <img class="profile-img" id="fotoProfilImg" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 50px; width: 50px; border-radius: 50%;">
                             <label for="fotoProfil" class="form-label">Upload Foto Profil Masjid</label>
                             <script>
@@ -140,11 +140,11 @@ if ($id_user) {
                         <hr>
                         <div class="mb-3">
                             <label for="namaMasjid" class="form-label">Nama Masjid</label>
-                            <input type="text" class="form-control" id="namaMasjid" name="namaMasjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
+                            <input type="text" class="form-control" id="namaMasjid" name="nama_masjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="namaPengurus" class="form-label">Nama Pengurus</label>
-                            <input type="text" class="form-control" id="namaPengurus" name="namaPengurus" value="<?= esc($masjid['nama_pengurus'] ?? ''); ?>" required>
+                            <input type="text" class="form-control" id="namaPengurus" name="nama_pengurus" value="<?= esc($masjid['nama_pengurus'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="gambar1" class="form-label">Upload Gambar 1</label>
@@ -161,11 +161,11 @@ if ($id_user) {
                         <hr>
                         <div class="mb-3">
                             <label for="deskripsiMasjid" class="form-label">Deskripsi Masjid</label>
-                            <textarea class="form-control" id="deskripsiMasjid" name="deskripsiMasjid" rows="3" required><?= esc($masjid['deskripsi'] ?? ''); ?></textarea>
+                            <textarea class="form-control" id="deskripsiMasjid" name="deskripsi_masjid" rows="3" required><?= esc($masjid['deskripsi_masjid'] ?? ''); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="alamat" name="alamat" rows="3" required><?= esc($masjid['alamat_masjid'] ?? ''); ?></textarea>
+                            <textarea class="form-control" id="alamat" name="alamat_masjid" rows="3" required><?= esc($masjid['alamat_masjid'] ?? ''); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="provinsi" class="form-label">Provinsi</label>
@@ -173,7 +173,7 @@ if ($id_user) {
                         </div>
                         <div class="mb-3">
                             <label for="kota" class="form-label">Kota</label>
-                            <input type="text" class="form-control" id="kota" name="kota" value="<?= esc($masjid['kota_kab'] ?? ''); ?>" required>
+                            <input type="text" class="form-control" id="kota" name="kota_kab" value="<?= esc($masjid['kota_kab'] ?? ''); ?>" required>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>

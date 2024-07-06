@@ -54,21 +54,38 @@ class editP extends BaseController
         $session = session();
         $userData = $session->get('user_data');
         $id_user = $userData['id_user'] ?? null;
+        
 
         if ($id_user) {
             $data = $this->request->getPost();
             $files = $this->request->getFiles();
 
             // Handle file uploads
+            if ($files['sampul']->isValid() && !$files['sampul']->hasMoved()) {
+                    $newName = $files['sampul']->getRandomName();
+                    $files['sampul']->move(FCPATH . 'img', $newName);
+                    $uploadedSampulFileName = $newName; 
+                    $data['sampul'] = $newName;
+            }
             if ($files['gambar1']->isValid() && !$files['gambar1']->hasMoved()) {
-                $data['gambar1'] = $files['gambar1']->store();
+                    $newName = $files['gambar1']->getRandomName();
+                    $files['gambar1']->move(FCPATH . 'img', $newName);
+                    $uploadedGambar1FileName = $newName; 
+                    $files['gambar1'] = $newName;
             }
             if ($files['gambar2']->isValid() && !$files['gambar2']->hasMoved()) {
-                $data['gambar2'] = $files['gambar2']->store();
+                    $newName = $files['gambar2']->getRandomName();
+                    $files['gambar2']->move(FCPATH . 'img', $newName);
+                    $uploadedGambar2FileName = $newName; 
+                    $files['gambar2'] = $newName;
             }
             if ($files['gambar3']->isValid() && !$files['gambar3']->hasMoved()) {
-                $data['gambar3'] = $files['gambar3']->store();
+                    $newName = $files['gambar3']->getRandomName();
+                    $files['gambar3']->move(FCPATH . 'img', $newName);
+                    $uploadedGambar3FileName = $newName; 
+                    $files['gambar3'] = $newName;
             }
+
 
             // Update the database
             $this->dbdatamasjidModel->update($id_user, $data);
