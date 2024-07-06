@@ -21,15 +21,15 @@
         <div class="containerdonasi">
             <div class="card">
                 <div class="card-body">
-                    <form action="#" method="post">
+                    <form action="<?= base_url('/donasi-store'); ?>" method="post">
                         <h4>biodata donatur</h4>
                         <div class="form-group">
                             <label for="nama">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan Nama Lengkap" required>
+                            <input type="text" class="form-control" id="nama" name="nama_donatur" placeholder="Masukkan Nama Lengkap" required>
                         </div>
                         <div class="form-group">
                             <label for="noTelp">Nomor Telepon</label>
-                            <input type="tel" class="form-control" id="noTelp" name="noTelp" placeholder="Masukkan Nomor Telepon" required>
+                            <input type="tel" class="form-control" id="noTelp" name="ho_telp" placeholder="Masukkan Nomor Telepon" required>
                         </div>
                         <div class="form-group">
                             <label for="alamat">Alamat</label>
@@ -42,24 +42,21 @@
                         <hr>
                         <h4>Amil zakat yang dituju</h4>
                         <div class="form-group">
-                            <label for="namaMasjid">Nama Masjid</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="namaMasjid" name="namaMasjid" placeholder="Masukkan Nama Masjid" required style="flex: 1;">
-                            </div>
+                            <label for="masjid">Pilih Masjid</label>
+                            <input list="encodings" value="" class="form-control custom-select custom-select-sm" id="nama_masjid" , name="masjid">
+                            <datalist id="encodings">
+                                <?php for ($i = 0; $i < count($masjidOptions); $i++) {
+                                    echo "<option value='" . $masjidOptions[$i]['nama_masjid'] . "'>" . $masjidOptions[$i]['id'] . "</option>";
+                                }
+                                ?>
+                            </datalist>
+                            <input hidden type="text" name="id_masjid", id="id_masjid">
                         </div>
                         <div class="form-group">
-                            <label for="rekening">Pilih Bank</label>
-                            <select class="form-control" id="rekening" name="rekening">
-                                <option value="BRI">BRI</option>
-                                <option value="BCA">BCA</option>
-                                <option value="BNI">BNI</option>
-                            </select>
+                            <label for="rekening">Bank</label>
+                            <input type="text" class="form-control" id="bank" name="bank" value="" readonly disabled>
                             <label for="rekening">No Rekening</label>
-                            <input type="text" class="form-control" id="rekening" name="rekening" value="1234-5678-9101-1121" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="namaRekening">Nama Rekening </label>
-                            <input type="text" class="form-control" id="namaRekening" name="namaRekening" value="Donasi Masjid" readonly>
+                            <input type="text" class="form-control" id="rekening" name="rekening" value="" readonly disabled>
                         </div>
                         <button type="submit" class="tomboldonasi">Donasi</button>
                     </form>
@@ -69,5 +66,32 @@
 
     </section>
 </section>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var masjid = new Array();
+        <?php foreach ($masjidList as $k => $v) { ?>
+            var value = new Array();
+            <?php foreach ($v as $i => $j) { ?>
+                value['<?php echo esc($i); ?>'] = '<?php echo esc($j); ?>';
+            <?php } ?>
+            masjid.push(value);
+        <?php } ?>
+        var masjidName = document.getElementById('nama_masjid');
+        masjidName.addEventListener("change", function(value) {
+            var bank = document.getElementById('bank');
+            var rek = document.getElementById('rekening');
+            var idMasjid = document.getElementById('id_masjid');
+            var selectedMasjid;
+            masjid.forEach(function(item, index) {
+                if(item['nama_masjid'] == value.target.value) {
+                    selectedMasjid = item;
+                }
+            });
+            bank.setAttribute('value', selectedMasjid['nama_bank']);
+            rek.setAttribute('value',  selectedMasjid['no_rekening']);
+            idMasjid.setAttribute('value',  selectedMasjid['id']);
+        });
+    });
+</script>
 
 <?= $this->endSection(); ?>

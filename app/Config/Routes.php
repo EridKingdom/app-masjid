@@ -16,6 +16,7 @@ $routes->get('delails/(:segment)', 'Pages::details/$1');
 $routes->get('/login', 'Login::index');
 $routes->get('/registrasi', 'Login::registrasi');
 $routes->get('/donasi', 'Login::donasi');
+$routes->post('/donasi-store', 'Login::storeDonasi');
 $routes->get('/TbMasjid', 'TbMasjid::index');
 $routes->get('/TbMasjid/(:segment)', 'TbMasjid::details/$1');
 $routes->get('/zakat', 'Pages::zakat');

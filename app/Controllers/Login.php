@@ -4,7 +4,9 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\DbDataMasjidModel;
+use App\Models\DonasiModel;
 use CodeIgniter\Controller;
+use App\Models\ZakatModel;
 
 class Login extends Controller
 {
@@ -145,6 +147,41 @@ class Login extends Controller
 
     public function donasi()
     {
-        return view('auth/donasi');
+        $tableMasjid = new DbDataMasjidModel();
+        $allMasjid = $tableMasjid->findAll();
+        $masjidOptions = array_map(function($value) {
+            return [
+                'id' => $value['id'],
+                'nama_masjid' => $value['nama_masjid'],
+         ];
+        }, $allMasjid);
+        $masjidBank = array_map(function($value) {
+            return [
+                'id' => $value['id'],
+                'nama_masjid' => $value['nama_masjid'],
+                'no_rekening' => $value['no_rekening'],
+                'nama_bank' => $value['nama_bank'],
+         ];
+        }, $allMasjid);
+        $data = ['masjidList' => $masjidBank, 'masjidOptions' => $masjidOptions];
+        return view('auth/donasi', $data);
+    }
+
+    public function storeDonasi()
+    {
+        $tbDonasi = new DonasiModel();
+        $tbDonasi->save($this->request->getPost());
+        $tbZakat = new ZakatModel();
+        $zakat = $tbZakat->findAll();
+
+        $data = [
+            'title' => 'Daftar Zakat',
+            'zakat' => $zakat,
+            'showSearch' => false
+        ];
+        $session = session();
+        $session->setFlashdata('success', 'Donasi sedang diproses');
+        return view('zakat', $data);
+
     }
 }
