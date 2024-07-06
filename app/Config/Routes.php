@@ -50,6 +50,7 @@ $routes->get('/buat-postingan', 'Posting::create');
 $routes->get('/edit-postingan/(:num)', 'Posting::update/$1');
 $routes->post('/store-postingan', 'Posting::store');
 $routes->post('/edit-postingan/(:num)', 'Posting::edit/$1');
+$routes->get('/delete-postingan/(:num)', 'Posting::delete/$1');
 
 $routes->get('profile/(:segment)', 'Profile::details/$1');
 

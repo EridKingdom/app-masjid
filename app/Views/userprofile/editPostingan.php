@@ -116,7 +116,7 @@ if ($id_user) {
             <div class="card col-md-20 col-lg-9">
                 <div class="card-body">
                     <h5 class="card-title text-center">Edit Postingan</h5>
-                    <form action="<?= base_url('/edit-postingan/' . $id_kegiatan); ?>" method="post" enctype="multipart/form-data">
+                    <form action="<?= base_url("/edit-postingan/" . $id_kegiatan); ?>" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="id_masjid" value="<?= esc($masjid['id_masjid'] ?? ''); ?>">
                         <div class="mb-3">
                             <label for="postType" class="form-label">Tipe Postingan</label>

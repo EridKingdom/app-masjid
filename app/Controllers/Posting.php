@@ -89,21 +89,11 @@ class Posting extends Controller
 
         $idMasjid = $this->request->getPost('id_masjid');
         $postType = $this->request->getPost('postType');
-        $judulKegiatan = $this->request->getPost('judulKegiatan');
-        $deskripsiKegiatan = $this->request->getPost('deskripsiKegiatan');
+        $judulKegiatan = $this->request->getPost('judul_kegiatan');
+        $deskripsiKegiatan = $this->request->getPost('deskripsi_kegiatan');
         $postMedia = $this->request->getFiles('postMedia');
 
         // Debugging
-        log_message('debug', 'Deskripsi Kegiatan (before validation): ' . $deskripsiKegiatan);
-
-        if (!$this->validate([
-            'deskripsiKegiatan' => 'required|min_length[3]',
-            'postMedia.*' => 'uploaded[postMedia]|max_size[postMedia,10240]|ext_in[postMedia,jpg,jpeg,png,mp4]',
-        ])) {
-            log_message('error', 'Validation failed: ' . json_encode($this->validator->getErrors()));
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
         log_message('debug', 'Deskripsi Kegiatan (after validation): ' . $deskripsiKegiatan);
 
         // Proses file yang diunggah
@@ -139,6 +129,12 @@ class Posting extends Controller
         }
 
         return redirect()->to('/profile')->with('message', 'Post berhasil diperbarui');
+    }
+
+    public function delete($id_kegiatan) {
+        $tbKegiatanModel = new TbKegiatanModel();
+        $tbKegiatanModel->delete($id_kegiatan);
+        return redirect()->to('/profile')->with('message', 'Post berhasil dihapus');
     }
 
 }
