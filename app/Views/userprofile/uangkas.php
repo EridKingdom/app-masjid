@@ -1,6 +1,8 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
+
+
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -133,6 +135,23 @@ if ($id_user) {
     }
 }
 ?>
+
+// This section handles notifications
+<?php if (session()->getFlashdata('success')) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert('<?= session()->getFlashdata('success') ?>');
+        });
+    </script>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert('<?= session()->getFlashdata('error') ?>');
+        });
+    </script>
+<?php endif; ?>
 
 <section data-bs-version="5.1" class="article11 cid-ueCj6ebiFP" id="article11-19">
     <div class="container-fluid">
@@ -311,12 +330,33 @@ if ($id_user) {
                         }
                     });
 
+                    // Event listener for Delete button
+                    const deleteButton = document.querySelector('.btn-primary.delete');
+                    deleteButton.addEventListener('click', function() {
+                        const selectedRows = document.querySelectorAll('input.selectRow:checked');
+                        if (selectedRows.length > 0) {
+                            if (confirm('Apa Kamu Yakin Menghapus Data?')) {
+                                const form = document.getElementById('deleteForm');
+                                selectedRows.forEach(row => {
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = 'id_transaksi[]';
+                                    input.value = row.closest('tr').dataset.id;
+                                    form.appendChild(input);
+                                });
+                                form.submit();
+                            }
+                        } else {
+                            alert('Pilih data yang ingin dihapus.');
+                        }
+                    });
+
                     // Add event listener to rows for checkbox toggle
                     Array.from(rows).forEach(function(row) {
                         row.addEventListener('click', function() {
                             const checkbox = row.querySelector('.selectRow');
                             const checkedRow = document.querySelector('input.selectRow:checked');
-                            if(checkedRow) checkedRow.checked = false;
+                            if (checkedRow) checkedRow.checked = false;
                             if (checkbox) {
                                 checkbox.checked = !checkbox.checked;
                             }
@@ -328,7 +368,7 @@ if ($id_user) {
                 <h4>Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
                 <button class="btn btn-primary" id="addButton">Tambah</button>
                 <button class="btn btn-primary edit">Edit</button>
-                <button class="btn btn-primary">Hapus</button>
+                <button class="btn btn-primary delete">Hapus</button>
             </div>
         </div>
     </div>
@@ -407,6 +447,11 @@ if ($id_user) {
     </div>
 </div>
 
+<!-- Form for deleting data -->
+<form id="deleteForm" method="POST" action="/uang/deleteFormData">
+    <?= csrf_field() ?>
+</form>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const rows = document.querySelectorAll('#uangkas-table-body tr');
@@ -448,7 +493,6 @@ if ($id_user) {
         setupPagination();
     });
 </script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const rows = document.getElementById('uangkas-table-body').querySelectorAll('tr');

@@ -88,6 +88,23 @@ if ($id_user) {
 }
 ?>
 
+<!-- Notification Element -->
+<?php if (session()->getFlashdata('success')) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert('<?= session()->getFlashdata('success') ?>');
+        });
+    </script>
+<?php endif; ?>
+
+<?php if (session()->getFlashdata('error')) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert('<?= session()->getFlashdata('error') ?>');
+        });
+    </script>
+<?php endif; ?>
+
 <section data-bs-version="5.1" class="article11 cid-ueCj6ebiFP" id="article11-19">
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -127,18 +144,19 @@ if ($id_user) {
                         </tr>
                     </thead>
                     <tbody id="zakat-table-body">
-    <?php $i = 1; ?>
-    <?php foreach ($zakat as $k) : ?>
-        <tr data-id="<?= esc($k['id_zakat']); ?>">
-            <th scope="row"><?= $i++; ?></th>
-            <td><?= esc($k['tgl']); ?></td>
-            <td><?= esc($k['keterangan']); ?></td>
-            <td><?= esc($k['nominal']); ?></td>
-            <td><input type="checkbox" class="row-checkbox"></td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
+                        <?php $i = 1; ?>
+                        <?php foreach ($zakat as $k) : ?>
+                            <tr data-id="<?= esc($k['id_zakat']); ?>">
+                                <th scope="row"><?= $i++; ?></th>
+                                <td><?= esc($k['tgl']); ?></td>
+                                <td><?= esc($k['keterangan']); ?></td>
+                                <td><?= esc($k['nominal']); ?></td>
+                                <td><input type="checkbox" class="row-checkbox"></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
                 </table>
+                <div id="pagination" class="pagination"></div> <!-- Elemen untuk pagination -->
                 <script>
                     const zakatTableBody = document.getElementById('zakat-table-body');
                     for (let i = 0; i < 10; i++) {
@@ -158,7 +176,7 @@ if ($id_user) {
                     <a href="<?= base_url('/verifikasiDonasi'); ?>" class="btn btn-primary">Verifikasi Pembayaran</a>
                     <button id="addButton" class="btn btn-primary">Tambahkan</button>
                     <button class="btn btn-primary edit">Edit</button>
-                    <button class="btn btn-primary">Hapus</button> <!-- Added button for donation -->
+                    <button class="btn btn-primary delete">Hapus</button> <!-- Added button for delete -->
                 </div>
             </div>
         </div>
@@ -203,7 +221,6 @@ if ($id_user) {
                 <h5 class="modal-title" id="editModalLabel">Edit Data Zakat</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
             <div class="modal-body">
                 <form id="editForm" method="POST" action="/zakat2/updateFormData/<?= $masjid['id_masjid'] ?>">
                     <input type="hidden" id="editId" name="id_zakat">
@@ -285,7 +302,7 @@ if ($id_user) {
             row.addEventListener('click', function() {
                 const checkbox = row.querySelector('.row-checkbox');
                 const checkedRow = document.querySelector('input.row-checkbox:checked');
-                if(checkedRow) checkedRow.checked = false;
+                if (checkedRow) checkedRow.checked = false;
                 if (checkbox) {
                     checkbox.checked = !checkbox.checked;
                 }
@@ -315,8 +332,81 @@ if ($id_user) {
                 document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
                 editModal.show();
             } else {
-                alert('Please select a row to edit.');
+                alert('Pilih Data yang di edit.');
             }
+        });
+
+        const deleteButton = document.querySelector('.btn-primary.delete');
+        deleteButton.addEventListener('click', function() {
+            const checkedRow = document.querySelector('input.row-checkbox:checked');
+            if (checkedRow) {
+                if (confirm('Apa Kamu Yakin Menghapus Data?')) {
+                    const row = checkedRow.closest('tr');
+                    const id = row.dataset.id;
+                    window.location.href = `/zakat2/deleteFormData/${id}`;
+                }
+            } else {
+                alert('Please Pilih Data yang mau Dihapus.');
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const zakatTableBody = document.getElementById('zakat-table-body');
+        const rows = zakatTableBody.querySelectorAll('tr');
+        const rowsPerPage = 10;
+        const pagination = document.getElementById('pagination');
+        let currentPage = 1;
+
+        function displayRows(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+        }
+
+        function setupPagination() {
+            const pageCount = Math.ceil(rows.length / rowsPerPage);
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= pageCount; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.classList.add('page-btn');
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', function() {
+                    currentPage = i;
+                    displayRows(currentPage);
+                    document.querySelectorAll('.page-btn').forEach(btn => btn.classList.remove('active'));
+                    pageButton.classList.add('active');
+                });
+                pagination.appendChild(pageButton);
+            }
+        }
+
+        displayRows(currentPage);
+        setupPagination();
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('#zakat-table-body tr');
+
+        // Add event listener to rows for checkbox toggle
+        Array.from(rows).forEach(function(row) {
+            row.addEventListener('click', function() {
+                const checkbox = row.querySelector('.row-checkbox');
+                const checkedRow = document.querySelector('input.row-checkbox:checked');
+                if (checkedRow) checkedRow.checked = false;
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
         });
     });
 </script>

@@ -2,25 +2,25 @@
 
 namespace App\Controllers;
 
-use App\Models\infakanakyatimModel;
-use App\Models\dbdatamasjidModel;
+use App\Models\InfakAnakYatimModel;
+use App\Models\DbDataMasjidModel;
 
-class yatim extends BaseController
+class Yatim extends BaseController
 {
-    protected $infakanakyatimModel;
-    protected $dbdatamasjidModel;
+    protected $infakAnakYatimModel;
+    protected $dbDataMasjidModel;
 
     public function __construct()
     {
-        $this->infakanakyatimModel = new infakanakyatimModel();
-        $this->dbdatamasjidModel = new dbdatamasjidModel();
+        $this->infakAnakYatimModel = new InfakAnakYatimModel();
+        $this->dbDataMasjidModel = new DbDataMasjidModel();
     }
 
     public function index($id = null)
     {
         if ($id !== null) {
-            $masjid = $this->dbdatamasjidModel->find($id);
-            $infak_anak_yatim = $this->infakanakyatimModel->where('id_masjid', $id)->findAll();
+            $masjid = $this->dbDataMasjidModel->find($id);
+            $infak_anak_yatim = $this->infakAnakYatimModel->where('id_masjid', $id)->findAll();
 
             $data = [
                 'title' => 'Daftar Infak Anak Yatim',
@@ -34,11 +34,42 @@ class yatim extends BaseController
         }
     }
 
+    public function handleFormData($id_masjid)
+    {
+        $data = [
+            'id_masjid' => $id_masjid,
+            'tgl' => $this->request->getVar('tgl'),
+            'keterangan' => $this->request->getVar('keterangan'),
+            'nominal' => $this->request->getVar('nominal'),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->infakAnakYatimModel->insert($data);
+        session()->setFlashdata('success', 'Data berhasil ditambahkan');
+        return redirect()->to('/yatim/' . $id_masjid);
+    }
+
+    public function updateFormData($id_masjid)
+    {
+        $id_infak = $this->request->getVar('id_infak');
+        $data = [
+            'tgl' => $this->request->getVar('tgl'),
+            'keterangan' => $this->request->getVar('keterangan'),
+            'nominal' => $this->request->getVar('nominal'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->infakAnakYatimModel->update($id_infak, $data);
+        session()->setFlashdata('success', 'Data berhasil diedit');
+        return redirect()->to('/yatim/' . $id_masjid);
+    }
+
     public function viewyatim($id = null)
     {
         if ($id !== null) {
-            $masjid = $this->dbdatamasjidModel->find($id);
-            $infak_anak_yatim = $this->infakanakyatimModel->where('id_masjid', $id)->findAll();
+            $masjid = $this->dbDataMasjidModel->find($id);
+            $infak_anak_yatim = $this->infakAnakYatimModel->where('id_masjid', $id)->findAll();
 
             $data = [
                 'title' => 'Daftar Infak Anak Yatim',
@@ -52,34 +83,15 @@ class yatim extends BaseController
         }
     }
 
-    public function handleFormData($masjid_id = null)
+    public function deleteFormData($id_infak)
     {
-        $tanggal = $this->request->getPost('tgl');
-        $keterangan = $this->request->getPost('keterangan');
-        $nominal = $this->request->getPost('nominal');
-
-        // Validasi data yang diterima
-        if (!$tanggal || !$keterangan || !$nominal) {
-            return redirect()->back()->with('error', 'Semua field harus diisi!');
-        }
-
-        // Proses penyimpanan data ke database
-        $data = [
-            'tgl' => $tanggal,
-            'keterangan' => $keterangan,
-            'nominal' => $nominal,
-            'id_masjid' => $masjid_id,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-        ];
-
-        // Misalkan Anda memiliki model yang bertanggung jawab untuk menyimpan data
-        $saved = $this->infakanakyatimModel->save($data);
-
-        if ($saved) {
-            return redirect()->back()->with('success', 'Data berhasil disimpan.');
+        $infak = $this->infakAnakYatimModel->find($id_infak);
+        if ($infak) {
+            $this->infakAnakYatimModel->delete($id_infak);
+            session()->setFlashdata('success', 'Data berhasil dihapus');
         } else {
-            return redirect()->back()->with('error', 'Gagal menyimpan data.');
+            session()->setFlashdata('error', 'Data tidak ditemukan');
         }
+        return redirect()->to('/yatim/' . $infak['id_masjid']);
     }
 }

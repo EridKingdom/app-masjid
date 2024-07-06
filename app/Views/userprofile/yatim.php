@@ -1,9 +1,7 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
-
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
-
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
@@ -110,66 +108,171 @@ if ($id_user) {
     </div>
 </section>
 
-<section data-bs-version="5.1" class="header09 startm5 cid-ubP7pTTB9Y mbr-fullscreen" id="header09-c">
+<!-- Notification Element -->
+<?php if (session()->getFlashdata('success')) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert('<?= session()->getFlashdata('success') ?>');
+        });
+    </script>
+<?php endif; ?>
 
+<section data-bs-version="5.1" class="header09 startm5 cid-ubP7pTTB9Y mbr-fullscreen" id="header09-c">
     <div class="container-fluid">
         <div class="row">
             <div class="content-wrap col-12 col-md-8">
-                <h2 class="judul">Informasi Infak Anak Yatim Pada Masjid <?= esc($masjid['nama_masjid']); ?></h2>
+                <h2 class="judul">Informasi Infak Anak yatim Pada <?= esc($masjid['nama_masjid']); ?></h2>
                 <form class="cari" role="search" method="GET">
                     <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Infak" aria-label="Search">
                 </form>
-                <table class="table table-striped" id="zakat-table">
+                <table class="table table-striped" id="infak-table">
                     <thead>
                         <tr>
-                            <th>tgl</th>
-                            <th>keterangan</th>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Keterangan</th>
                             <th>Nominal</th>
-                            <th> </th> <!-- Added column for checkbox -->
+                            <th>*</th> <!-- Added column for checkbox -->
                         </tr>
                     </thead>
-                    <tbody id="zakat-table-body">
+                    <tbody id="infak-table-body">
+                        <?php $i = 1; ?>
                         <?php foreach ($infak_anak_yatim as $k) : ?>
-                            <tr>
-                                <td><?= $k['tgl']; ?></td>
-                                <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
-                                <td><input type="checkbox" class="row-checkbox"></td> <!-- Added checkbox -->
+                            <tr data-id="<?= esc($k['id_infak']); ?>">
+                                <th scope="row"><?= $i++; ?></th>
+                                <td><?= esc($k['tgl']); ?></td>
+                                <td><?= esc($k['keterangan']); ?></td>
+                                <td><?= esc($k['nominal']); ?></td>
+                                <td><input type="checkbox" class="row-checkbox"></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
-                </table>
-                <script>
-                    const zakatTableBody = document.getElementById('zakat-table-body');
-                    for (let i = 0; i < 10; i++) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
+                    <script>
+                        const infakTableBody = document.getElementById('infak-table-body');
+                        for (let i = 0; i < 10; i++) {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                            <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td><input type="checkbox" class="row-checkbox"></td>
                         `;
-                        zakatTableBody.appendChild(tr);
-                    }
+                            infakTableBody.appendChild(tr);
+                        }
+                    </script>
+                </table>
+                <div id="pagination" class="pagination"></div> <!-- Elemen untuk pagination -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const infakTableBody = document.getElementById('infak-table-body');
+                        const rows = infakTableBody.querySelectorAll('tr');
+                        const rowsPerPage = 10;
+                        const pagination = document.getElementById('pagination');
+                        let currentPage = 1;
+
+                        function displayRows(page) {
+                            const start = (page - 1) * rowsPerPage;
+                            const end = start + rowsPerPage;
+
+                            rows.forEach((row, index) => {
+                                row.style.display = (index >= start && index < end) ? '' : 'none';
+                            });
+                        }
+
+                        function setupPagination() {
+                            const pageCount = Math.ceil(rows.length / rowsPerPage);
+                            pagination.innerHTML = '';
+
+                            for (let i = 1; i <= pageCount; i++) {
+                                const pageButton = document.createElement('button');
+                                pageButton.textContent = i;
+                                pageButton.classList.add('page-btn');
+                                if (i === currentPage) {
+                                    pageButton.classList.add('active');
+                                }
+                                pageButton.addEventListener('click', function() {
+                                    currentPage = i;
+                                    displayRows(currentPage);
+                                    document.querySelectorAll('.page-btn').forEach(btn => btn.classList.remove('active'));
+                                    pageButton.classList.add('active');
+                                });
+                                pagination.appendChild(pageButton);
+                            }
+                        }
+
+                        displayRows(currentPage);
+                        setupPagination();
+
+                        // Add event listener to rows for checkbox toggle
+                        Array.from(rows).forEach(function(row) {
+                            row.addEventListener('click', function() {
+                                const checkbox = row.querySelector('.row-checkbox');
+                                const checkedRow = document.querySelector('input.row-checkbox:checked');
+                                if (checkedRow) checkedRow.checked = false;
+                                if (checkbox) {
+                                    checkbox.checked = !checkbox.checked;
+                                }
+                            });
+                        });
+
+                        const addButton = document.getElementById('addButton');
+                        const addModal = new bootstrap.Modal(document.getElementById('addModal'));
+
+                        addButton.addEventListener('click', function() {
+                            addModal.show();
+                        });
+
+                        const editButton = document.querySelector('.btn-primary.edit');
+                        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+
+                        editButton.addEventListener('click', function() {
+                            const checkedRow = document.querySelector('input.row-checkbox:checked');
+                            if (checkedRow) {
+                                const row = checkedRow.closest('tr');
+                                const cells = row.getElementsByTagName('td');
+                                document.getElementById('editId').value = row.dataset.id;
+                                document.getElementById('editTgl').value = cells[0].textContent.trim();
+                                document.getElementById('editKeterangan').value = cells[1].textContent.trim();
+                                document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
+                                editModal.show();
+                            } else {
+                                alert('Please select a row to edit.');
+                            }
+                        });
+
+                        const deleteButton = document.querySelector('.btn-primary.delete');
+                        deleteButton.addEventListener('click', function() {
+                            const checkedRow = document.querySelector('input.row-checkbox:checked');
+                            if (checkedRow) {
+                                if (confirm('Are you sure you want to delete this data?')) {
+                                    const row = checkedRow.closest('tr');
+                                    const id = row.dataset.id;
+                                    window.location.href = `/yatim/deleteFormData/${id}`;
+                                }
+                            } else {
+                                alert('Please select a row to delete.');
+                            }
+                        });
+                    });
                 </script>
                 <div style="text-align: right;">
-                    <h4>Total Saldo Zakat: <span id="totalSaldo">Rp 00.00</span></h4>
-                    <button class="btn btn-primary" id="addButton">Tambah</button>
-                    <button class="btn btn-primary">Edit</button>
-                    <button class="btn btn-primary">Hapus</button>
+                    <h4>Total Saldo Infak: <span id="totalSaldo">Rp 00.00</span></h4>
+                    <button id="addButton" class="btn btn-primary">Tambahkan</button>
+                    <button class="btn btn-primary edit">Edit</button>
+                    <button class="btn btn-primary delete">Hapus</button> <!-- Updated button for delete -->
                 </div>
             </div>
         </div>
     </div>
-
 </section>
 
-<!-- Modal for Adding Data -->
+<!-- Modal Form -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Tambah Data Infak Anak Yatim</h5>
+                <h5 class="modal-title" id="addModalLabel">Tambah Data Infak</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -193,10 +296,41 @@ if ($id_user) {
     </div>
 </div>
 
+<!-- Modal Form for Editing Data -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Data Infak Anak Yatim</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="editForm" method="POST" action="/yatim/updateFormData/<?= $masjid['id_masjid'] ?>">
+                    <input type="hidden" id="editId" name="id_infak">
+                    <div class="mb-3">
+                        <label for="editTgl" class="form-label">Tanggal</label>
+                        <input type="date" class="form-control" id="editTgl" name="tgl" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editKeterangan" class="form-label">Keterangan</label>
+                        <input type="text" class="form-control" id="editKeterangan" name="keterangan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editNominal" class="form-label">Nominal</label>
+                        <input type="number" class="form-control" id="editNominal" name="nominal" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('searchInput');
-        const tableBody = document.getElementById('zakat-table-body');
+        const tableBody = document.getElementById('infak-table-body');
         const rows = tableBody.getElementsByTagName('tr');
         const totalSaldoElement = document.getElementById('totalSaldo');
 
@@ -247,24 +381,7 @@ if ($id_user) {
             calculateTotal();
         });
 
-        // Add event listener to rows for checkbox toggle
-        Array.from(rows).forEach(function(row) {
-            row.addEventListener('click', function() {
-                const checkbox = row.querySelector('.row-checkbox');
-                if (checkbox) {
-                    checkbox.checked = !checkbox.checked;
-                }
-            });
-        });
-
         calculateTotal();
-
-        const addButton = document.getElementById('addButton');
-        const addModal = new bootstrap.Modal(document.getElementById('addModal'));
-
-        addButton.addEventListener('click', function() {
-            addModal.show();
-        });
     });
 </script>
 

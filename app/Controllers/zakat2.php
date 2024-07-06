@@ -66,6 +66,7 @@ class zakat2 extends BaseController
         ];
 
         $this->zakatModel->insert($data);
+        session()->setFlashdata('success', 'Data berhasil ditambahkan');
         return redirect()->to('/zakat2/' . $id_masjid);
     }
 
@@ -79,6 +80,19 @@ class zakat2 extends BaseController
         ];
 
         $this->zakatModel->update($id, $data);
+        session()->setFlashdata('success', 'Data berhasil diedit');
         return redirect()->to('/zakat2/' . $id_masjid);
+    }
+
+    public function deleteFormData($id_zakat)
+    {
+        $zakat = $this->zakatModel->find($id_zakat);
+        if ($zakat) {
+            $this->zakatModel->delete($id_zakat);
+            session()->setFlashdata('success', 'Data berhasil dihapus');
+        } else {
+            session()->setFlashdata('error', 'Data tidak ditemukan');
+        }
+        return redirect()->to('/zakat2/' . $zakat['id_masjid']);
     }
 }

@@ -101,4 +101,21 @@ class uang extends BaseController
             return redirect()->to('/uangkas/' . $id_masjid)->with('error', 'ID transaksi tidak ditemukan.');
         }
     }
+
+    public function deleteFormData()
+    {
+        $ids = $this->request->getPost('id_transaksi');
+        if ($ids && is_array($ids)) {
+            foreach ($ids as $id_transaksi) {
+                $kas = $this->kasmasjidModel->find($id_transaksi);
+                if ($kas) {
+                    $this->kasmasjidModel->delete($id_transaksi);
+                }
+            }
+            session()->setFlashdata('success', 'Data berhasil dihapus');
+        } else {
+            session()->setFlashdata('error', 'Data tidak ditemukan');
+        }
+        return redirect()->back();
+    }
 }
