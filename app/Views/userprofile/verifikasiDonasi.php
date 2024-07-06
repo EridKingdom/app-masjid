@@ -179,8 +179,8 @@ if ($id_user) {
                         });
                     </script>
                     <div style="text-align: right;">
-                        <button class="btn btn-primary">Verifikasi Semua</button>
-                        <button class="btn btn-primary">Batalkan Semua</button>
+                        <a class="btn btn-primary"  href="/donasi/verifikasi/all">Verifikasi Semua</a>
+                        <a class="btn btn-primary"  href="/donasi/verifikasi/all">Batalkan Semua</a>
                     </div>
                 </table>
             </div>

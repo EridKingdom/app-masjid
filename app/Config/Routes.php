@@ -17,6 +17,8 @@ $routes->get('/login', 'Login::index');
 $routes->get('/registrasi', 'Login::registrasi');
 $routes->get('/donasi', 'Login::donasi');
 $routes->post('/donasi-store', 'Login::storeDonasi');
+$routes->get('/donasi/verifikasi/all', 'verifikasiDonasi::verifyAllDonasi');
+$routes->get('/donasi/unverifikasi/all', 'verifikasiDonasi::unverifyAllDonasi');
 $routes->get('/donasi/verifikasi/(:num)', 'verifikasiDonasi::verifyDonasi/$1');
 $routes->get('/donasi/unverifikasi/(:num)', 'verifikasiDonasi::unverifyDonasi/$1');
 $routes->get('/TbMasjid', 'TbMasjid::index');

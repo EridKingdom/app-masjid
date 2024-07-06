@@ -42,29 +42,56 @@ class verifikasiDonasi extends BaseController
         return view('userprofile/verifikasiDonasi', $data);
     }
 
-    public function verifyDonasi($id_donasi) {
+    public function verifyDonasi($id_donasi)
+    {
         $donasi = $this->donasiModel->find($id_donasi);
-        if($donasi) {
+        if ($donasi) {
             $zakatData = [
                 'tgl' => $donasi['create_at'],
                 'id_masjid' => $donasi['id_masjid'],
                 'keterangan' => $donasi['nama_donatur'],
                 'nominal' => $donasi['nominal'],
             ];
-            if($this->zakatModel->save($zakatData)) {
+            if ($this->zakatModel->save($zakatData)) {
                 $this->donasiModel->delete($id_donasi);
                 return redirect()->back();
-            }else {
+            } else {
                 return redirect()->back()->with('error', 'Tidak berhasil verifikasi');
             }
-        } else{
+        } else {
             return redirect()->back()->with('error', 'Data tidak ditemukan.');
         }
-       
     }
 
-    public function unverifyDonasi($id_donasi) {
+    public function unverifyDonasi($id_donasi)
+    {
         $this->donasiModel->delete($id_donasi);
-                return redirect()->back();
+        return redirect()->back();
+    }
+
+    public function verifyAllDonasi()
+    {
+        $donasiAll = $this->donasiModel->findAll();
+        foreach ($donasiAll as $key => $donasi) {
+            if ($donasi) {
+                $zakatData = [
+                    'tgl' => $donasi['create_at'],
+                    'id_masjid' => $donasi['id_masjid'],
+                    'keterangan' => $donasi['nama_donatur'],
+                    'nominal' => $donasi['nominal'],
+                ];
+                if ($this->zakatModel->save($zakatData)) {
+                    $this->donasiModel->delete($donasi['id_donasi']);
+                }
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    public function unverifyAllDonasi()
+    {
+        $this->donasiModel->delete();
+        return redirect()->back();
     }
 }
