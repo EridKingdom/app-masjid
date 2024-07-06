@@ -82,7 +82,7 @@ $id_user = $userData['id_user'] ?? null;
 $masjid = [];
 if ($id_user) {
     $db = \Config\Database::connect();
-    $query = $db->query("SELECT nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $query = $db->query("SELECT nama_masjid, deskripsi, alamat_masjid, sampul FROM db_data_masjid WHERE id_user = ?", [$id_user]);
     $result = $query->getRowArray();
     if ($result) {
         $masjid = $result;
@@ -117,13 +117,23 @@ if ($id_user) {
                     <h3 class="text-center mb-3">Edit Profil Masjid</h3>
                     <form method="POST" action="<?= base_url('editP/updateProfile'); ?>" enctype="multipart/form-data">
                         <div class="mb-3 text-center">
-                            <input type="file" class="form-control text-center" id="fotoProfil" name="fotoProfil" accept="image/*">
+                            <input hidden value="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" type="file" class="form-control text-center" id="fotoProfil" name="fotoProfil" accept="image/*">
+                            <img class="profile-img" id="fotoProfilImg" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 50px; width: 50px; border-radius: 50%;">
                             <label for="fotoProfil" class="form-label">Upload Foto Profil Masjid</label>
                             <script>
+                                
                                 document.getElementById('fotoProfil').addEventListener('change', function() {
                                     if (this.files.length > 0) {
+                                        var fr=new FileReader();
+                                        var showImg = document.getElementById('fotoProfilImg');
+                                        fr.onload = function(e) { showImg.setAttribute('src',this.result) };
                                         this.nextElementSibling.innerHTML = this.files[0].name;
+                                        fr.readAsDataURL(this.files[0]);
                                     }
+                                });
+                                document.getElementById('fotoProfilImg').addEventListener('click', function() {
+                                    var img = document.getElementById('fotoProfil');
+                                    img.click();
                                 });
                             </script>
                         </div>
