@@ -13,7 +13,7 @@ class editP extends BaseController
     public function __construct()
     {
         // Menginisialisasi model dalam satu konstruktor
-        $this->dbdatamasjidModel = new dbdatamasjidModel();
+        $this->dbdatamasjidModel = new DbDataMasjidModel();
         $this->tbkegiatanModel = new tbkegiatanModel();
     }
 
@@ -64,31 +64,27 @@ class editP extends BaseController
             if ($files['sampul']->isValid() && !$files['sampul']->hasMoved()) {
                     $newName = $files['sampul']->getRandomName();
                     $files['sampul']->move(FCPATH . 'img', $newName);
-                    $uploadedSampulFileName = $newName; 
                     $data['sampul'] = $newName;
             }
             if ($files['gambar1']->isValid() && !$files['gambar1']->hasMoved()) {
                     $newName = $files['gambar1']->getRandomName();
                     $files['gambar1']->move(FCPATH . 'img', $newName);
-                    $uploadedGambar1FileName = $newName; 
-                    $files['gambar1'] = $newName;
+                    $data['gambar1'] = $newName;
+
             }
             if ($files['gambar2']->isValid() && !$files['gambar2']->hasMoved()) {
                     $newName = $files['gambar2']->getRandomName();
                     $files['gambar2']->move(FCPATH . 'img', $newName);
-                    $uploadedGambar2FileName = $newName; 
-                    $files['gambar2'] = $newName;
+                    $data['gambar2'] = $newName;
             }
             if ($files['gambar3']->isValid() && !$files['gambar3']->hasMoved()) {
                     $newName = $files['gambar3']->getRandomName();
                     $files['gambar3']->move(FCPATH . 'img', $newName);
-                    $uploadedGambar3FileName = $newName; 
-                    $files['gambar3'] = $newName;
+                    $data['gambar3'] = $newName;
             }
-
-
             // Update the database
-            $this->dbdatamasjidModel->update($id_user, $data);
+            $currentData = $this->dbdatamasjidModel->where('id_user', $id_user);
+            $this->dbdatamasjidModel->update($currentData->id, $data);
 
             return redirect()->to('/profile')->with('message', 'Profile updated successfully');
         } else {

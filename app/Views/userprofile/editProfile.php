@@ -161,7 +161,7 @@ if ($id_user) {
                         <hr>
                         <div class="mb-3">
                             <label for="deskripsiMasjid" class="form-label">Deskripsi Masjid</label>
-                            <textarea class="form-control" id="deskripsiMasjid" name="deskripsi_masjid" rows="3" required><?= esc($masjid['deskripsi_masjid'] ?? ''); ?></textarea>
+                            <textarea class="form-control" id="deskripsiMasjid" name="deskripsi" rows="3" required><?= esc($masjid['deskripsi'] ?? ''); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
