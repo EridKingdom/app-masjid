@@ -144,8 +144,8 @@ if ($id_user) {
                                         <?php endif; ?>
                                     </td>
                                     <td class="column-center">
-                                        <a class="ceklis">✔</a>
-                                        <a class="silang">✘</a>
+                                        <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi']?>">✔</a>
+                                        <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi']?>">✘</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
