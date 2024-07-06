@@ -7,9 +7,11 @@ use App\Models\DbDataMasjidModel;
 use App\Models\TbKegiatanModel;
 use App\Models\ZakatModel;
 use App\Models\InfakAnakYatimModel;
+use CodeIgniter\API\ResponseTrait;
 
 class Laporan extends BaseController
 {
+    use ResponseTrait;
     protected $kasMasjidModel;
     protected $dbDataMasjidModel;
     protected $tbKegiatanModel;
@@ -51,5 +53,30 @@ class Laporan extends BaseController
         ];
 
         return view('userprofile/laporan', $data);
+    }
+
+    public function laporanFilter() {
+        $type = $this->request->getVar('type');
+        $from = $this->request->getVar('startDate');
+        $to = $this->request->getVar('endDate');
+        switch ($type) {
+            case 'kasTable':
+                $kasList =  $this->kasMasjidModel->where("DATE_FORMAT(tgl,'%Y-%m-%d')",'>=',$from)
+                ->where("DATE_FORMAT(tgl,'%Y-%m-%d')",'<=',$to);
+                return $this->respond($kasList);
+                break;
+
+            case 'zakat-table':
+                
+                break;
+
+            case 'kegiatan-table':
+                    # code...
+                break;
+            case 'infak_anak_yatim-table':
+                    # code...
+                break;
+            
+        }
     }
 }

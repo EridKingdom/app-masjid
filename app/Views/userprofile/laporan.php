@@ -158,7 +158,7 @@ if ($id_user) {
                 <form class="report-filter-form" method="POST">
                     <div class="form-group">
                         <label for="reportType">Tipe Laporan:</label>
-                        <select class="form-control" id="reportType" name="reportType" onchange="updateTableColumns();">
+                        <select class="form-control" id="reportType" name="reportType">
                             <option value="kas_masjid">Uang Kas</option>
                             <option value="zakat">Zakat</option>
                             <option value="infak_anak_yatim">Infak Anak Yatim</option>
