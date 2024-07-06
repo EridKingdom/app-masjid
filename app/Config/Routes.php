@@ -47,7 +47,9 @@ $routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
 $routes->post('/login/auth', 'Login::auth');
 
 $routes->get('/buat-postingan', 'Posting::create');
+$routes->get('/edit-postingan/(:num)', 'Posting::update/$1');
 $routes->post('/store-postingan', 'Posting::store');
+$routes->post('/edit-postingan/(:num)', 'Posting::edit/$1');
 
 $routes->get('profile/(:segment)', 'Profile::details/$1');
 

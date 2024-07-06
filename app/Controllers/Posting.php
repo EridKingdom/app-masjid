@@ -12,6 +12,13 @@ class Posting extends Controller
         return view('userprofile/buatPostingan');
     }
 
+    public function update($id_kegiatan)
+    {
+        $tbKegiatanModel =  new TbKegiatanModel();
+        $posting = $tbKegiatanModel->find($id_kegiatan);
+        return view('userprofile/editPostingan', $posting);
+    }
+
     public function store()
     {
         $idMasjid = $this->request->getPost('id_masjid');
@@ -70,4 +77,68 @@ class Posting extends Controller
 
         return redirect()->to('/profile')->with('message', 'Post berhasil dibuat');
     }
+
+    public function edit($id_kegiatan)
+    {
+        $tbKegiatanModel = new TbKegiatanModel();
+        $existingData = $tbKegiatanModel->find($id_kegiatan);
+
+        if (!$existingData) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+        }
+
+        $idMasjid = $this->request->getPost('id_masjid');
+        $postType = $this->request->getPost('postType');
+        $judulKegiatan = $this->request->getPost('judulKegiatan');
+        $deskripsiKegiatan = $this->request->getPost('deskripsiKegiatan');
+        $postMedia = $this->request->getFiles('postMedia');
+
+        // Debugging
+        log_message('debug', 'Deskripsi Kegiatan (before validation): ' . $deskripsiKegiatan);
+
+        if (!$this->validate([
+            'deskripsiKegiatan' => 'required|min_length[3]',
+            'postMedia.*' => 'uploaded[postMedia]|max_size[postMedia,10240]|ext_in[postMedia,jpg,jpeg,png,mp4]',
+        ])) {
+            log_message('error', 'Validation failed: ' . json_encode($this->validator->getErrors()));
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        log_message('debug', 'Deskripsi Kegiatan (after validation): ' . $deskripsiKegiatan);
+
+        // Proses file yang diunggah
+        $uploadedFileName = $existingData['gambar_kegiatan']; // Default to existing file name
+        foreach ($postMedia['postMedia'] as $file) {
+            if ($file->isValid() && !$file->hasMoved()) {
+                $newName = $file->getRandomName();
+                $file->move(FCPATH . 'imgpostingan', $newName);
+                $uploadedFileName = $newName;
+            }
+        }
+
+        // Log file upload status
+        log_message('debug', 'Uploaded File Name: ' . $uploadedFileName);
+
+        // Update konten postingan dan path file ke database
+        $data = [
+            'id_masjid' => $idMasjid,
+            'tgl' => date('Y-m-d H:i:s'),
+            'gambar_kegiatan' => $uploadedFileName,
+            'judul_kegiatan' => $judulKegiatan,
+            'tipe_postingan' => $postType,
+            'deskripsi_kegiatan' => $deskripsiKegiatan,
+        ];
+
+        // Log data yang akan dimasukkan
+        log_message('debug', 'Data yang akan dimasukkan (before save): ' . json_encode($data));
+
+        if ($tbKegiatanModel->update($id_kegiatan, $data)) {
+            log_message('debug', 'Data berhasil diperbarui');
+        } else {
+            log_message('error', 'Data gagal diperbarui');
+        }
+
+        return redirect()->to('/profile')->with('message', 'Post berhasil diperbarui');
+    }
+
 }

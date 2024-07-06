@@ -82,7 +82,7 @@ $id_user = $userData['id_user'] ?? null;
 $masjid = [];
 if ($id_user) {
     $db = \Config\Database::connect();
-    $query = $db->query("SELECT nama_masjid, nama_pengurus, sampul, deskripsi, alamat_masjid, provinsi, kota_kab, jenis_tipologi, tahun_berdiri, luas_bangunan, surat_takmir, sertifikat, no_rekening, nama_bank, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $query = $db->query("SELECT nama_masjid, nama_pengurus, sampul, deskripsi, alamat_masjid, provinsi, kota_kab, jenis_tipologi, tahun_berdiri, luas_bangunan, surat_takmir, sertifikat, no_rekening, nama_bank, gambar1, gambar2, gambar3, no_rekening, nama_bank FROM db_data_masjid WHERE id_user = ?", [$id_user]);
     $result = $query->getRowArray();
     if ($result) {
         $masjid = $result;
@@ -174,6 +174,14 @@ if ($id_user) {
                         <div class="mb-3">
                             <label for="kota" class="form-label">Kota</label>
                             <input type="text" class="form-control" id="kota" name="kota_kab" value="<?= esc($masjid['kota_kab'] ?? ''); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="provinsi" class="form-label">Bank</label>
+                            <input type="text" class="form-control" id="nama_bank" name="nama_bank" value="<?= esc($masjid['nama_bank'] ?? ''); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="provinsi" class="form-label">No Rekening</label>
+                            <input type="text" class="form-control" id="no_rekening" name="no_rekening" value="<?= esc($masjid['no_rekening'] ?? ''); ?>" required>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>

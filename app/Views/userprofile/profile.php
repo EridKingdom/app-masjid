@@ -248,7 +248,7 @@ echo "<script>var files = " . json_encode($files) . ";</script>";
                                         <i class="fas fa-ellipsis-h"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" href="#">Edit Postingan</a></li>
+                                        <li><a class="dropdown-item" href="<?= base_url('/edit-postingan/' . $k['id_kegiatan']); ?>">Edit Postingan</a></li>
                                         <li><a class="dropdown-item" href="#">Hapus Postingan</a></li>
                                     </ul>
                                 </div>
