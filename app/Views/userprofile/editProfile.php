@@ -110,62 +110,60 @@ if ($id_user) {
     </div>
 </section>
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="card col-md-20 col-lg-9">
-
                 <div class="card-body">
                     <h3 class="text-center mb-3">Edit Profil Masjid</h3>
-                    <div class="mb-3 text-center">
-                        <input type="file" class="form-control text-center" id="fotoProfil" name="fotoProfil" accept="image/*" required>
-                        <label for="fotoProfil" class="form-label">Upload Foto Profil Masjid</label>
-                        <script>
-                            document.getElementById('fotoProfil').addEventListener('change', function() {
-                                if (this.files.length > 0) {
-                                    this.nextElementSibling.innerHTML = '+';
-                                }
-                            });
-                        </script>
-                    </div>
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" action="<?= base_url('editP/updateProfile'); ?>" enctype="multipart/form-data">
+                        <div class="mb-3 text-center">
+                            <input type="file" class="form-control text-center" id="fotoProfil" name="fotoProfil" accept="image/*">
+                            <label for="fotoProfil" class="form-label">Upload Foto Profil Masjid</label>
+                            <script>
+                                document.getElementById('fotoProfil').addEventListener('change', function() {
+                                    if (this.files.length > 0) {
+                                        this.nextElementSibling.innerHTML = this.files[0].name;
+                                    }
+                                });
+                            </script>
+                        </div>
                         <hr>
                         <div class="mb-3">
                             <label for="namaMasjid" class="form-label">Nama Masjid</label>
-                            <input type="text" class="form-control" id="namaMasjid" name="namaMasjid" required>
+                            <input type="text" class="form-control" id="namaMasjid" name="namaMasjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="namaPengurus" class="form-label">Nama Pengurus</label>
-                            <input type="text" class="form-control" id="namaPengurus" name="namaPengurus" required>
+                            <input type="text" class="form-control" id="namaPengurus" name="namaPengurus" value="<?= esc($masjid['nama_pengurus'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="gambar1" class="form-label">Upload Gambar 1</label>
-                            <input type="file" class="form-control" id="gambar1" name="gambar1" accept="image/*" required>
+                            <input type="file" class="form-control" id="gambar1" name="gambar1" accept="image/*">
                         </div>
                         <div class="mb-3">
                             <label for="gambar2" class="form-label">Upload Gambar 2</label>
-                            <input type="file" class="form-control" id="gambar2" name="gambar2" accept="image/*" required>
+                            <input type="file" class="form-control" id="gambar2" name="gambar2" accept="image/*">
                         </div>
                         <div class="mb-3">
                             <label for="gambar3" class="form-label">Upload Gambar 3</label>
-                            <input type="file" class="form-control" id="gambar3" name="gambar3" accept="image/*" required>
+                            <input type="file" class="form-control" id="gambar3" name="gambar3" accept="image/*">
                         </div>
                         <hr>
                         <div class="mb-3">
                             <label for="deskripsiMasjid" class="form-label">Deskripsi Masjid</label>
-                            <textarea class="form-control" id="deskripsiMasjid" name="deskripsiMasjid" rows="3" required></textarea>
+                            <textarea class="form-control" id="deskripsiMasjid" name="deskripsiMasjid" rows="3" required><?= esc($masjid['deskripsi'] ?? ''); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
+                            <textarea class="form-control" id="alamat" name="alamat" rows="3" required><?= esc($masjid['alamat_masjid'] ?? ''); ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="provinsi" class="form-label">Provinsi</label>
-                            <input type="text" class="form-control" id="provinsi" name="provinsi" required>
+                            <input type="text" class="form-control" id="provinsi" name="provinsi" value="<?= esc($masjid['provinsi'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="kota" class="form-label">Kota</label>
-                            <input type="text" class="form-control" id="kota" name="kota" required>
+                            <input type="text" class="form-control" id="kota" name="kota" value="<?= esc($masjid['kota'] ?? ''); ?>" required>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>
@@ -173,7 +171,6 @@ if ($id_user) {
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

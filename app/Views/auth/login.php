@@ -10,6 +10,9 @@
             <?php if (session()->getFlashdata('msg')) : ?>
                 <div class="alert alert-danger"><?= session()->getFlashdata('msg'); ?></div>
             <?php endif; ?>
+            <?php if (session()->getFlashdata('success')) : ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
+            <?php endif; ?>
             <form class="user" action="<?= base_url('/login/auth'); ?>" method="POST">
                 <div class="form-group">
                     <input type="text" class="form-control form-control-user" id="exampleInputEmail" name="username" aria-describedby="emailHelp" placeholder="Username">

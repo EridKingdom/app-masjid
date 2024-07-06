@@ -48,4 +48,34 @@ class editP extends BaseController
     {
         echo $slug;
     }
+
+    public function updateProfile()
+    {
+        $session = session();
+        $userData = $session->get('user_data');
+        $id_user = $userData['id_user'] ?? null;
+
+        if ($id_user) {
+            $data = $this->request->getPost();
+            $files = $this->request->getFiles();
+
+            // Handle file uploads
+            if ($files['gambar1']->isValid() && !$files['gambar1']->hasMoved()) {
+                $data['gambar1'] = $files['gambar1']->store();
+            }
+            if ($files['gambar2']->isValid() && !$files['gambar2']->hasMoved()) {
+                $data['gambar2'] = $files['gambar2']->store();
+            }
+            if ($files['gambar3']->isValid() && !$files['gambar3']->hasMoved()) {
+                $data['gambar3'] = $files['gambar3']->store();
+            }
+
+            // Update the database
+            $this->dbdatamasjidModel->update($id_user, $data);
+
+            return redirect()->to('/profile')->with('message', 'Profile updated successfully');
+        } else {
+            return redirect()->to('/login')->with('error', 'User not logged in');
+        }
+    }
 }

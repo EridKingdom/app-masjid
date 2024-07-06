@@ -109,7 +109,7 @@ class Login extends Controller
                     $uploadedSertifikatFileName = $newName; // Simpan nama file
                 }
             }
-    
+
 
             $userModel->insert($userData);
             $userId = $userModel->getInsertID();
@@ -124,7 +124,7 @@ class Login extends Controller
                 'gambar2' => $uploadedGambar2FileName,
                 'kota_kab' => $this->request->getVar('kota'),
                 'alamat_masjid' => $this->request->getVar('alamat'),
-                'surat_takmir' => $uploadedTakmirFileName ,
+                'surat_takmir' => $uploadedTakmirFileName,
                 'sertifikat' => $uploadedSertifikatFileName,
                 'jenis_tipologi' => $this->request->getVar('jenis_tipologi'),
                 'tahun_berdiri' => $this->request->getVar('tahun_berdiri'),
@@ -136,7 +136,7 @@ class Login extends Controller
 
             $masjidModel->insert($masjidData);
 
-            $session->setFlashdata('success', 'Registrasi berhasil.');
+            $session->setFlashdata('success', 'Registrasi berhasil, silahkan login.');
             return redirect()->to('/login');
         }
 
