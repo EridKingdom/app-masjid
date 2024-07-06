@@ -82,7 +82,7 @@ $id_user = $userData['id_user'] ?? null;
 $masjid = [];
 if ($id_user) {
     $db = \Config\Database::connect();
-    $query = $db->query("SELECT nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $query = $db->query("SELECT nama_masjid, nama_pengurus, sampul, deskripsi, alamat_masjid, provinsi, kota_kab, jenis_tipologi, tahun_berdiri, luas_bangunan, surat_takmir, sertifikat, no_rekening, nama_bank, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
     $result = $query->getRowArray();
     if ($result) {
         $masjid = $result;
@@ -163,7 +163,7 @@ if ($id_user) {
                         </div>
                         <div class="mb-3">
                             <label for="kota" class="form-label">Kota</label>
-                            <input type="text" class="form-control" id="kota" name="kota" value="<?= esc($masjid['kota'] ?? ''); ?>" required>
+                            <input type="text" class="form-control" id="kota" name="kota" value="<?= esc($masjid['kota_kab'] ?? ''); ?>" required>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>
