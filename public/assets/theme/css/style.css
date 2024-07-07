@@ -1739,27 +1739,6 @@ h1 {
   -webkit-overflow-scrolling: touch;
 }
 
-@media print {
-      body * {
-          visibility: hidden;
-      }
-      .judul, .table.table-responsive, .judul * , .table.table-responsive * {
-          visibility: visible;
-      }
-      .judul {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-      }
-      .table.table-responsive {
-          position: absolute;
-          top: 50px; /* Adjust as needed */
-          left: 0;
-          width: 100%;
-    }
-}
-
 .TombolKirim, .TombolBatalkan {
   width: 60%;
   display: inline-block;

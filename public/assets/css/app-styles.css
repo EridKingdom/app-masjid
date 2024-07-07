@@ -138,25 +138,3 @@ main {
 .table-row.selected {
     background-color: #d3d3d3; /* Warna latar belakang untuk baris yang dipilih */
 }
-
-@media print {
-    /* Sembunyikan elemen yang tidak perlu saat mencetak */
-    .header09, .slider3, .report-filter-form, .filter-button-container {
-        display: none;
-    }
-
-    /* Pastikan tabel yang dipilih terlihat */
-    #kasTable, #zakat-table, #kegiatan-table, #infak_anak_yatim-table {
-        display: table !important;
-    }
-
-    /* Atur margin dan padding untuk tampilan cetak */
-    body {
-        margin: 0;
-        padding: 0;
-    }
-
-    .container-fluid {
-        width: 100%;
-    }
-}

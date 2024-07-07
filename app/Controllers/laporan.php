@@ -55,28 +55,55 @@ class Laporan extends BaseController
         return view('userprofile/laporan', $data);
     }
 
-    public function laporanFilter() {
-        $type = $this->request->getVar('type');
-        $from = $this->request->getVar('startDate');
-        $to = $this->request->getVar('endDate');
-        switch ($type) {
-            case 'kasTable':
-                $kasList =  $this->kasMasjidModel->where("DATE_FORMAT(tgl,'%Y-%m-%d')",'>=',$from)
-                ->where("DATE_FORMAT(tgl,'%Y-%m-%d')",'<=',$to);
-                return $this->respond($kasList);
-                break;
+    public function laporanFilter($id_masjid, $type, $from = null, $to =null)
+    {
+        // return $this->respond($startDate);
+        if (!$from || !$to) {
+            switch ($type) {
+                case 'kas_masjid':
+                    $list =  $this->kasMasjidModel->where("id_masjid", $id_masjid)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
 
-            case 'zakat-table':
-                
-                break;
+                case 'zakat':
+                    $list =  $this->zakatModel->where("id_masjid", $id_masjid)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
 
-            case 'kegiatan-table':
-                    # code...
-                break;
-            case 'infak_anak_yatim-table':
-                    # code...
-                break;
-            
+                case 'tb_kegiatan':
+                    $list =  $this->tbKegiatanModel->where("id_masjid", $id_masjid)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
+                case 'infak_anak_yatim':
+                    $list =  $this->infakAnakYatimModel->where("id_masjid", $id_masjid)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
+            }
+        } else {
+            switch ($type) {
+                case 'kas_masjid':
+                    $list =  $this->kasMasjidModel->where("id_masjid", $id_masjid)->where("tgl >=", $from)
+                        ->where("tgl <=", $to)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
+
+                case 'zakat':
+                    $list =  $this->zakatModel->where("id_masjid", $id_masjid)->where("tgl >=", $from)
+                        ->where("tgl <=", $to)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
+
+                case 'tb_kegiatan':
+                    $list =  $this->tbKegiatanModel->where("id_masjid", $id_masjid)->where("tgl >=", $from)
+                        ->where("tgl <=", $to)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
+                case 'infak_anak_yatim':
+                    $list =  $this->infakAnakYatimModel->where("id_masjid", $id_masjid)->where("tgl >=", $from)
+                        ->where("tgl <=", $to)->findAll();
+                    return $this->respond(['data' => $list]);
+                    break;
+            }
         }
     }
 }

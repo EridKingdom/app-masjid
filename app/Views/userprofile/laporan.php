@@ -42,6 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
+
+
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
 
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
@@ -57,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $masjid = [];
                 if ($id_user) {
                     $db = \Config\Database::connect();
-                    $query = $db->query("SELECT nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+                    $query = $db->query("SELECT id, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
                     $result = $query->getRowArray();
                     if ($result) {
                         $masjid = $result;
@@ -122,7 +130,7 @@ $id_user = $userData['id_user'] ?? null;
 $masjid = [];
 if ($id_user) {
     $db = \Config\Database::connect();
-    $query = $db->query("SELECT nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $query = $db->query("SELECT id, nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
     $result = $query->getRowArray();
     if ($result) {
         $masjid = $result;
@@ -153,7 +161,7 @@ if ($id_user) {
 <section data-bs-version="5.1" class="header09 startm5 cid-ubP7pTTB9Y mbr-fullscreen" id="header09-c">
     <div class="container-fluid">
         <div class="row">
-            <div class="content-wrap col-16 col-md-10">
+            <div id="print-section" class="content-wrap col-16 col-md-10">
                 <h2 class="judul">Laporan</h2>
                 <form class="report-filter-form" method="POST">
                     <div class="form-group">
@@ -172,139 +180,55 @@ if ($id_user) {
                         <tbody id="reportTableBody"></tbody>
                     </table>
                 </div>
-                <table id="kasTable" class="table table-bordered" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Tanggal</th>
-                            <th>Keterangan</th>
-                            <th>Jenis Kas</th>
-                            <th>Nominal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="uangkas-table-body">
-                        <?php $i = 1; ?>
-                        <?php foreach ($kas_masjid as $k) : ?>
+                <div id="divkas" style="display: none;">
+                    <table id="kas_masjid-table" class="table table-bordered">
+                        <thead>
                             <tr>
-                                <th scope="row"><?= $i++; ?></th>
-                                <td><?= $k['tgl']; ?></td>
-                                <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['jenis_kas']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Keterangan</th>
+                                <th>Jenis Kas</th>
+                                <th>Nominal</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <script>
-                    const uangkasTableBody = document.getElementById('uangkas-table-body');
-                    for (let i = 0; i < 10; i++) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        `;
-                        uangkasTableBody.appendChild(tr);
-                    }
-                </script>
-                <table class="table table-striped" id="zakat-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Keterangan</th>
-                            <th>Nominal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="zakat-table-body">
-                        <?php foreach ($zakat as $k) : ?>
+                        </thead>
+                    </table>
+                </div>
+                <div id="divzakat" style="display: none;">
+                    <table class="table table-striped" id="zakat-table">
+                        <thead>
                             <tr>
-                                <td><?= $k['tgl']; ?></td>
-                                <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Keterangan</th>
+                                <th>Nominal</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <script>
-                    const zakatTableBody = document.getElementById('zakat-table-body');
-                    for (let i = 0; i < 10; i++) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        `;
-                        zakatTableBody.appendChild(tr);
-                    }
-                </script>
-                <table class="table table-striped" id="kegiatan-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Gambar</th>
-                            <th>Judul</th>
-                            <th>Tipe</th>
-                            <th>Deskripsi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="kegiatan-table-body">
-                        <?php foreach ($tb_kegiatan as $k) : ?>
+                        </thead>
+                    </table>
+                </div>
+                <div id="divkegiatan" style="display: none;">
+                    <table class="table table-striped" id="tb_kegiatan-table">
+                        <thead>
                             <tr>
-                                <td><?= $k['tgl']; ?></td>
-                                <td><img src="/imgpostingan/<?= $k['gambar_kegiatan']; ?>" alt="Gambar tidak ditemukan" class="sampul"></td>
-                                <td><?= $k['judul_kegiatan']; ?></td>
-                                <td><?= $k['tipe_postingan']; ?></td>
-                                <td><?= $k['deskripsi_kegiatan']; ?></td>
+                                <td>No</td>
+                                <td>Gambar</td>
+                                <td>Judul</td>
+                                <td>Deksripsi</td>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <script>
-                    const kegiatanTableBody = document.getElementById('kegiatan-table-body');
-                    for (let i = 0; i < 10; i++) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        `;
-                        kegiatanTableBody.appendChild(tr);
-                    }
-                </script>
-                <table id="infak_anak_yatim-table" class="table table-bordered" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>tgl</th>
-                            <th>keterangan</th>
-                            <th>Nominal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="infak-table-body">
-                        <?php foreach ($infak_anak_yatim as $k) : ?>
+                        </thead>
+                    </table>
+                </div>
+                <div id="divinfak" style="display: none;">
+                    <table id="infak_anak_yatim-table" class="table table-bordered">
+                        <thead>
                             <tr>
-                                <td><?= $k['tgl']; ?></td>
-                                <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>keterangan</th>
+                                <th>Nominal</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-                <script>
-                    const infakTableBody = document.getElementById('infak-table-body');
-                    for (let i = 0; i < 10; i++) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        `;
-                        infakTableBody.appendChild(tr);
-                    }
-                </script>
+                        </thead>
+                    </table>
+                </div>
 
                 <form class="date-filter-form" method="POST" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
                     <div class="form-group" style="margin-right: 10px;">
@@ -319,130 +243,244 @@ if ($id_user) {
                 <div class="filter-button-container">
                     <button class="filter-button" id="filterButton">Filter</button>
                 </div>
-                <div class="print-button-container">
-                    <button class="print-button" onclick="window.print()">Print</button>
-                </div>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    document.getElementById('reportType').addEventListener('change', function() {
-        // Sembunyikan semua tabel terlebih dahulu
-        document.getElementById('kasTable').style.display = 'none';
-        document.getElementById('zakat-table').style.display = 'none';
-        document.getElementById('kegiatan-table').style.display = 'none';
-        document.getElementById('infak_anak_yatim-table').style.display = 'none';
-
-        // Tampilkan tabel berdasarkan pilihan
-        var selectedOption = this.value;
-        switch (selectedOption) {
-            case 'kas_masjid':
-                document.getElementById('kasTable').style.display = '';
-                break;
-            case 'zakat':
-                document.getElementById('zakat-table').style.display = '';
-                break;
-            case 'infak_anak_yatim':
-                document.getElementById('infak_anak_yatim-table').style.display = '';
-                break;
-            case 'tb_kegiatan':
-                document.getElementById('kegiatan-table').style.display = '';
-                break;
-        }
-    });
-    document.querySelector('.print-button').addEventListener('click', function() {
-        var selectedOption = document.getElementById('reportType').value;
-        document.getElementById('kasTable').style.display = 'none';
-        document.getElementById('zakat-table').style.display = 'none';
-        document.getElementById('kegiatan-table').style.display = 'none';
-        document.getElementById('infak_anak_yatim-table').style.display = 'none';
-
-        switch (selectedOption) {
-            case 'kas_masjid':
-                document.getElementById('kasTable').style.display = 'table';
-                break;
-            case 'zakat':
-                document.getElementById('zakat-table').style.display = 'table';
-                break;
-            case 'infak_anak_yatim':
-                document.getElementById('infak_anak_yatim-table').style.display = 'table';
-                break;
-            case 'tb_kegiatan':
-                document.getElementById('kegiatan-table').style.display = 'table';
-                break;
-        }
-
-        window.print();
-    });
-</script>
-
-<script>
-    document.getElementById('filterButton').addEventListener('click', function(event) {
-        event.preventDefault();
-        var startDate = document.getElementById('startDate').value;
-        var endDate = document.getElementById('endDate').value;
-        var reportType = document.getElementById('reportType').value;
-
-        fetch('/laporan/filter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+    $(document).ready(function() {
+        function updateKas(from = null, to = null) {
+            var url = '/laporan/filter/<?= $masjid['id'] ?>/kas_masjid';
+            if (from && to) {
+                url += '/' + from + '/' + to;
+            }
+            $('#kas_masjid-table').DataTable({
+                ajax: {
+                    url: url,
+                    dataSrc: 'data'
                 },
-                body: JSON.stringify({
-                    startDate: startDate,
-                    endDate: endDate,
-                    type: reportType
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    updateTable(data.headers, data.rows);
+                layout: {
+                    bottomEnd: {
+                        buttons: [{
+                            extend: 'print',
+                            title: 'Laporan Kas Masjid',
+                        }]
+                    }
+                },
+                "bDestroy": true,
+                columns: [{
+                        "data": "id_transaksi",
+                        "name": "No"
+                    },
+                    {
+                        "data": "tgl",
+                        "name": "Tanggal"
+                    },
+                    {
+                        "data": "keterangan",
+                        "name": "Keterangan"
+                    },
+                    {
+                        "data": "jenis_kas",
+                        "name": "Jenis Kas"
+                    },
+                    {
+                        "data": "nominal",
+                        "name": "Nominal"
+                    },
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
                 }
-            })
-            .catch(error => console.error('Error:', error));
-    });
-
-    function updateTable(headers, rows) {
-        var reportType = document.getElementById('reportType').value;
-        var tableId = reportType + '-table'; // Pastikan ini sesuai dengan ID tabel di HTML
-        var table = document.getElementById(tableId);
-
-        if (!table) {
-            console.error('Tabel dengan ID ' + tableId + ' tidak ditemukan.');
-            return;
+            });
         }
 
-        var tableHead = table.getElementsByTagName('thead')[0];
-        var tableBody = table.getElementsByTagName('tbody')[0];
-
-        // Clear existing table data
-        tableHead.innerHTML = '';
-        tableBody.innerHTML = '';
-
-        // Create new header row
-        var headerRow = tableHead.insertRow(0);
-        headers.forEach(header => {
-            var cell = headerRow.insertCell();
-            cell.outerHTML = `<th>${header}</th>`;
-        });
-
-        // Insert new rows
-        rows.forEach(row => {
-            var newRow = tableBody.insertRow();
-            row.forEach(cellData => {
-                var cell = newRow.insertCell();
-                cell.textContent = cellData;
+        function updateZakat(from = null, to = null) {
+            var url = '/laporan/filter/<?= $masjid['id'] ?>/zakat';
+            if (from && to) {
+                url += '/' + from + '/' + to;
+            }
+            $('#zakat-table').DataTable({
+                ajax: {
+                    url: url,
+                    dataSrc: 'data'
+                },
+                layout: {
+                    bottomEnd: {
+                        buttons: [{
+                            extend: 'print',
+                            title: 'Laporan Zakat Masjid'
+                        }]
+                    }
+                },
+                "bDestroy": true,
+                columns: [{
+                        "data": "id_zakat",
+                        "name": "No"
+                    },
+                    {
+                        "data": "tgl",
+                        "name": "Tanggal"
+                    },
+                    {
+                        "data": "keterangan",
+                        "name": "Keterangan"
+                    },
+                    {
+                        "data": "nominal",
+                        "name": "Nominal"
+                    },
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                }
             });
+        }
+
+        function updateKegiatan(from = null, to = null) {
+            var url = '/laporan/filter/<?= $masjid['id'] ?>/tb_kegiatan';
+            if (from && to) {
+                url += '/' + from + '/' + to;
+            }
+            $('#tb_kegiatan-table').DataTable({
+                ajax: {
+                    url: url,
+                    dataSrc: 'data'
+                },
+                layout: {
+                    bottomEnd: {
+                        buttons: [{
+                            extend: 'print',
+                            title: 'Laporan Kegiatan Masjid'
+                        }]
+                    }
+                },
+                "bDestroy": true,
+                columns: [{
+                        "data": "id_kegiatan",
+                        "name": "No"
+                    },
+                    {
+                        "data": "gambar_kegiatan",
+                        "name": "Gambar",
+                        "render": function(data) {
+                            return '<img src="/imgpostingan/' + data + '" width="40px">';
+                        }
+                    },
+                    {
+                        "data": "judul_kegiatan",
+                        "name": "Judul"
+                    },
+                    {
+                        "data": "deskripsi_kegiatan",
+                        "name": "Deskripsi"
+                    },
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                }
+            });
+        }
+
+        function updateInfak(from = null, to = null) {
+            var url = '/laporan/filter/<?= $masjid['id'] ?>/infak_anak_yatim';
+            if (from && to) {
+                url += '/' + from + '/' + to;
+            }
+            $('#infak_anak_yatim-table').DataTable({
+                ajax: {
+                    url: url,
+                    dataSrc: 'data'
+                },
+                layout: {
+                    bottomEnd: {
+                        buttons: [{
+                            extend: 'print',
+                            title: 'Laporan Infak Anak Yatim'
+                        }]
+                    }
+                },
+                "bDestroy": true,
+                columns: [{
+                        "data": "id_infak",
+                        "name": "No"
+                    },
+                    {
+                        "data": "tgl",
+                        "name": "Tanggal"
+                    },
+                    {
+                        "data": "keterangan",
+                        "name": "Keterangan"
+                    },
+                    {
+                        "data": "nominal",
+                        "name": "Nominal"
+                    },
+                ],
+                "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    $('td:eq(0)', nRow).html(iDisplayIndexFull + 1);
+                }
+            });
+        }
+
+        updateKas();
+        updateInfak();
+        updateZakat();
+        updateKegiatan();
+        $('.buttons-excel, .buttons-print').each(function() {
+            $(this).removeClass('btn-default').addClass('btn-primary')
+        })
+
+        document.getElementById('filterButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var reportType = document.getElementById('reportType').value;
+
+            switch (reportType) {
+                case 'kas_masjid':
+                    updateKas(startDate, endDate);
+                    break;
+                case 'zakat':
+                    updateZakat(startDate, endDate);
+                    break;
+                case 'infak_anak_yatim':
+                    updateInfak(startDate, endDate);
+                    break;
+                case 'tb_kegiatan':
+                    updateKegiatan(startDate, endDate);
+                    break;
+            }
         });
 
-        // Show the table
-        table.style.display = '';
-    }
+        document.getElementById('reportType').addEventListener('change', function() {
+            $('#divkas').hide();
+            $('#divzakat').hide();
+            $('#divinfak').hide();
+            $('#divkegiatan').hide();
+            var selectedOption = this.value;
+            switch (selectedOption) {
+                case 'kas_masjid':
+                    $('#divkas').show();
+                    $('#kas_masjid-table').removeAttr('style');
+                    break;
+                case 'zakat':
+                    $('#divzakat').show();
+                    $('#zakat-table').removeAttr('style');
+                    break;
+                case 'infak_anak_yatim':
+                    $('#divinfak').show();
+                    $('#infak_anak_yatim-table').removeAttr('style');
+                    break;
+                case 'tb_kegiatan':
+                    $('#divkegiatan').show();
+                    $('#tb_kegiatan-table').removeAttr('style');
+                    break;
+            }
+        });
+    });
 </script>
 
 <?= $this->endSection('content'); ?>

@@ -47,6 +47,8 @@ $routes->get('/zakatview', 'zakat2::viewzakat');
 $routes->get('/yatim', 'yatim::index');
 $routes->get('/yatim/(:num)', 'yatim::index/$1');
 $routes->get('/laporan', 'laporan::index');
+$routes->get('/laporan/filter/(:num)/(:any)', 'laporan::laporanFilter/$1/$2');
+$routes->get('/laporan/filter/(:num)/(:any)/(:any)?/(:any)?', 'laporan::laporanFilter/$1/$2/$3/$4');
 $routes->get('/laporan/(:num)', 'laporan::index/$1');
 $routes->get('/editProfile', 'editP::index');
 $routes->post('/laporan/getData', 'Laporan::getData');
