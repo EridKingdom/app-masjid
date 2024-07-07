@@ -65,7 +65,8 @@
                     const todayDate = new Date();
                     const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
                     const kota = '<?= $masjid['kota_kab'] ?>';
-                    if (!kota) kota = 'Kota jambi';
+                    if (!kota) kota = 'Kota Padang';
+                    console.log(kota)
                     fetch(apiURLLocation + kota)
                         .then(response => response.json())
                         .then(data => {
@@ -81,6 +82,7 @@
                         })
                         .catch(error => console.error('Error fetching prayer times:', error));
                 }
+                
 
                 function displayPrayerTimes(data) {
                     const times = data.jadwal;
@@ -96,59 +98,76 @@
             </script>
         </div>
     </div>
-    <div class="widget-calendar d-none d-md-block" style="position: absolute; right: 10px;">
-        <p style="text-align: right;">
-            <iframe src="https://jadwalsholat.org/hijri/hijri.php" frameborder="0" width="400" height="315"></iframe>
-        </p>
-        <div class="digital-calendar" style="text-align: center; margin-top: 20px;">
-            <p id="current-date"></p>
-            <script>
-                const monthNames = ["January", "February", "March", "April", "May", "June",
-                    "July", "August", "September", "October", "November", "December"
-                ];
-                const today = new Date();
-                let currentMonth = today.getMonth();
-                let currentYear = today.getFullYear();
-
-                function showCalendar(month, year) {
-                    let firstDay = (new Date(year, month)).getDay();
-                    let daysInMonth = 32 - new Date(year, month, 32).getDate();
-
-                    let tbl = document.getElementById("calendar-body");
-                    tbl.innerHTML = "";
-
-                    document.getElementById("month-name").innerHTML = monthNames[month];
-                    document.getElementById("year").innerHTML = year;
-
-                    let date = 1;
-                    for (let i = 0; i < 6; i++) {
-                        let row = document.createElement("tr");
-                        for (let j = 0; j < 7; j++) {
-                            if (i === 0 && j < firstDay) {
-                                let cell = document.createElement("td");
-                                let cellText = document.createTextNode("");
-                                cell.appendChild(cellText);
-                                row.appendChild(cell);
-                            } else if (date > daysInMonth) {
-                                break;
-                            } else {
-                                let cell = document.createElement("td");
-                                let cellText = document.createTextNode(date);
-                                if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                                    cell.classList.add("bg-info");
-                                }
-                                cell.appendChild(cellText);
-                                row.appendChild(cell);
-                                date++;
-                            }
-                        }
-                        tbl.appendChild(row);
-                    }
-                }
-
-                showCalendar(currentMonth, currentYear);
-            </script>
+    <div class="widget-calendar d-none d-md-block" style="position: absolute; right: 20px;"> <!-- Menambahkan kelas d-none d-md-block -->
+        <div id="calendar-container">
+            <div id="calendar-header">
+                <span id="month-name"></span>
+                <span id="year"></span>
+            </div>
+            <div id="calendar-dates">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-body">
+                    </tbody>
+                </table>
+            </div>
         </div>
+        <script>
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const today = new Date();
+            let currentMonth = today.getMonth();
+            let currentYear = today.getFullYear();
+
+            function showCalendar(month, year) {
+                let firstDay = (new Date(year, month)).getDay();
+                let daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+                let tbl = document.getElementById("calendar-body");
+                tbl.innerHTML = "";
+
+                document.getElementById("month-name").innerHTML = monthNames[month];
+                document.getElementById("year").innerHTML = year;
+
+                let date = 1;
+                for (let i = 0; i < 6; i++) {
+                    let row = document.createElement("tr");
+                    for (let j = 0; j < 7; j++) {
+                        if (i === 0 && j < firstDay) {
+                            let cell = document.createElement("td");
+                            let cellText = document.createTextNode("");
+                            cell.appendChild(cellText);
+                            row.appendChild(cell);
+                        } else if (date > daysInMonth) {
+                            break;
+                        } else {
+                            let cell = document.createElement("td");
+                            let cellText = document.createTextNode(date);
+                            if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                                cell.classList.add("bg-info");
+                            }
+                            cell.appendChild(cellText);
+                            row.appendChild(cell);
+                            date++;
+                        }
+                    }
+                    tbl.appendChild(row);
+                }
+            }
+
+            showCalendar(currentMonth, currentYear);
+        </script>
     </div>
 
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
