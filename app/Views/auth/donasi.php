@@ -50,7 +50,7 @@
                                 }
                                 ?>
                             </datalist>
-                            <input hidden type="text" name="id_masjid", id="id_masjid">
+                            <input hidden type="text" name="id_masjid" , id="id_masjid">
                         </div>
                         <div class="form-group">
                             <label for="rekening">Bank</label>
@@ -59,6 +59,9 @@
                             <input type="text" class="form-control" id="rekening" name="rekening" value="" readonly disabled>
                         </div>
                         <button type="submit" class="tomboldonasi">Donasi</button>
+                        <div class="teksbawah-center">
+                            <a class="small" href="<?= base_url('/bukti-donasi'); ?>">Ingin Upload Bukti Transaksi</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -83,13 +86,13 @@
             var idMasjid = document.getElementById('id_masjid');
             var selectedMasjid;
             masjid.forEach(function(item, index) {
-                if(item['nama_masjid'] == value.target.value) {
+                if (item['nama_masjid'] == value.target.value) {
                     selectedMasjid = item;
                 }
             });
             bank.setAttribute('value', selectedMasjid['nama_bank']);
-            rek.setAttribute('value',  selectedMasjid['no_rekening']);
-            idMasjid.setAttribute('value',  selectedMasjid['id']);
+            rek.setAttribute('value', selectedMasjid['no_rekening']);
+            idMasjid.setAttribute('value', selectedMasjid['id']);
         });
     });
 </script>

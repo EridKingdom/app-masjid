@@ -1,8 +1,6 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
-
-
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
 
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
@@ -137,15 +135,17 @@ if ($id_user) {
                                     <td><?= esc($item['nama_donatur']); ?></td>
                                     <td><?= esc($item['nominal']); ?></td>
                                     <td>
-                                        <?php if (!empty($item['gambar_bukti'])) : ?>
-                                            <img src="<?= base_url('img/' . esc($item['gambar_bukti'])); ?>" alt="Bukti Donasi" width="100">
+                                        <?php if (!empty($item['bukti_transfer'])) : ?>
+                                            <a href="#" class="view-image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="<?= base_url('img/' . esc($item['bukti_transfer'])); ?>">
+                                                <?= esc($item['bukti_transfer']); ?>
+                                            </a>
                                         <?php else : ?>
-                                            Tidak ada gambar
+                                            Belum Upload Bukti bayar
                                         <?php endif; ?>
                                     </td>
                                     <td class="column-center">
-                                        <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi']?>">✔</a>
-                                        <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi']?>">✘</a>
+                                        <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
+                                        <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -179,8 +179,8 @@ if ($id_user) {
                         });
                     </script>
                     <div style="text-align: right;">
-                        <a class="btn btn-primary"  href="/donasi/verifikasi/all">Verifikasi Semua</a>
-                        <a class="btn btn-primary"  href="/donasi/verifikasi/all">Batalkan Semua</a>
+                        <a class="btn btn-primary" href="/donasi/verifikasi/all" onclick="return confirm('Are you sure you want to verify all donations?')">Verifikasi Semua</a>
+                        <a class="btn btn-primary" href="/donasi/unverifikasi/all" onclick="return confirm('Are you sure you want to delete all donations?')">Batalkan Semua</a>
                     </div>
                 </table>
             </div>
@@ -189,24 +189,41 @@ if ($id_user) {
 
 </section>
 
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Bukti Transfer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" class="img-fluid" alt="Bukti Transfer">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const tableBody = document.getElementById('verifikasi-table').getElementsByTagName('tbody')[0];
-        const rows = tableBody.getElementsByTagName('tr');
-        const totalSaldoElement = document.getElementById('totalSaldo');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
 
-        // Function to add empty rows
-        function addEmptyRows(numberOfRows) {
-            for (let i = 0; i < numberOfRows; i++) {
-                const row = tableBody.insertRow();
-                for (let j = 0; j < 4; j++) { // Assuming there are 4 columns in the table
-                    const cell = row.insertCell();
-                    cell.innerHTML = '&nbsp;'; // Non-breaking space
-                }
-            }
-        }
+        imageModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const imageUrl = button.getAttribute('data-image');
+            modalImage.src = imageUrl;
+        });
 
+        // Display success message if available
+        <?php if (session()->getFlashdata('success')) : ?>
+            alert('<?= session()->getFlashdata('success') ?>');
+        <?php endif; ?>
+
+        // Display error message if available
+        <?php if (session()->getFlashdata('error')) : ?>
+            alert('<?= session()->getFlashdata('error') ?>');
+        <?php endif; ?>
     });
 </script>
 

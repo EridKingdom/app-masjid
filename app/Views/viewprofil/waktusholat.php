@@ -113,23 +113,23 @@
                         <div class="card-body d-flex justify-content-around flex-wrap">
                             <div class="prayer-time">
                                 <span>SHUBUH</span>
-                                <span>5:12</span>
+                                <span id="subuh-time">5:12</span>
                             </div>
                             <div class="prayer-time">
                                 <span>DZUHUR</span>
-                                <span>12:33</span>
+                                <span id="zuhur-time">12:33</span>
                             </div>
                             <div class="prayer-time">
                                 <span>Ashar</span>
-                                <span>15:50</span>
+                                <span id="asar-time">15:50</span>
                             </div>
                             <div class="prayer-time">
                                 <span>MAGHRIB</span>
-                                <span>18:37</span>
+                                <span id="magrib-time">18:37</span>
                             </div>
                             <div class="prayer-time">
                                 <span>'ISYA</span>
-                                <span>19:45</span>
+                                <span id="isya-time">19:45</span>
                             </div>
                         </div>
                     </div>
@@ -159,6 +159,71 @@
         // Update time immediately and then every second
         updateTime();
         setInterval(updateTime, 1000);
+
+        function fetchPrayerTimes() {
+            const apiURLLocation = "https://api.myquran.com/v2/sholat/kota/cari/";
+            const apiURLPrayer = "https://api.myquran.com/v2/sholat/jadwal/";
+            const todayDate = new Date();
+            const formatDate = todayDate.getFullYear() + '-' + (todayDate.getMonth() + 1).toString().padStart(2, '0') + '-' + todayDate.getDate().toString().padStart(2, '0');
+            let kota = '<?= $masjid['kota_kab'] ?>';
+            if (!kota) kota = 'Kota jambi';
+
+            console.log("Fetching prayer times for city:", kota); // Logging
+
+            fetch(apiURLLocation + kota)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status && data.data.length > 0) {
+                        // Filter hasil yang mengandung kata "Kota"
+                        const kotaData = data.data.find(item => item.lokasi.toLowerCase().includes('kota') && item.lokasi.toLowerCase().includes(kota.toLowerCase()));
+                        if (kotaData) {
+                            var idKota = kotaData.id;
+                            console.log("City ID found:", idKota); // Logging
+                            fetch(apiURLPrayer + idKota + '/' + formatDate)
+                                .then(response => response.json())
+                                .then(d => {
+                                    console.log("Prayer times response:", d); // Logging
+                                    if (d.status) {
+                                        displayPrayerTimes(d.data);
+                                    } else {
+                                        console.error('Error in prayer times response:', d);
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching prayer times:', error));
+                        } else {
+                            console.error('City not found in API response:', data);
+                        }
+                    } else {
+                        console.error('City not found or invalid response:', data);
+                    }
+                })
+                .catch(error => console.error('Error fetching city ID:', error));
+        }
+
+        function displayPrayerTimes(data) {
+            const times = data.jadwal;
+            console.log("Displaying prayer times:", times); // Logging
+
+            // Check if elements exist before setting their text content
+            if (document.getElementById('subuh-time')) {
+                document.getElementById('subuh-time').textContent = times.subuh;
+            }
+            if (document.getElementById('zuhur-time')) {
+                document.getElementById('zuhur-time').textContent = times.dzuhur;
+            }
+            if (document.getElementById('asar-time')) {
+                document.getElementById('asar-time').textContent = times.ashar;
+            }
+            if (document.getElementById('magrib-time')) {
+                document.getElementById('magrib-time').textContent = times.maghrib;
+            }
+            if (document.getElementById('isya-time')) {
+                document.getElementById('isya-time').textContent = times.isya;
+            }
+        }
+
+        // Call fetchPrayerTimes on window load to display the times immediately
+        window.onload = fetchPrayerTimes;
     </script>
 </body>
 
@@ -169,6 +234,5 @@
         <?php endforeach; ?>
     </marquee>
 </footer>
-
 
 </html>

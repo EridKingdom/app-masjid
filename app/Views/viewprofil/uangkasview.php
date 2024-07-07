@@ -191,6 +191,7 @@
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
+                            <td>&nbsp;</td>
                         `;
                                 uangkasTableBody.appendChild(tr);
                             }

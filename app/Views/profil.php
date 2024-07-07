@@ -105,18 +105,30 @@
             </table>
             <script>
                 function fetchPrayerTimes() {
-                    const proxyURL = "https://cors-anywhere.herokuapp.com/";
-                    const apiURL = "https://api.myquran.com/v1/sholat/jadwal/2610/";
-                    fetch(proxyURL + apiURL)
+                    const apiURLLocation = "https://api.myquran.com/v2/sholat/kota/cari/";
+                    const apiURLPrayer = "https://api.myquran.com/v2/sholat/jadwal/";
+                    const todayDate = new Date();
+                    const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
+                    const kota = '<?= $masjid['kota_kab'] ?>';
+                    if (!kota) kota = 'Kota jambi';
+                    fetch(apiURLLocation + kota)
                         .then(response => response.json())
                         .then(data => {
-                            displayPrayerTimes(data);
+                            var idKota = data.status ? data.data[0].id : '0314';
+                            fetch(apiURLPrayer + idKota + '/' + formatDate)
+                                .then(response => response.json())
+                                .then(d => {
+                                    if (d.status) {
+                                        displayPrayerTimes(d.data);
+                                    }
+                                });
+
                         })
                         .catch(error => console.error('Error fetching prayer times:', error));
                 }
 
                 function displayPrayerTimes(data) {
-                    const times = data.data.jadwal;
+                    const times = data.jadwal;
                     document.getElementById('subuh-time').textContent = times.subuh;
                     document.getElementById('zuhur-time').textContent = times.dzuhur;
                     document.getElementById('asar-time').textContent = times.ashar;
@@ -124,6 +136,7 @@
                     document.getElementById('isya-time').textContent = times.isya;
                 }
 
+                // Call fetchPrayerTimes on window load to display the times immediately
                 window.onload = fetchPrayerTimes;
             </script>
         </div>

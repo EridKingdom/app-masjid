@@ -54,19 +54,22 @@ class verifikasiDonasi extends BaseController
             ];
             if ($this->zakatModel->save($zakatData)) {
                 $this->donasiModel->delete($id_donasi);
-                return redirect()->back();
+                return redirect()->back()->with('success', 'Donation verified successfully.');
             } else {
-                return redirect()->back()->with('error', 'Tidak berhasil verifikasi');
+                return redirect()->back()->with('error', 'Failed to verify donation.');
             }
         } else {
-            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+            return redirect()->back()->with('error', 'Donation not found.');
         }
     }
 
     public function unverifyDonasi($id_donasi)
     {
-        $this->donasiModel->delete($id_donasi);
-        return redirect()->back();
+        if ($this->donasiModel->delete($id_donasi)) {
+            return redirect()->back()->with('success', 'Donation deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete donation.');
+        }
     }
 
     public function verifyAllDonasi()
@@ -86,12 +89,15 @@ class verifikasiDonasi extends BaseController
             }
         }
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'All donations verified successfully.');
     }
 
     public function unverifyAllDonasi()
     {
-        $this->donasiModel->delete();
-        return redirect()->back();
+        if ($this->donasiModel->delete()) {
+            return redirect()->back()->with('success', 'All donations deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete all donations.');
+        }
     }
 }

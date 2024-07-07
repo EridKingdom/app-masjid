@@ -33,7 +33,7 @@
 </section>
 
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
-    <div class="widget-clock d-none d-md-block" style="position: absolute; left: 20px;">
+    <div class="widget-clock d-none d-md-block" style="position: absolute; left: 18px;"> <!-- Menambahkan kelas d-none d-md-block -->
         <iframe src="https://free.timeanddate.com/clock/i8b1n8jt/n108/szw160/szh160/hoc09f/hbw0/hfc09f/cf100/hnc09f/fas20/fdi86/mqcfff/mqs4/mql3/mqw4/mqd70/mhcfff/mhs2/mhl3/mhw4/mhd70/mmv0/hhcbbb/hhs2/hmcbbb/hms2/hscbbb" frameborder="0" width="160" height="160"></iframe>
         <div class="prayer-times" style="margin-top: 20px;">
             <table>
@@ -60,15 +60,38 @@
             </table>
             <script>
                 function fetchPrayerTimes() {
-                    const apiURL = "https://jadwalsholat.org/adzan/ajax.row.php?id=265";
-                    fetch(apiURL)
-                        .then(response => response.text())
+                    const apiURLLocation = "https://api.myquran.com/v2/sholat/kota/cari/";
+                    const apiURLPrayer = "https://api.myquran.com/v2/sholat/jadwal/";
+                    const todayDate = new Date();
+                    const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
+                    const kota = '<?= $masjid['kota_kab'] ?>';
+                    if (!kota) kota = 'Kota jambi';
+                    fetch(apiURLLocation + kota)
+                        .then(response => response.json())
                         .then(data => {
-                            document.querySelector('.prayer-times').innerHTML = data;
+                            var idKota = data.status ? data.data[0].id : '0314';
+                            fetch(apiURLPrayer + idKota + '/' + formatDate)
+                                .then(response => response.json())
+                                .then(d => {
+                                    if (d.status) {
+                                        displayPrayerTimes(d.data);
+                                    }
+                                });
+
                         })
                         .catch(error => console.error('Error fetching prayer times:', error));
                 }
 
+                function displayPrayerTimes(data) {
+                    const times = data.jadwal;
+                    document.getElementById('subuh-time').textContent = times.subuh;
+                    document.getElementById('zuhur-time').textContent = times.dzuhur;
+                    document.getElementById('asar-time').textContent = times.ashar;
+                    document.getElementById('magrib-time').textContent = times.maghrib;
+                    document.getElementById('isya-time').textContent = times.isya;
+                }
+
+                // Call fetchPrayerTimes on window load to display the times immediately
                 window.onload = fetchPrayerTimes;
             </script>
         </div>
@@ -80,16 +103,50 @@
         <div class="digital-calendar" style="text-align: center; margin-top: 20px;">
             <p id="current-date"></p>
             <script>
-                function updateCalendar() {
-                    const today = new Date();
-                    const day = String(today.getDate()).padStart(2, '0');
-                    const month = String(today.getMonth() + 1).padStart(2, '0');
-                    const year = today.getFullYear();
-                    const formattedDate = `${day}/${month}/${year}`;
-                    document.getElementById('current-date').textContent = formattedDate;
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                const today = new Date();
+                let currentMonth = today.getMonth();
+                let currentYear = today.getFullYear();
+
+                function showCalendar(month, year) {
+                    let firstDay = (new Date(year, month)).getDay();
+                    let daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+                    let tbl = document.getElementById("calendar-body");
+                    tbl.innerHTML = "";
+
+                    document.getElementById("month-name").innerHTML = monthNames[month];
+                    document.getElementById("year").innerHTML = year;
+
+                    let date = 1;
+                    for (let i = 0; i < 6; i++) {
+                        let row = document.createElement("tr");
+                        for (let j = 0; j < 7; j++) {
+                            if (i === 0 && j < firstDay) {
+                                let cell = document.createElement("td");
+                                let cellText = document.createTextNode("");
+                                cell.appendChild(cellText);
+                                row.appendChild(cell);
+                            } else if (date > daysInMonth) {
+                                break;
+                            } else {
+                                let cell = document.createElement("td");
+                                let cellText = document.createTextNode(date);
+                                if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                                    cell.classList.add("bg-info");
+                                }
+                                cell.appendChild(cellText);
+                                row.appendChild(cell);
+                                date++;
+                            }
+                        }
+                        tbl.appendChild(row);
+                    }
                 }
 
-                window.onload = updateCalendar;
+                showCalendar(currentMonth, currentYear);
             </script>
         </div>
     </div>
