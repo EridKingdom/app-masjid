@@ -35,6 +35,44 @@
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
     <div class="widget-clock d-none d-md-block" style="position: absolute; left: 18px;"> <!-- Menambahkan kelas d-none d-md-block -->
         <iframe src="https://free.timeanddate.com/clock/i8b1n8jt/n108/szw160/szh160/hoc09f/hbw0/hfc09f/cf100/hnc09f/fas20/fdi86/mqcfff/mqs4/mql3/mqw4/mqd70/mhcfff/mhs2/mhl3/mhw4/mhd70/mmv0/hhcbbb/hhs2/hmcbbb/hms2/hscbbb" frameborder="0" width="160" height="160"></iframe>
+            <hr>
+        <select name="kota" id="kota-select" class="form-select" onchange="fetchPrayerTimes()">
+            <option value="">Pilih Kota</option>
+            <option value="Kota Banda Aceh">Kota Banda Aceh</option>
+            <option value="Kota Medan">Kota Medan</option>
+            <option value="Kota Padang">Kota Padang</option>
+            <option value="Kota Pekanbaru">Kota Pekanbaru</option>
+            <option value="Kota Jambi">Kota Jambi</option>
+            <option value="Kota Bengkulu">Kota Bengkulu</option>
+            <option value="Kota Lampung">Kota Lampung</option>
+            <option value="Kota Jakarta">Kota Jakarta</option>
+            <option value="Kota Bandung">Kota Bandung</option>
+            <option value="Kota Cirebon">Kota Cirebon</option>
+            <option value="Kota Tasikmalaya">Kota Tasikmalaya</option>
+            <option value="Kota Solo">Kota Solo</option>
+            <option value="Kota Madiun">Kota Madiun</option>
+            <option value="Kota Kediri">Kota Kediri</option>
+            <option value="Kota Blitar">Kota Blitar</option>
+            <option value="Kota Surabaya">Kota Surabaya</option>
+            <option value="Kota Malang">Kota Malang</option>
+            <option value="Kota Yogyakarta">Kota Yogyakarta</option>
+            <option value="Kota Semarang">Kota Semarang</option>
+            <option value="Kota Banjarmasin">Kota Banjarmasin</option>
+            <option value="Kota Pontianak">Kota Pontianak</option>
+            <option value="Kota Samarinda">Kota Samarinda</option>
+            <option value="Kota Balikpapan">Kota Balikpapan</option>
+            <option value="Kota Makassar">Kota Makassar</option>
+            <option value="Kota Parepare">Kota Parepare</option>
+            <option value="Kota Palangkaraya">Kota Palangkaraya</option>
+            <option value="Kota Banjarbaru">Kota Banjarbaru</option>
+            <option value="Kota Tarakan">Kota Tarakan</option>
+            <option value="Kota Bitung">Kota Bitung</option>
+            <option value="Kota Tual">Kota Tual</option>
+            <option value="Kota Tidore">Kota Tidore</option>
+            <option value="Kota Ambon">Kota Ambon</option>
+            <option value="Kota Ternate">Kota Ternate</option>
+            <option value="Kota Jayapura">Kota Jayapura</option>
+        </select>
         <div class="prayer-times" style="margin-top: 20px;">
             <table>
                 <tr>
@@ -64,8 +102,7 @@
                     const apiURLPrayer = "https://api.myquran.com/v2/sholat/jadwal/";
                     const todayDate = new Date();
                     const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
-                    const kota = '<?= $masjid['kota_kab'] ?>';
-                    if (!kota) kota = 'Kota Padang';
+                    const kota = 'Kota Padang';
                     console.log(kota)
                     fetch(apiURLLocation + kota)
                         .then(response => response.json())
