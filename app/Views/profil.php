@@ -110,11 +110,12 @@
                     const todayDate = new Date();
                     const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
                     const kota = '<?= $masjid['kota_kab'] ?>';
-                    if (!kota) kota = 'Kota jambi';
+                    if (!kota) kota = 'Kota Padang';
                     fetch(apiURLLocation + kota)
                         .then(response => response.json())
                         .then(data => {
                             var idKota = data.status ? data.data[0].id : '0314';
+                            console.log(idKota);
                             fetch(apiURLPrayer + idKota + '/' + formatDate)
                                 .then(response => response.json())
                                 .then(d => {

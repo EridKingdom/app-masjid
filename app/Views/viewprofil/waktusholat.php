@@ -164,38 +164,30 @@
             const apiURLLocation = "https://api.myquran.com/v2/sholat/kota/cari/";
             const apiURLPrayer = "https://api.myquran.com/v2/sholat/jadwal/";
             const todayDate = new Date();
-            const formatDate = todayDate.getFullYear() + '-' + (todayDate.getMonth() + 1).toString().padStart(2, '0') + '-' + todayDate.getDate().toString().padStart(2, '0');
+            const formatDate = todayDate.getFullYear() + '-' + todayDate.getMonth() + '-' + todayDate.getDate();
             let kota = '<?= $masjid['kota_kab'] ?>';
-            if (!kota) kota = 'Kota jambi';
+            if (!kota) kota = 'Kota Padang';
 
             console.log("Fetching prayer times for city:", kota); // Logging
 
             fetch(apiURLLocation + kota)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status && data.data.length > 0) {
-                        // Filter hasil yang mengandung kata "Kota"
-                        const kotaData = data.data.find(item => item.lokasi.toLowerCase().includes('kota') && item.lokasi.toLowerCase().includes(kota.toLowerCase()));
-                        if (kotaData) {
-                            var idKota = kotaData.id;
-                            console.log("City ID found:", idKota); // Logging
-                            fetch(apiURLPrayer + idKota + '/' + formatDate)
-                                .then(response => response.json())
-                                .then(d => {
-                                    console.log("Prayer times response:", d); // Logging
-                                    if (d.status) {
-                                        displayPrayerTimes(d.data);
-                                    } else {
-                                        console.error('Error in prayer times response:', d);
-                                    }
-                                })
-                                .catch(error => console.error('Error fetching prayer times:', error));
-                        } else {
-                            console.error('City not found in API response:', data);
-                        }
-                    } else {
-                        console.error('City not found or invalid response:', data);
-                    }
+                    const idKota = data.status ? data.data[0].id : '0314';
+                    console.log("City ID found:", idKota); // Logging
+                    fetch(apiURLPrayer + idKota + '/' + formatDate)
+                        .then(response => response.json())
+                        .then(d => {
+                            console.log("Prayer times response:", d); // Logging
+                            if (d.status) {
+                                displayPrayerTimes(d.data);
+                            } else {
+                                console.error('Error in prayer times response:', d);
+                            }
+                        })
+                        .catch(error => console.error('Error fetching prayer times:', error));
+
+
                 })
                 .catch(error => console.error('Error fetching city ID:', error));
         }
