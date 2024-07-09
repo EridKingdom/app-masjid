@@ -55,13 +55,18 @@
         <div class="row justify-content-center">
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
-                    <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
-                        <strong><?= esc($masjid['nama_masjid']); ?></strong>
-                    </h5>
-                    <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
-                        <?= esc($masjid['deskripsi']); ?>
-                    </p>
-                    <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                    <div class="d-flex align-items-center">
+                        <img class="profile-img" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;">
+                        <div>
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
+                                <strong><?= esc($masjid['nama_masjid']); ?></strong>
+                            </h5>
+                            <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
+                                <?= esc($masjid['deskripsi']); ?>
+                            </p>
+                            <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                        </div>
+                    </div>
                 <?php else : ?>
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
@@ -77,6 +82,7 @@
     <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
     <a href="<?= base_url('/waktusholat/' . $masjid['id']); ?>" class="linkmenu">Waktu Sholat ( Full Screen )</a>
 </div>
+
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
     <div class="widget-clock" style="position: absolute; left: 18px;">
         <iframe src="https://free.timeanddate.com/clock/i8b1n8jt/n108/szw160/szh160/hoc09f/hbw0/hfc09f/cf100/hnc09f/fas20/fdi86/mqcfff/mqs4/mql3/mqw4/mqd70/mhcfff/mhs2/mhl3/mhw4/mhd70/mmv0/hhcbbb/hhs2/hmcbbb/hms2/hscbbb" frameborder="0" width="160" height="160"></iframe>
@@ -216,9 +222,15 @@
 
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
         <div class="row justify-content-center my-2" style="max-width: 690px;"> <!-- Menambahkan max-width untuk membatasi lebar -->
+            <select id="filter-tipe-postingan" class="filterposting">
+                <option value="">Semua Tipe Postingan</option>
+                <?php foreach ($tipe_postingan_list as $tipe) : ?>
+                    <option value="<?= esc($tipe['tipe_postingan']); ?>"><?= esc($tipe['tipe_postingan']); ?></option>
+                <?php endforeach; ?>
+            </select>
             <?php if (!empty($tb_kegiatan)) : ?>
                 <?php foreach ($tb_kegiatan as $k) : ?>
-                    <div class="col-12 mb-3"> <!-- Menggunakan col-12 untuk lebar penuh dan mb-3 untuk margin bawah -->
+                    <div class="col-12 mb-3 kegiatan-item" data-tipe="<?= esc($k['tipe_postingan']); ?>">
                         <div class="card">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div class="d-flex align-items-center">
@@ -238,23 +250,13 @@
                             <div class="image-wrapper d-flex justify-content-center mb-4">
                                 <img src="<?= base_url('imgpostingan/' . esc($k['gambar_kegiatan'])); ?>" alt="Mobirise Website Builder">
                             </div>
-                            <div class="card-content-text px-3"> <!-- Menambahkan padding horizontal -->
-                                <p class="text-muted"><?= esc($k['tipe_postingan']); ?></p> <!-- Menambahkan kelas text-muted untuk warna teks -->
+                            <div class="card-content-text px-3">
+                                <p class="text-muted"><?= esc($k['tipe_postingan']); ?></p>
                                 <h3 class="card-title mbr-fonts-style mbr-white mt-3 mb-4 display-2">
                                     <strong><?= esc($k['judul_kegiatan']); ?></strong>
                                 </h3>
-                                <p class="postingan"><?= esc($k['deskripsi_kegiatan']); ?></p>
-                            </div>
-                            <div class="d-flex justify-content-end mt-2 mb-2 px-3"> <!-- Menambahkan padding horizontal -->
-                                <button style="border: none; background: none;">
-                                    <i class="fas fa-thumbs-up"></i> Like
-                                </button>
-                                <button style="border: none; background: none; margin-left: 10px;">
-                                    <i class="fas fa-comment"></i> Komentar
-                                </button>
-                                <button style="border: none; background: none; margin-left: 10px;">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
+                                <p class="text-muted"><?= esc($k['tgl']); ?></p>
+                                <div class="postingan"><?= nl2br(esc($k['deskripsi_kegiatan'])); ?></div>
                             </div>
                         </div>
                     </div>
@@ -264,14 +266,30 @@
             <?php endif; ?>
         </div>
     </div>
+
+
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
         <div class="row justify-content-center my-2" style="max-width: 690px; height: 500px;"> <!-- Menambahkan max-width untuk membatasi lebar -->
             <div class="col-12 mb-3"> <!-- Menggunakan col-12 untuk lebar penuh dan mb-3 untuk margin bawah -->
 
             </div>
         </div>
-
-
+    </div>
 </section>
+
+<script>
+    document.getElementById('filter-tipe-postingan').addEventListener('change', function() {
+        var selectedTipe = this.value;
+        var kegiatanItems = document.querySelectorAll('.kegiatan-item');
+
+        kegiatanItems.forEach(function(item) {
+            if (selectedTipe === "" || item.getAttribute('data-tipe') === selectedTipe) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+</script>
 
 <?= $this->endSection('content'); ?>

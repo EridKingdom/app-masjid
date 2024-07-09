@@ -23,6 +23,7 @@ class profile extends BaseController
             // Mengambil data dari kedua tabel
             $db_data_masjid = $this->dbdatamasjidModel->findAll();
             $tb_kegiatan = $this->tbkegiatanModel->findAll();
+            $tipe_postingan_list = $this->tbkegiatanModel->getUniqueTipePostingan();
 
             // Debugging: Log the data to see if it's being fetched correctly
             log_message('debug', 'db_data_masjid: ' . print_r($db_data_masjid, true));
@@ -33,6 +34,7 @@ class profile extends BaseController
                 'title' => 'Daftar Masjid dan Postingan',
                 'db_data_masjid' => $db_data_masjid,
                 'tb_kegiatan' => $tb_kegiatan,
+                'tipe_postingan_list' => $tipe_postingan_list, // Menambahkan tipe postingan ke data
             ];
 
             return view('userprofile/profile', $data);

@@ -177,14 +177,20 @@
 
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
         <div class="row justify-content-center my-2" style="max-width: 690px;"> <!-- Menambahkan max-width untuk membatasi lebar -->
+            <select id="filter-tipe-postingan" class="filterposting">
+                <option value="">Semua Tipe Postingan</option>
+                <?php foreach ($tipe_postingan_list as $tipe) : ?>
+                    <option value="<?= esc($tipe['tipe_postingan']); ?>"><?= esc($tipe['tipe_postingan']); ?></option>
+                <?php endforeach; ?>
+            </select>
             <?php if (!empty($kegiatanWithMasjid)) : ?>
                 <?php foreach ($kegiatanWithMasjid as $kegiatan) : ?>
-                    <div class="col-12 mb-3"> <!-- Menggunakan col-12 untuk lebar penuh dan mb-3 untuk margin bawah -->
+                    <div class="col-12 mb-3 kegiatan-item" data-tipe="<?= esc($kegiatan['tipe_postingan']); ?>"> <!-- Menggunakan col-12 untuk lebar penuh dan mb-3 untuk margin bawah -->
                         <div class="card">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <div class="d-flex align-items-center">
                                     <?php if (isset($kegiatan['sampul'])) : ?>
-                                        <img src="<?= base_url('img/' . esc($kegiatan['sampul'])); ?>" alt="Profile Icon" style="width: 40px; height: 40px; border-radius: 20px;">
+                                        <img src="<?= base_url('img/' . esc($kegiatan['sampul'])); ?>" alt="Profile Icon" style="width: 40px; height: 40px; border-radius: 20px; margin-right: 20px;"> <!-- Menambahkan margin-right -->
                                     <?php endif; ?>
                                     <span class="ml-2"><?= esc($kegiatan['nama_masjid']); ?></span>
                                 </div>
@@ -197,18 +203,9 @@
                                 <h3 class="card-title mbr-fonts-style mbr-white mt-3 mb-4 display-2">
                                     <strong><?= esc($kegiatan['judul_kegiatan']); ?></strong>
                                 </h3>
-                                <p class="postingan"><?= esc($kegiatan['deskripsi_kegiatan']); ?></p>
+                                <div class="postingan"><?= nl2br(esc($kegiatan['deskripsi_kegiatan'])); ?></div> <!-- Menggunakan nl2br untuk mengubah newline menjadi <br> -->
                             </div>
                             <div class="d-flex justify-content-end mt-2 mb-2 px-3"> <!-- Menambahkan padding horizontal -->
-                                <button style="border: none; background: none;">
-                                    <i class="fas fa-thumbs-up"></i> Like
-                                </button>
-                                <button style="border: none; background: none; margin-left: 10px;">
-                                    <i class="fas fa-comment"></i> Komentar
-                                </button>
-                                <button style="border: none; background: none; margin-left: 10px;">
-                                    <i class="fas fa-share"></i> Share
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -220,5 +217,20 @@
     </div>
 
 </section>
+
+<script>
+    document.getElementById('filter-tipe-postingan').addEventListener('change', function() {
+        var selectedTipe = this.value;
+        var kegiatanItems = document.querySelectorAll('.kegiatan-item');
+
+        kegiatanItems.forEach(function(item) {
+            if (selectedTipe === "" || item.getAttribute('data-tipe') === selectedTipe) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+</script>
 
 <?= $this->endSection('content'); ?>

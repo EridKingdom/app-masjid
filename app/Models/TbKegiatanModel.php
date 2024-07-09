@@ -25,4 +25,11 @@ class TbKegiatanModel extends Model
             ->join('db_data_masjid', 'db_data_masjid.id = tb_kegiatan.id_masjid')
             ->findAll();
     }
+
+    public function getUniqueTipePostingan()
+    {
+        return $this->select('tipe_postingan')
+            ->distinct()
+            ->findAll();
+    }
 }

@@ -29,6 +29,9 @@ class Pages extends BaseController
         $db_data_masjid = $this->dbdatamasjidModel->findAll();
         $kegiatanWithMasjid = $this->tbkegiatanModel->getKegiatanWithMasjid();
 
+        // Mengambil tipe postingan unik
+        $tipe_postingan_list = $this->tbkegiatanModel->getUniqueTipePostingan();
+
         // Mengurutkan data berdasarkan yang terbaru
         usort($kegiatanWithMasjid, function ($a, $b) {
             return strtotime($b['created_at']) - strtotime($a['created_at']);
@@ -39,6 +42,7 @@ class Pages extends BaseController
             'title' => 'Daftar Masjid dan Postingan',
             'db_data_masjid' => $db_data_masjid,
             'kegiatanWithMasjid' => $kegiatanWithMasjid,
+            'tipe_postingan_list' => $tipe_postingan_list, // Menambahkan tipe postingan ke data
             'showSearch' => true
         ];
 
@@ -71,6 +75,7 @@ class Pages extends BaseController
         ];
         return view('infakyatim', $data);
     }
+
     public function details($slug)
     {
         echo $slug;

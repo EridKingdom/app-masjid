@@ -30,12 +30,14 @@ class Profil extends BaseController
 
                 // Mengambil kegiatan terkait
                 $tb_kegiatan = $this->tbkegiatanModel->where('id_masjid', $id)->findAll();
+                $tipe_postingan_list = $this->tbkegiatanModel->getUniqueTipePostingan();
 
                 // Menyiapkan data untuk view
                 $data = [
                     'title' => 'Profil Masjid',
                     'masjid' => $masjid,
                     'tb_kegiatan' => $tb_kegiatan,
+                    'tipe_postingan_list' => $tipe_postingan_list, // Menambahkan tipe postingan ke data
                 ];
 
                 return view('profil', $data);

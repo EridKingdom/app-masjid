@@ -138,3 +138,21 @@ main {
 .table-row.selected {
     background-color: #d3d3d3; /* Warna latar belakang untuk baris yang dipilih */
 }
+.filterposting {
+    appearance: none; /* Menghilangkan gaya default browser */
+    -webkit-appearance: none; /* Menghilangkan gaya default browser di WebKit */
+    -moz-appearance: none; /* Menghilangkan gaya default browser di Firefox */
+    background-color: #fff; /* Warna latar belakang */
+    border: 1px solid #ccc; /* Warna border */
+    border-radius: 4px; /* Radius border */
+    padding: 10px 15px; /* Padding dalam elemen */
+    font-size: 16px; /* Ukuran font */
+    color: #333; /* Warna teks */
+    width: 100%; /* Lebar penuh */
+    max-width: 300px; /* Lebar maksimum */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Bayangan */
+    cursor: pointer; /* Cursor pointer */
+    position: relative; /* Posisi relatif */
+}
+
+/* Gaya untuk dropdown */
