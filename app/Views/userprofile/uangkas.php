@@ -136,7 +136,6 @@ if ($id_user) {
 }
 ?>
 
-// This section handles notifications
 <?php if (session()->getFlashdata('success')) : ?>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
