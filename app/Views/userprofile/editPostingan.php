@@ -127,6 +127,10 @@ if ($id_user) {
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="tgl" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="tgl" name="tgl" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="judulKegiatan" class="form-label">Judul Kegiatan</label>
                             <input type="text" class="form-control" id="judulKegiatan" name="judul_kegiatan" required value="<?= esc($judul_kegiatan); ?>">
                         </div>

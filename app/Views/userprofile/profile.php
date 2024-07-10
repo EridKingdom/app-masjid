@@ -285,7 +285,7 @@ if ($id_user) {
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li><a class="dropdown-item" href="<?= base_url('/edit-postingan/' . $k['id_kegiatan']); ?>">Edit Postingan</a></li>
-                                        <li><a class="dropdown-item" href="<?= base_url('/delete-postingan/' . $k['id_kegiatan']); ?>">Hapus Postingan</a></li>
+                                        <li><a class="dropdown-item delete-postingan" href="<?= base_url('/delete-postingan/' . $k['id_kegiatan']); ?>">Hapus Postingan</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -328,6 +328,16 @@ if ($id_user) {
                 item.style.display = 'block';
             } else {
                 item.style.display = 'none';
+            }
+        });
+    });
+
+    document.querySelectorAll('.delete-postingan').forEach(function(element) {
+        element.addEventListener('click', function(event) {
+            event.preventDefault();
+            var url = this.href;
+            if (confirm('Apa Kamu Yakin Menghapus Data?')) {
+                window.location.href = url;
             }
         });
     });

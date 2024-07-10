@@ -54,6 +54,7 @@ $routes->get('/editProfile', 'editP::index');
 $routes->post('/laporan/getData', 'Laporan::getData');
 $routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
 $routes->post('/login/auth', 'Login::auth');
+$routes->get('/lupa-password', 'Lupa::index');
 
 $routes->get('/buat-postingan', 'Posting::create');
 $routes->get('/edit-postingan/(:num)', 'Posting::update/$1');

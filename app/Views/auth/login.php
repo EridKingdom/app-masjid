@@ -37,10 +37,10 @@
             </form>
             <hr>
             <div class="teksbawah-center">
-                <a class="small" href="forgot-password.html">Lupa Passord</a>
+                <a class="small" href="<?= base_url('/lupa-password'); ?>">Lupa Passord</a>
             </div>
             <div class="teksbawah-center">
-                <a class="small" href="<?= base_url('/registrasi'); ?>">Create an Account!</a>
+                <a class="small" href="<?= base_url('/registrasi'); ?>">Ingin Mendaftar Akun</a>
             </div>
         </div>
     </div>

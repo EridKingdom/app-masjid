@@ -116,6 +116,14 @@ if ($id_user) {
             <div class="card col-md-20 col-lg-9">
                 <div class="card-body">
                     <h5 class="card-title text-center">Buat postingan</h5>
+
+                    <!-- Display flash message -->
+                    <?php if (session()->getFlashdata('success')) : ?>
+                        <script>
+                            alert('<?= session()->getFlashdata('success'); ?>');
+                        </script>
+                    <?php endif; ?>
+
                     <form action="<?= base_url('/posting/store'); ?>" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="id_masjid" value="<?= esc($masjid['id_masjid'] ?? ''); ?>">
                         <div class="mb-3">
@@ -125,6 +133,10 @@ if ($id_user) {
                                 <option value="Kegiatan">Kegiatan</option>
                                 <option value="Acara">Acara</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tgl" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="tgl" name="tgl" required>
                         </div>
                         <div class="mb-3">
                             <label for="judulKegiatan" class="form-label">Judul Kegiatan</label>

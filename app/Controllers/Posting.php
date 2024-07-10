@@ -23,6 +23,7 @@ class Posting extends Controller
     {
         $idMasjid = $this->request->getPost('id_masjid');
         $postType = $this->request->getPost('postType');
+        $tgl = $this->request->getPost('tgl');
         $judulKegiatan = $this->request->getPost('judulKegiatan');
         $deskripsiKegiatan = $this->request->getPost('deskripsiKegiatan');
         $postMedia = $this->request->getFiles('postMedia');
@@ -59,7 +60,7 @@ class Posting extends Controller
         $tbKegiatanModel = new TbKegiatanModel();
         $data = [
             'id_masjid' => $idMasjid,
-            'tgl' => date('Y-m-d H:i:s'),
+            'tgl' => $tgl,
             'gambar_kegiatan' => $uploadedFileName, // Simpan nama file sebagai string
             'judul_kegiatan' => $judulKegiatan, // Menggunakan input pengguna untuk judul
             'tipe_postingan' => $postType,
@@ -71,11 +72,13 @@ class Posting extends Controller
 
         if ($tbKegiatanModel->save($data)) {
             log_message('debug', 'Data berhasil disimpan');
+            // Set flash data
+            session()->setFlashdata('success', 'Data berhasil disimpan.');
         } else {
             log_message('error', 'Data gagal disimpan');
         }
 
-        return redirect()->to('/profile')->with('message', 'Post berhasil dibuat');
+        return redirect()->to('/profile');
     }
 
     public function edit($id_kegiatan)
@@ -89,6 +92,7 @@ class Posting extends Controller
 
         $idMasjid = $this->request->getPost('id_masjid');
         $postType = $this->request->getPost('postType');
+        $tgl = $this->request->getPost('tgl');
         $judulKegiatan = $this->request->getPost('judul_kegiatan');
         $deskripsiKegiatan = $this->request->getPost('deskripsi_kegiatan');
         $postMedia = $this->request->getFiles('postMedia');
@@ -112,11 +116,11 @@ class Posting extends Controller
         // Update konten postingan dan path file ke database
         $data = [
             'id_masjid' => $idMasjid,
-            'tgl' => date('Y-m-d H:i:s'),
-            'gambar_kegiatan' => $uploadedFileName,
-            'judul_kegiatan' => $judulKegiatan,
+            'tgl' => $tgl,
+            'gambar_kegiatan' => $uploadedFileName, // Simpan nama file sebagai string
+            'judul_kegiatan' => $judulKegiatan, // Menggunakan input pengguna untuk judul
             'tipe_postingan' => $postType,
-            'deskripsi_kegiatan' => $deskripsiKegiatan,
+            'deskripsi_kegiatan' => $deskripsiKegiatan, // Menggunakan input pengguna untuk deskripsi
         ];
 
         // Log data yang akan dimasukkan
@@ -131,10 +135,10 @@ class Posting extends Controller
         return redirect()->to('/profile')->with('message', 'Post berhasil diperbarui');
     }
 
-    public function delete($id_kegiatan) {
+    public function delete($id_kegiatan)
+    {
         $tbKegiatanModel = new TbKegiatanModel();
         $tbKegiatanModel->delete($id_kegiatan);
         return redirect()->to('/profile')->with('message', 'Post berhasil dihapus');
     }
-
 }
