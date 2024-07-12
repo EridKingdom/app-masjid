@@ -181,21 +181,22 @@
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
-                        </table>
-                        <script>
-                            const uangkasTableBody = document.getElementById('uangkas-table-body');
-                            for (let i = 0; i < 10; i++) {
-                                const tr = document.createElement('tr');
-                                tr.innerHTML = `
+                            <script>
+                                const uangkastablebody = document.getElementById('uangkas-table-body');
+                                for (let i = 0; i < 10; i++) {
+                                    const tr = document.createElement('tr');
+                                    tr.innerHTML = `
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                         `;
-                                uangkasTableBody.appendChild(tr);
-                            }
-                        </script>
+                                    uangkastablebody.appendChild(tr);
+                                }
+                            </script>
+                        </table>
+                        <div id="pagination-container" class="pagination-container"></div>
                         <div style="text-align: right;">
                             <h4>Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
                             <!-- Added button for donation -->
@@ -259,6 +260,42 @@
         } else {
             console.error('totalSaldo element not found');
         }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rows = document.querySelectorAll('#uangkas-table-body tr');
+        const rowsPerPage = 10;
+        const paginationContainer = document.getElementById('pagination-container');
+        let currentPage = 1;
+
+        function displayRows(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+        }
+
+        function setupPagination() {
+            const pageCount = Math.ceil(rows.length / rowsPerPage);
+            paginationContainer.innerHTML = '';
+
+            for (let i = 1; i <= pageCount; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.addEventListener('click', () => {
+                    currentPage = i;
+                    displayRows(i);
+                });
+                paginationContainer.appendChild(button);
+            }
+        }
+
+        setupPagination();
+        displayRows(currentPage);
     });
 </script>
 

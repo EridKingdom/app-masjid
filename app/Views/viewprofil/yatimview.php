@@ -75,7 +75,7 @@
     <a href="<?= base_url('/viewkasmasjid/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
     <a href="<?= base_url('/viewinfak/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
     <a href="<?= base_url('/viewzakat/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
-    <a href="<?= base_url('/waktusholat'); ?>" class="linkmenu">Details Waktu Sholat</a>
+    <a href="<?= base_url('/waktusholat/' . $masjid['id']); ?>" class="linkmenu">Details Waktu Sholat</a>
 </div>
 <section data-bs-version="5.1" class="header09 startm5 cid-ubP7pTTB9Y mbr-fullscreen" id="header09-c">
 
@@ -116,6 +116,13 @@
                         zakatTableBody.appendChild(tr);
                     }
                 </script>
+                <!-- Pagination controls -->
+                <div id="pagination-controls" style="text-align: center;">
+                    <button id="prev-page" disabled>Previous</button>
+                    <span id="page-numbers"></span>
+                    <button id="next-page">Next</button>
+                </div>
+                <hr>
                 <div style="text-align: right;">
                     <h4>Total Saldo Zakat: <span id="totalSaldo">Rp 00.00</span></h4>
 
@@ -125,6 +132,76 @@
     </div>
 
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rowsPerPage = 10;
+        const tableBody = document.getElementById('zakat-table-body');
+        const rows = tableBody.getElementsByTagName('tr');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+        let currentPage = 1;
+
+        const prevPageButton = document.getElementById('prev-page');
+        const nextPageButton = document.getElementById('next-page');
+        const pageNumbers = document.getElementById('page-numbers');
+
+        function showPage(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            Array.from(rows).forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            updatePageNumbers();
+            prevPageButton.disabled = page === 1;
+            nextPageButton.disabled = page === totalPages;
+        }
+
+        function updatePageNumbers() {
+            pageNumbers.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const pageNumber = document.createElement('span');
+                pageNumber.textContent = i;
+                pageNumber.style.cursor = 'pointer';
+                pageNumber.style.margin = '0 5px';
+                pageNumber.style.padding = '5px 10px';
+                pageNumber.style.border = '1px solid #007bff';
+                pageNumber.style.borderRadius = '5px';
+                pageNumber.style.backgroundColor = i === currentPage ? '#007bff' : '#fff';
+                pageNumber.style.color = i === currentPage ? '#fff' : '#007bff';
+
+                pageNumber.addEventListener('click', function() {
+                    currentPage = i;
+                    showPage(currentPage);
+                });
+
+                pageNumbers.appendChild(pageNumber);
+            }
+        }
+
+        prevPageButton.addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextPageButton.addEventListener('click', function() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        showPage(currentPage);
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
