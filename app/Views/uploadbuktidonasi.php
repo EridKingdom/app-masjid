@@ -70,10 +70,19 @@
                             <input type="hidden" name="donasi_id" id="donasiId" value="">
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary mt-3 mt-md-0">Upload</button>
+                            <button type="submit" class="btn btn-primary mt-3 mt-md-0" id="uploadButton">Upload</button>
                         </div>
                     </div>
                 </form>
+                <script>
+                    document.getElementById('uploadButton').addEventListener('click', function(event) {
+                        const donasiId = document.getElementById('donasiId').value;
+                        if (!donasiId) {
+                            event.preventDefault();
+                            alert('Pilih Donatur yang akan di mengupload bukti.');
+                        }
+                    });
+                </script>
                 <!-- Pagination -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center" id="pagination">

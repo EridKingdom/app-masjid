@@ -157,13 +157,18 @@ if ($id_user) {
         <div class="row justify-content-center">
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
-                    <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
-                        <strong><?= esc($masjid['nama_masjid']); ?></strong>
-                    </h5>
-                    <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
-                        <?= esc($masjid['deskripsi']); ?>
-                    </p>
-                    <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                    <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
+                        <img class="profile-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                        <div>
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
+                                <strong><?= esc($masjid['nama_masjid']); ?></strong>
+                            </h5>
+                            <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
+                                <?= esc($masjid['deskripsi']); ?>
+                            </p>
+                            <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                        </div>
+                    </div>
                 <?php else : ?>
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>

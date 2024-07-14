@@ -88,6 +88,18 @@ if ($id_user) {
         $masjid = $result;
     }
 }
+$gambar_masjid = '';
+$id_masjid = null;
+if ($id_user) {
+    $db = \Config\Database::connect();
+    $query = $db->query("SELECT id, nama_masjid, sampul FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $result = $query->getRow();
+    if ($result) {
+        $id_masjid = $result->id;
+        $nama_masjid = $result->nama_masjid;
+        $gambar_masjid = $result->sampul;
+    }
+}
 ?>
 
 <section data-bs-version="5.1" class="article11 cid-ueCj6ebiFP" id="article11-19">
@@ -95,13 +107,18 @@ if ($id_user) {
         <div class="row justify-content-center">
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
-                    <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
-                        <strong><?= esc($masjid['nama_masjid']); ?></strong>
-                    </h5>
-                    <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
-                        <?= esc($masjid['deskripsi']); ?>
-                    </p>
-                    <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                    <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
+                        <img class="profile-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                        <div>
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
+                                <strong><?= esc($masjid['nama_masjid']); ?></strong>
+                            </h5>
+                            <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
+                                <?= esc($masjid['deskripsi']); ?>
+                            </p>
+                            <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                        </div>
+                    </div>
                 <?php else : ?>
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
@@ -121,12 +138,13 @@ if ($id_user) {
                             <img class="profile-img" id="fotoProfilImg" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 50px; width: 50px; border-radius: 50%;">
                             <label for="fotoProfil" class="form-label">Upload Foto Profil Masjid</label>
                             <script>
-                                
                                 document.getElementById('fotoProfil').addEventListener('change', function() {
                                     if (this.files.length > 0) {
-                                        var fr=new FileReader();
+                                        var fr = new FileReader();
                                         var showImg = document.getElementById('fotoProfilImg');
-                                        fr.onload = function(e) { showImg.setAttribute('src',this.result) };
+                                        fr.onload = function(e) {
+                                            showImg.setAttribute('src', this.result)
+                                        };
                                         this.nextElementSibling.innerHTML = this.files[0].name;
                                         fr.readAsDataURL(this.files[0]);
                                     }

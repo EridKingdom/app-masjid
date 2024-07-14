@@ -24,7 +24,7 @@
                     <form action="<?= base_url('/donasi-store'); ?>" method="post">
                         <h4>biodata donatur</h4>
                         <div class="form-group">
-                            <label for="nama">Nama Lengkap</label>
+                            <label for="nama">Nama Lengkap atau Nama Organisasi</label>
                             <input type="text" class="form-control" id="nama" name="nama_donatur" placeholder="Masukkan Nama Lengkap" required>
                         </div>
                         <div class="form-group">

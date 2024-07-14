@@ -23,12 +23,12 @@ class verifikasiDonasi extends BaseController
         $this->donasiModel = new DonasiModel();
     }
 
-    public function index()
+    public function index($id_masjid)
     {
-        // Mengambil data dari ketiga tabel
-        $db_data_masjid = $this->dbdatamasjidModel->findAll();
-        $zakat = $this->zakatModel->findAll();
-        $donasi = $this->donasiModel->findAll();
+        // Mengambil data dari ketiga tabel berdasarkan id_masjid
+        $db_data_masjid = $this->dbdatamasjidModel->where('id', $id_masjid)->findAll();
+        $zakat = $this->zakatModel->where('id_masjid', $id_masjid)->findAll();
+        $donasi = $this->donasiModel->where('id_masjid', $id_masjid)->findAll();
 
         // Menggabungkan data dalam satu array
         $data = [
