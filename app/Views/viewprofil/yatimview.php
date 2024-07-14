@@ -56,13 +56,18 @@
         <div class="row justify-content-center">
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
-                    <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
-                        <strong><?= esc($masjid['nama_masjid']); ?></strong>
-                    </h5>
-                    <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
-                        <?= esc($masjid['deskripsi']); ?>
-                    </p>
-                    <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                    <div class="d-flex align-items-center">
+                        <img class="profile-img" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;">
+                        <div>
+                            <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
+                                <strong><?= esc($masjid['nama_masjid']); ?></strong>
+                            </h5>
+                            <p class="mbr-section-text mbr-fonts-style mb-4 display-7">
+                                <?= esc($masjid['deskripsi']); ?>
+                            </p>
+                            <p class="mbr-text mbr-fonts-style display-7"><?= esc($masjid['alamat_masjid']); ?></p>
+                        </div>
+                    </div>
                 <?php else : ?>
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
@@ -73,7 +78,7 @@
 <div class="menuprofil">
     <a href="<?= base_url('/profil/' . $masjid['id']); ?>" class="linkmenu">Kegiatan</a>
     <a href="<?= base_url('/viewkasmasjid/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
-    <a href="<?= base_url('/viewinfak/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
+    <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
     <a href="<?= base_url('/viewzakat/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
     <a href="<?= base_url('/waktusholat/' . $masjid['id']); ?>" class="linkmenu">Details Waktu Sholat</a>
 </div>
