@@ -13,6 +13,6 @@ class lupa extends Controller
 
     public function lupa()
     {
-        return view('auth/lupa');
+        return view('superAdmin/resetpassword');
     }
 }

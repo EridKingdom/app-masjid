@@ -15,10 +15,10 @@ $routes->get('delails/(:segment)', 'Pages::details/$1');
 
 $routes->get('/login', 'Login::index');
 $routes->get('/registrasi', 'Login::registrasi');
-$routes->get('/donasi', 'Login::donasi');
-$routes->get('/bukti-donasi', 'Login::uploadbuktiDonasi');
-$routes->post('/upload-bukti-transfer', 'Login::uploadBuktiTransfer');
-$routes->post('/donasi-store', 'Login::storeDonasi');
+$routes->get('/donasi', 'Donasizakat::donasi');
+$routes->get('/bukti-donasi', 'Donasizakat::uploadbuktiDonasi');
+$routes->post('/upload-bukti-transfer', 'Donasizakat::uploadBuktiTransfer');
+$routes->post('/donasi-store', 'Donasizakat::storeDonasi');
 $routes->get('/verifikasiDonasi/(:num)', 'verifikasiDonasi::index/$1');
 $routes->get('/donasi/verifikasi/all', 'verifikasiDonasi::verifyAllDonasi');
 $routes->get('/donasi/unverifikasi/all', 'verifikasiDonasi::unverifyAllDonasi');
@@ -59,6 +59,7 @@ $routes->post('/laporan/getData', 'Laporan::getData');
 $routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
 $routes->post('/login/auth', 'Login::auth');
 $routes->get('/lupa-password', 'Lupa::index');
+$routes->get('/reset-password', 'Lupa::lupa');
 $routes->get('/dashboardSuper', 'dashboardSuper::index');
 
 $routes->get('/buat-postingan', 'Posting::create');
@@ -68,6 +69,13 @@ $routes->post('/edit-postingan/(:num)', 'Posting::edit/$1');
 $routes->get('/delete-postingan/(:num)', 'Posting::delete/$1');
 
 $routes->get('profile/(:segment)', 'Profile::details/$1');
+
+
+$routes->get('/validasi-pendaftaran', 'Pendaftaran::pendaftaran');
+$routes->get('/pengajuan-perubahan', 'Pendaftaran::pengajuan');
+
+
+
 
 $routes->get('errors/custom_error', function () {
     return view('errors/custom_error', ['message' => 'ID masjid tidak ditemukan dalam sesi']);

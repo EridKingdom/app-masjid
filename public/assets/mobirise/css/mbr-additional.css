@@ -2061,7 +2061,7 @@ a {
 }
 @media (max-width: 991px) and (min-width: 768px) {
   .cid-ubP7pTTB9Y .content-wrap {
-    min-width: 50%;
+    min-width: 100%;
   }
 }
 @media (max-width: 767px) {

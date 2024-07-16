@@ -16,7 +16,7 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Pendaftaran</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">10 Akun</div>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-auto ml-auto">
                         <i class="fas fa-user fa-2x text-gray-300"></i>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pengajuan Akun</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">1 Akun</div>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-auto ml-auto">
                         <i class="fas fa-user-cog fa-2x text-gray-300"></i>
                     </div>
                 </div>
@@ -46,23 +46,8 @@
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Masjid Terdaftar</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">20 Masjid</div>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-auto ml-auto">
                         <i class="fas fa-list fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-3 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pengajuan Akun</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">1 Akun</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>

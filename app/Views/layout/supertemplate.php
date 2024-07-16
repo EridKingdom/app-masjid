@@ -85,8 +85,8 @@
                 <h3 class="text-black text-primary display-4 text-center">Super ADMIN Panel</h3>
                 <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/dashboardSuper'); ?>">Dashboard</a>
                 <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/Daftar-Masjid'); ?>">Data Masjid</a>
-                <a class="nav-link link text-black text-primary display-4" href="#">Pendaftaran</a>
-                <a class="nav-link link text-black text-primary display-4" href="#">Pengajuan Akun</a>
+                <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/validasi-pendaftaran'); ?>">Pendaftaran</a>
+                <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/pengajuan-perubahan'); ?>">Pengajuan Akun</a>
             </div>
             <div class="sidebar-login">
                 <a class="sidebar-login-tombol" href="<?= base_url('/login'); ?>">Admin Logout</a>
