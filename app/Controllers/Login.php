@@ -111,23 +111,23 @@ class Login extends Controller
             foreach ($postGambar2['gambar2'] as $file) {
                 if ($file->isValid() && !$file->hasMoved()) {
                     $newName = $file->getRandomName();
-                    $file->move(FCPATH . 'img', $newName); // Simpan file di folder imgpostingan
-                    $uploadedGambar2FileName = $newName; // Simpan nama file
+                    $file->move(FCPATH . 'img', $newName); 
+                    $uploadedGambar2FileName = $newName;
                 }
             }
             $uploadedTakmirFileName = '';
             foreach ($postTakmir['surat_takmir'] as $file) {
                 if ($file->isValid() && !$file->hasMoved()) {
                     $newName = $file->getRandomName();
-                    $file->move(FCPATH . 'dokumen', $newName); // Simpan file di folder imgpostingan
-                    $uploadedTakmirFileName = $newName; // Simpan nama file
+                    $file->move(FCPATH . 'dokumen', $newName);
+                    $uploadedTakmirFileName = $newName;
                 }
             }
             $uploadedSertifikatFileName = '';
             foreach ($postSertifikat['sertifikat'] as $file) {
                 if ($file->isValid() && !$file->hasMoved()) {
                     $newName = $file->getRandomName();
-                    $file->move(FCPATH . 'dokumen', $newName); // Simpan file di folder imgpostingan
+                    $file->move(FCPATH . 'dokumen', $newName);
                     $uploadedSertifikatFileName = $newName; // Simpan nama file
                 }
             }
@@ -145,13 +145,14 @@ class Login extends Controller
                 'username' => $this->request->getVar('username'),
                 'password' => $this->request->getVar('password'),
                 'role' => 'pengurus',
+                'nama_pengurus' => $this->request->getVar('nama_pengurus'),
                 'gambar_ktp' => $uploadedKtpFileName,
-                'email' => $this->request->getVar('password'),
+                'email' => $this->request->getVar('email'),
                 'alamat_pengurus' => $this->request->getVar('alamat_pengurus'),
                 'no_telp' => $this->request->getVar('no_telp'),
                 'status' => 'pendaftaran',
-                // 'created_at' => date('Y-m-d H:i:s'),
-                // 'updated_at' => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ];
             $userModel->insert($userData);
             $userId = $userModel->getInsertID();
@@ -161,7 +162,6 @@ class Login extends Controller
                 'id_user' => $userId,
                 'sampul' => $uploadedSampulFileName,
                 'nama_masjid' => $this->request->getVar('nama_masjid'),
-                'nama_pengurus' => $this->request->getVar('nama_pengurus'),
                 'provinsi' => $this->request->getVar('provinsi'),
                 'gambar1' => $uploadedGambar1FileName,
                 'gambar2' => $uploadedGambar2FileName,

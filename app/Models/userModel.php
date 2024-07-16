@@ -17,7 +17,9 @@ class UserModel extends Model
         'alamat_pengurus',
         'no_telp',
         'nama_pengurus',
-        'role'
+        'role',
+        'created_at',
+        'updated_at'
 ];
 
     public function validateLogin($username, $password)
