@@ -8,7 +8,17 @@ class UserModel extends Model
 {
     protected $table = 'user';
     protected $primaryKey = 'id_user';
-    protected $allowedFields = ['username', 'password'];
+    protected $allowedFields = [
+        'username',
+        'password',
+        'email',
+        'gambar_ktp',
+        'status',
+        'alamat_pengurus',
+        'no_telp',
+        'nama_pengurus',
+        'role'
+];
 
     public function validateLogin($username, $password)
     {

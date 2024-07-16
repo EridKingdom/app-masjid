@@ -21,17 +21,40 @@ class Login extends Controller
 
         if ($user) {
             if ($user && $user['password'] === $password) {
-                $userData = [
-                    'id_user' => $user['id_user'] ?? '',
-                    'username' => $user['username'],
-                    'logged_in' => true,
-                    'role' => $user['role']
-                ];
-                $session->set('user_data', $userData);
-                if($user['role'] == 'superAdmin') {
+
+                // ketika role adalah superAdmin
+                if ($user['role'] == 'superAdmin') {
+                    $userData = [
+                        'id_user' => $user['id_user'] ?? '',
+                        'username' => $user['username'],
+                        'logged_in' => true,
+                        'role' => $user['role']
+                    ];
+                    $session->set('user_data', $userData);
+
                     return redirect()->to('/dashboardSuper');
                 }
-                return redirect()->to('/profile');
+
+                // ketika status user == diterima
+                if ($user['status'] == 'diterima') {
+                    $userData = [
+                        'id_user' => $user['id_user'] ?? '',
+                        'username' => $user['username'],
+                        'logged_in' => true,
+                        'role' => $user['role']
+                    ];
+                    $session->set('user_data', $userData);
+                    return redirect()->to('/profile');
+                }
+                // ketika status user == ditolak
+                elseif($user['status'] == 'diterima') {
+                    $session->setFlashdata('msg', 'Pendaftaran Anda ditolak');
+                    return redirect()->back();
+                } else {
+                    $session->setFlashdata('msg', 'Pendaftaran Anda sedang diverifkasi');
+                    return redirect()->back();
+                }
+
             } else {
                 $session->setFlashdata('msg', 'Password salah.');
                 return redirect()->to('/login');
@@ -62,18 +85,12 @@ class Login extends Controller
         $postSampul = $this->request->getFiles('sampul');
         $postGambar1 = $this->request->getFiles('gambar1');
         $postGambar2 = $this->request->getFiles('gambar2');
+        $ktpImage = $this->request->getFiles('gambar_ktp');
         $postTakmir = $this->request->getFiles('surat_takmir');
         $postSertifikat = $this->request->getFiles('sertifikat');
 
 
         if ($this->request->getMethod() === 'POST') {
-            $userData = [
-                'username' => $this->request->getVar('username'),
-                'password' => $this->request->getVar('password'),
-                'role' => 'pengurus',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ];
             $uploadedSampulFileName = '';
             foreach ($postSampul['sampul'] as $file) {
                 if ($file->isValid() && !$file->hasMoved()) {
@@ -91,7 +108,7 @@ class Login extends Controller
                 }
             }
             $uploadedGambar2FileName = '';
-            foreach ($postGambar1['gambar2'] as $file) {
+            foreach ($postGambar2['gambar2'] as $file) {
                 if ($file->isValid() && !$file->hasMoved()) {
                     $newName = $file->getRandomName();
                     $file->move(FCPATH . 'img', $newName); // Simpan file di folder imgpostingan
@@ -115,9 +132,30 @@ class Login extends Controller
                 }
             }
 
+            $uploadedKtpFileName = '';
+            foreach ($ktpImage['gambar_ktp'] as $file) {
+                if ($file->isValid() && !$file->hasMoved()) {
+                    $newName = $file->getRandomName();
+                    $file->move(FCPATH . 'dokumen', $newName);
+                    $uploadedKtpFileName = $newName;
+                }
+            }
 
+            $userData = [
+                'username' => $this->request->getVar('username'),
+                'password' => $this->request->getVar('password'),
+                'role' => 'pengurus',
+                'gambar_ktp' => $uploadedKtpFileName,
+                'email' => $this->request->getVar('password'),
+                'alamat_pengurus' => $this->request->getVar('alamat_pengurus'),
+                'no_telp' => $this->request->getVar('no_telp'),
+                'status' => 'pendaftaran',
+                // 'created_at' => date('Y-m-d H:i:s'),
+                // 'updated_at' => date('Y-m-d H:i:s')
+            ];
             $userModel->insert($userData);
             $userId = $userModel->getInsertID();
+
 
             $masjidData = [
                 'id_user' => $userId,
