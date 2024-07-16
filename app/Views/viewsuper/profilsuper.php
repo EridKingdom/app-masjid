@@ -1,4 +1,4 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/supertemplate'); ?>
 <?= $this->Section('content'); ?>
 
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
@@ -76,12 +76,13 @@
 </section>
 
 <div class="menuprofil">
-    <a href="<?= base_url('/profil/' . $masjid['id']); ?>" class="linkdefault linkdefault-hover">Kegiatan</a>
+    <a href="<?= base_url('/profil-super/' . $masjid['id']); ?>" class="linkdefault linkdefault-hover">Kegiatan</a>
     <a href="<?= base_url('/viewkasmasjid/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
-    <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
     <a href="<?= base_url('/viewzakat/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
-    <a href="<?= base_url('/waktusholat/' . $masjid['id']); ?>" class="linkmenu">Waktu Sholat ( Full Screen )</a>
+    <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
+    <a href="#" class="linkmenu">Biodata Pengurus</a>
 </div>
+
 
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
     <div class="widget-clock" style="position: absolute; left: 18px;">

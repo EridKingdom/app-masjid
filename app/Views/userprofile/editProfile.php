@@ -161,10 +161,6 @@ if ($id_user) {
                             <input type="text" class="form-control" id="namaMasjid" name="nama_masjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label for="namaPengurus" class="form-label">Nama Pengurus</label>
-                            <input type="text" class="form-control" id="namaPengurus" name="nama_pengurus" value="<?= esc($masjid['nama_pengurus'] ?? ''); ?>" required>
-                        </div>
-                        <div class="mb-3">
                             <label for="gambar1" class="form-label">Upload Gambar 1</label>
                             <input type="file" class="form-control" id="gambar1" name="gambar1" accept="image/*">
                         </div>
@@ -203,6 +199,7 @@ if ($id_user) {
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a href="#" class="btn btn-primary">Edit Data Pengurus</a>
                             <a href="<?= base_url('/profile'); ?>" class="btn btn-primary">Batalkan</a>
                         </div>
                     </form>

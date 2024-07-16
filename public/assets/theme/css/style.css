@@ -1843,3 +1843,23 @@ h1 {
 .filterposting .dropdown-menu a:hover {
   background-color: #ffffff;
 }
+
+.linkdefault {
+  color: white;
+  /* Warna teks saat tidak di-hover */
+  text-decoration: none;
+  /* Menghilangkan garis bawah */
+}
+
+.linkdefault-hover {
+  background-color: #007bff;
+  /* Warna latar belakang saat hover */
+  color: white;
+  /* Warna teks saat hover */
+  padding: 10px;
+  /* Padding untuk membuatnya terlihat lebih baik */
+  border-radius: 5px;
+  /* Membuat sudut membulat */
+  text-decoration: none;
+  /* Menghilangkan garis bawah */
+}

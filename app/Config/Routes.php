@@ -26,6 +26,8 @@ $routes->get('/donasi/verifikasi/(:num)', 'verifikasiDonasi::verifyDonasi/$1');
 $routes->get('/donasi/unverifikasi/(:num)', 'verifikasiDonasi::unverifyDonasi/$1');
 $routes->get('/TbMasjid', 'TbMasjid::index');
 $routes->get('/TbMasjid/(:segment)', 'TbMasjid::details/$1');
+$routes->get('/Daftar-Masjid', 'TbMasjid::daftarmasjid');
+
 $routes->get('/zakat', 'Pages::zakat');
 $routes->get('/masjid', 'Pages::masjid');
 $routes->get('/infakyatim', 'Pages::infakyatim');
@@ -33,6 +35,7 @@ $routes->get('profile/(:num)', 'Profile::index/$1');
 $routes->get('profile', 'Profile::index');
 $routes->get('profil', 'Profil::index');
 $routes->get('/profil/(:num)', 'Profil::index/$1');
+$routes->get('/profil-super/(:num)', 'Profil::superP/$1');
 $routes->get('waktusholat', 'Profil::waktusholat');
 $routes->get('/waktusholat/(:num)', 'Profil::waktusholat/$1');
 $routes->post('uang/handleFormData/(:num)', 'Uang::handleFormData/$1');
@@ -56,6 +59,7 @@ $routes->post('/laporan/getData', 'Laporan::getData');
 $routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
 $routes->post('/login/auth', 'Login::auth');
 $routes->get('/lupa-password', 'Lupa::index');
+$routes->get('/dashboardSuper', 'dashboardSuper::index');
 
 $routes->get('/buat-postingan', 'Posting::create');
 $routes->get('/edit-postingan/(:num)', 'Posting::update/$1');

@@ -12,7 +12,6 @@ class DbDataMasjidModel extends Model
         'id_user',
         'sampul',
         'nama_masjid',
-        'nama_pengurus',
         'provinsi',
         'deskripsi',
         'kota_kab',

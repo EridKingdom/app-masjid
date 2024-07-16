@@ -134,6 +134,18 @@ if ($id_user) {
         $masjid = $result;
     }
 }
+$gambar_masjid = '';
+$id_masjid = null;
+if ($id_user) {
+    $db = \Config\Database::connect();
+    $query = $db->query("SELECT id, nama_masjid, sampul FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $result = $query->getRow();
+    if ($result) {
+        $id_masjid = $result->id;
+        $nama_masjid = $result->nama_masjid;
+        $gambar_masjid = $result->sampul;
+    }
+}
 ?>
 
 <?php if (session()->getFlashdata('success')) : ?>

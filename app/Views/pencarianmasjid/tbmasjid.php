@@ -55,7 +55,6 @@
                                     <th>No</th>
                                     <th>Gambar</th>
                                     <th>Nama Masjid</th>
-                                    <th>Nama Pengurus</th>
                                     <th>Provinsi</th>
                                     <th>Kota/Kab</th>
                                     <th>Alamat Masjid</th>
@@ -69,7 +68,6 @@
                                         <th scope="row"><?= $i++; ?></th>
                                         <td><img src="/img/<?= $k['sampul']; ?>" alt="Gambar tidak ditemukan" class="sampul"></td>
                                         <td><?= $k['nama_masjid']; ?></td>
-                                        <td><?= $k['nama_pengurus']; ?></td>
                                         <td><?= $k['provinsi']; ?></td>
                                         <td><?= $k['kota_kab']; ?></td>
                                         <td><?= $k['alamat_masjid']; ?></td>
