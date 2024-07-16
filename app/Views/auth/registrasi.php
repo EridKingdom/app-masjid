@@ -17,7 +17,13 @@
                         <input type="text" class="form-control form-control-user" name="nama_pengurus" placeholder="Nama Ketua Pengurus">
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control form-control-user" name="alamat" placeholder="Alamat Lengkap"></textarea>
+                        <input type="text" class="form-control form-control-user" name="no_telp" placeholder="No Telp Pengurus">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control form-control-user" name="alamat_pengurus" placeholder="Alamat Pengurus"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control form-control-user" name="alamat" placeholder="Alamat Masjid"></textarea>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -59,6 +65,10 @@
                     <input type="file" class="form-control-file" id="inputSertifikat" name="sertifikat[]">
                 </div>
                 <div class="masukangambar">
+                    <p for="inputTakmirPdf">Upload KTP Pengurus JPG</p>
+                    <input type="file" class="form-control-file" id="inputGambarKtp" name="gambar_ktp[]">
+                </div>
+                <div class="masukangambar">
                     <p for="inputTakmirPdf">Upload profil JPG</p>
                     <input type="file" class="form-control-file" id="sampul" name="sampul[]">
                 </div>
@@ -71,6 +81,9 @@
                     <input type="file" class="form-control-file" id="inputGambar2" name="gambar2[]">
                 </div>
                 <hr>
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-user" name="email" placeholder="email">
+                </div>
                 <div class="form-group">
                     <input type="text" class="form-control form-control-user" name="username" placeholder="Username">
                 </div>
