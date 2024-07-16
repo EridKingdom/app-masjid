@@ -24,9 +24,13 @@ class Login extends Controller
                 $userData = [
                     'id_user' => $user['id_user'] ?? '',
                     'username' => $user['username'],
-                    'logged_in' => true
+                    'logged_in' => true,
+                    'role' => $user['role']
                 ];
                 $session->set('user_data', $userData);
+                if($user['role'] == 'superAdmin') {
+                    return redirect()->to('/dashboardSuper');
+                }
                 return redirect()->to('/profile');
             } else {
                 $session->setFlashdata('msg', 'Password salah.');
