@@ -75,6 +75,7 @@ $routes->get('profile/(:segment)', 'Profile::details/$1');
 
 
 $routes->get('/validasi-pendaftaran', 'Pendaftaran::pendaftaran');
+$routes->post('/validasi-pendaftaran/aksi', 'Pendaftaran::userRegisterAction');
 $routes->get('/pengajuan-perubahan', 'Pendaftaran::pengajuan');
 
 
