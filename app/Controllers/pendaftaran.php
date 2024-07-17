@@ -11,16 +11,13 @@ class Pendaftaran extends Controller
     {
 
         $db = $db = \Config\Database::connect();
-        $sql = 'SELECT db_data_masjid.id, db_data_masjid.sampul, db_data_masjid.nama_masjid, db_data_masjid.surat_takmir, db_data_masjid.sertifikat, user.nama_pengurus, user.username, user.email  FROM db_data_masjid INNER JOIN user ON db_data_masjid.id_user=user.id_user;';
+        $sql = 'SELECT db_data_masjid.id, db_data_masjid.sampul, db_data_masjid.nama_masjid, db_data_masjid.surat_takmir, db_data_masjid.sertifikat, user.nama_pengurus, user.username, user.email  FROM db_data_masjid INNER JOIN user ON db_data_masjid.id_user=user.id_user where user.status = "pendaftaran";';
 
-        $usermasjid = $db->query($sql)->getResultArray();
+        $userMasjid = $db->query($sql)->getResultArray();
 
-        dd($usermasjid);
+        $data = ['userMasjid' => $userMasjid];
 
-
-
-
-        return view('superAdmin/register');
+        return view('superAdmin/register', $data);
     }
 
     public function pengajuan()

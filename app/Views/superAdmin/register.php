@@ -29,17 +29,20 @@
                         const pendaftaranTableBody = document.getElementById('pendaftaran-table-body');
 
                         // Create 10 empty rows
-                        for (let i = 0; i < 10; i++) {
+
+                        var data = JSON.parse(`<?= json_encode($userMasjid) ?>`)
+
+                        for (let i = 0; i < data.length; i++) {
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
                                 <td><input type="checkbox" class="row-checkbox"></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                <td><img src="/img/`+data[i]["sampul"]+`"></td>
+                                <td>`+data[i]["nama_masjid"]+`</td>
+                                <td>`+data[i]["nama_pengurus"]+`</td>
+                                <td>`+data[i]["username"]+`</td>
+                                <td>`+data[i]["email"]+`</td>
+                                <td><a href="/dokumen/`+data[i]["surat_takmir"]+`">` +data[i]["surat_takmir"]+`</a></td>
+ <td><a href="/dokumen/`+data[i]["sertifikat"]+`">` +data[i]["sertifikat"]+`</a></td>
                             `;
                             pendaftaranTableBody.appendChild(tr);
                         }
