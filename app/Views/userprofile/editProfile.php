@@ -82,7 +82,7 @@ $id_user = $userData['id_user'] ?? null;
 $masjid = [];
 if ($id_user) {
     $db = \Config\Database::connect();
-    $query = $db->query("SELECT nama_masjid, nama_pengurus, sampul, deskripsi, alamat_masjid, provinsi, kota_kab, jenis_tipologi, tahun_berdiri, luas_bangunan, surat_takmir, sertifikat, no_rekening, nama_bank, gambar1, gambar2, gambar3, no_rekening, nama_bank FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+    $query = $db->query("SELECT nama_masjid, sampul, deskripsi, alamat_masjid, provinsi, kota_kab, jenis_tipologi, tahun_berdiri, luas_bangunan, surat_takmir, sertifikat, no_rekening, nama_bank, gambar1, gambar2, gambar3, no_rekening, nama_bank FROM db_data_masjid WHERE id_user = ?", [$id_user]);
     $result = $query->getRowArray();
     if ($result) {
         $masjid = $result;
@@ -108,7 +108,7 @@ if ($id_user) {
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
                     <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
-                        <img class="profile-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
                         <div>
                             <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
                                 <strong><?= esc($masjid['nama_masjid']); ?></strong>
@@ -199,7 +199,7 @@ if ($id_user) {
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Simpan</button>
-                            <a href="#" class="btn btn-primary">Edit Data Pengurus</a>
+                            <a href="<?= base_url('/edit-data-pengurus'); ?>" class="btn btn-primary">Edit Data Pengurus</a>
                             <a href="<?= base_url('/profile'); ?>" class="btn btn-primary">Batalkan</a>
                         </div>
                     </form>

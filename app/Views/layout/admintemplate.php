@@ -104,6 +104,7 @@
             <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/uangkas/' . $id_masjid); ?>">Uang Kas</a>
             <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/zakat2/' . $id_masjid); ?>">Dana Zakat</a>
             <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/yatim/' . $id_masjid); ?>">Dana Anak Yatim</a>
+            <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/verifikasiDonasi/' . $id_masjid); ?>">Verifikasi Donasi</a>
             <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/waktusholat/' . $id_masjid); ?>">Jadwal Sholat</a>
             <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/laporan/' . $id_masjid); ?>">Laporan</a>
             <div class="sidebar-logout">

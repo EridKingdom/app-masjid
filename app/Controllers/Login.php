@@ -47,7 +47,7 @@ class Login extends Controller
                     return redirect()->to('/profile');
                 }
                 // ketika status user == ditolak
-                elseif($user['status'] == 'diterima') {
+                elseif($user['status'] == 'ditolak') {
                     $session->setFlashdata('msg', 'Pendaftaran Anda ditolak');
                     return redirect()->back();
                 } else {
@@ -179,7 +179,7 @@ class Login extends Controller
 
             $masjidModel->insert($masjidData);
 
-            $session->setFlashdata('success', 'Registrasi berhasil, silahkan login.');
+            $session->setFlashdata('success', 'Registrasi berhasil, silahkan tunggu verifikasi.');
             return redirect()->to('/login');
         }
 

@@ -56,7 +56,7 @@
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
                     <div class="d-flex align-items-center">
-                        <img class="profile-img" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;">
+                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;">
                         <div>
                             <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
                                 <strong><?= esc($masjid['nama_masjid']); ?></strong>
@@ -71,6 +71,7 @@
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
             </div>
+            <a href="<?= base_url('/donasi'); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi</a>
         </div>
     </div>
 </section>

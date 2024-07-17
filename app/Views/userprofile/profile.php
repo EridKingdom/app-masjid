@@ -107,8 +107,8 @@ if ($id_user) {
         <div class="row justify-content-center">
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
-                    <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
-                        <img class="profile-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                    <div class="d-flex align-items-left"> <!-- Tambahkan div ini -->
+                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
                         <div>
                             <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
                                 <strong><?= esc($masjid['nama_masjid']); ?></strong>

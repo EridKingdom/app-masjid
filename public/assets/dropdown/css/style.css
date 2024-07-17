@@ -402,11 +402,11 @@
 
 .sidebar-login {
   text-align: center; /* Teks rata tengah */
-  margin-top: 100%;
+  margin-top: 90%;
 }
 .sidebar-logout {
   text-align: center; /* Teks rata tengah */
-  margin-top: 20%;
+  margin-top: 5%;
 }
 
 .sidebar-login-tombol {

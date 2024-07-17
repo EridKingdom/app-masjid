@@ -138,38 +138,23 @@ if ($id_user) {
     <div class="container-fluid">
         <div class="row">
             <div class="content-wrap col-12 col-md-8">
-                <h2 class="judul">Informasi Infak Anak yatim Pada <?= esc($masjid['nama_masjid']); ?></h2>
-                <form class="cari" role="search" method="GET">
-                    <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Infak" aria-label="Search">
-                </form>
+                <h2 class="judul">Konfigurasi Zakat Beras pada <?= esc($masjid['nama_masjid']); ?></h2>
                 <table class="table table-striped" id="infak-table">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Tanggal</th>
-                            <th>Keterangan</th>
-                            <th>Nominal</th>
+                            <th>Jenis Beras</th>
+                            <th>Harga Per-Kg</th>
                             <th>*</th> <!-- Added column for checkbox -->
                         </tr>
                     </thead>
                     <tbody id="infak-table-body">
-                        <?php $i = 1; ?>
-                        <?php foreach ($infak_anak_yatim as $k) : ?>
-                            <tr data-id="<?= esc($k['id_infak']); ?>">
-                                <th scope="row"><?= $i++; ?></th>
-                                <td><?= esc($k['tgl']); ?></td>
-                                <td><?= esc($k['keterangan']); ?></td>
-                                <td><?= esc($k['nominal']); ?></td>
-                                <td><input type="checkbox" class="row-checkbox"></td>
-                            </tr>
-                        <?php endforeach; ?>
                     </tbody>
                     <script>
                         const infakTableBody = document.getElementById('infak-table-body');
                         for (let i = 0; i < 10; i++) {
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
-                            <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
@@ -249,8 +234,7 @@ if ($id_user) {
                                 const row = checkedRow.closest('tr');
                                 const cells = row.getElementsByTagName('td');
                                 document.getElementById('editId').value = row.dataset.id;
-                                document.getElementById('editTgl').value = cells[0].textContent.trim();
-                                document.getElementById('editKeterangan').value = cells[1].textContent.trim();
+                                document.getElementById('editjenisberas').value = cells[1].textContent.trim();
                                 document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
                                 editModal.show();
                             } else {
@@ -274,9 +258,8 @@ if ($id_user) {
                     });
                 </script>
                 <div style="text-align: right;">
-                    <h4>Total Saldo Infak: <span id="totalSaldo">Rp 00.00</span></h4>
                     <button id="addButton" class="btn btn-primary">Tambahkan</button>
-                    <button class="btn btn-primary edit">Edit</button>
+                    <button id="editModal" class="btn btn-primary edit">Edit</button>
                     <button class="btn btn-primary delete">Hapus</button> <!-- Updated button for delete -->
                 </div>
             </div>
@@ -289,21 +272,17 @@ if ($id_user) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addModalLabel">Tambah Data Infak</h5>
+                <h5 class="modal-title" id="addModalLabel">Tambah Konfigurasi Beras</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addForm" method="POST" action="/yatim/handleFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="addForm" method="POST" action="">
                     <div class="mb-3">
-                        <label for="tgl" class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" id="tgl" name="tgl" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <label for="keterangan" class="form-label">Jenis Beras</label>
                         <input type="text" class="form-control" id="keterangan" name="keterangan" required>
                     </div>
                     <div class="mb-3">
-                        <label for="nominal" class="form-label">Nominal</label>
+                        <label for="nominal" class="form-label">Harga per-KG</label>
                         <input type="number" class="form-control" id="nominal" name="nominal" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -318,24 +297,20 @@ if ($id_user) {
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Data Infak Anak Yatim</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit Data Beras</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <form id="editForm" method="POST" action="/yatim/updateFormData/<?= $masjid['id_masjid'] ?>">
-                    <input type="hidden" id="editId" name="id_infak">
+                    <input type="hidden" id="editId" name="id_beras">
                     <div class="mb-3">
-                        <label for="editTgl" class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" id="editTgl" name="tgl" required>
+                        <label for="keterangan" class="form-label">Jenis Beras</label>
+                        <input type="text" class="form-control" id="keterangan" name="keterangan" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editKeterangan" class="form-label">Keterangan</label>
-                        <input type="text" class="form-control" id="editKeterangan" name="keterangan" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="editNominal" class="form-label">Nominal</label>
-                        <input type="number" class="form-control" id="editNominal" name="nominal" required>
+                        <label for="nominal" class="form-label">Harga per-KG</label>
+                        <input type="number" class="form-control" id="nominal" name="nominal" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>

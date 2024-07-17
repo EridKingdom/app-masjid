@@ -216,6 +216,14 @@
         </div>
     </div>
 
+    <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
+        <div class="row justify-content-center my-2" style="max-width: 690px; height: 500px;"> <!-- Menambahkan max-width untuk membatasi lebar -->
+            <div class="col-12 mb-3"> <!-- Menggunakan col-12 untuk lebar penuh dan mb-3 untuk margin bawah -->
+
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <script>

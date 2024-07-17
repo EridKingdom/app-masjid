@@ -17,7 +17,7 @@
                 $masjid = [];
                 if ($id_user) {
                     $db = \Config\Database::connect();
-                    $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+                    $query = $db->query("SELECT nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
                     $result = $query->getRowArray();
                     if ($result) {
                         $masjid = $result;
@@ -78,16 +78,6 @@ $session = session();
 $userData = $session->get('user_data');
 $id_user = $userData['id_user'] ?? null;
 
-// Fetch the masjid data from the database
-$masjid = [];
-if ($id_user) {
-    $db = \Config\Database::connect();
-    $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
-    $result = $query->getRowArray();
-    if ($result) {
-        $masjid = $result;
-    }
-}
 $gambar_masjid = '';
 $id_masjid = null;
 if ($id_user) {
@@ -127,43 +117,63 @@ if ($id_user) {
     </div>
 </section>
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="card col-md-20 col-lg-9">
                 <div class="card-body">
-                    <h5 class="card-title text-center">Edit Postingan</h5>
-                    <form action="<?= base_url("/edit-postingan/" . $id_kegiatan); ?>" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="id_masjid" value="<?= esc($masjid['id_masjid'] ?? ''); ?>">
-                        <div class="mb-3">
-                            <label for="postType" class="form-label">Tipe Postingan</label>
-                            <select class="form-control" id="postType" name="postType">
-                                <option value="Berita">Berita</option>
-                                <option value="Kegiatan">Kegiatan</option>
-                                <option value="Acara">Acara</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tgl" class="form-label">Tanggal</label>
-                            <input type="date" class="form-control" id="tgl" name="tgl" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="judulKegiatan" class="form-label">Judul Kegiatan</label>
-                            <input type="text" class="form-control" id="judulKegiatan" name="judul_kegiatan" required value="<?= esc($judul_kegiatan); ?>">
-                        </div>
-                        <div class="mb-3">
-                            <label for="deskripsiKegiatan" class="form-label">Deskripsi Postingan</label>
-                            <textarea class="form-control" id="deskripsiKegiatan" name="deskripsi_kegiatan" rows="3" required><?= esc($deskripsi_kegiatan); ?></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="postMedia" class="form-label">Tambahkan Foto/Video</label>
-                            <input class="form-control" type="file" id="postMedia" name="postMedia[]" multiple>
-                        </div>
-                        <div class="mb-3 text-center">
-                            <button type="submit" class="TombolKirim">Kirim</button>
-                            <a href="<?= base_url('/profile'); ?>" class="TombolBatalkan">Batalkan</a>
-                        </div>
-                    </form>
+                <h3 class="text-center mb-3">Edit Data Pengurus</h3>
+                <form method="POST" action="" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="fotoKTP" class="form-label">Foto KTP</label>
+                    <input type="file" class="form-control" id="fotoKTP" name="foto_ktp" accept="image/*" aria-label="Upload Foto KTP">
+                </div>
+                 <div class="mb-3">
+                    <label for="namaMasjid" class="form-label">Nama Masjid</label>
+                    <input type="text" class="form-control" id="namaMasjid" name="nama_masjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
+                </div>
+                 <div class="mb-3">
+                    <label for="namaPengurus" class="form-label">Nama Pengurus</label>
+                    <input type="text" class="form-control" id="namaPengurus" name="nama_pengurus" required>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                 </div>
+                <div class="mb-3">
+                    <label for="noTelp" class="form-label">No Telp</label>
+                    <input type="text" class="form-control" id="noTelp" name="no_telp" required>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Alamat Pengurus</label>
+                    <textarea class="form-control" id="alamatPengurus" name="alamat_pengurus" rows="3" required></textarea>
+                </div>
+                <hr>
+                <h4 class="text-center">Settingan Keamanan Akun</h4>
+                <div class="mb-3">
+                    <label for="newUsername" class="form-label">Ubah Username</label>
+                    <input type="text" class="form-control" id="newUsername" name="new_username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Password Lama</label>
+                    <input type="password" class="form-control" id="Password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">Password Baru</label>
+                    <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Ajukan Perubahan</button>
+                    <a href="<?= base_url('/profile'); ?>" class="btn btn-primary">Batalkan</a>
+                </div>
+                </form>
                 </div>
             </div>
         </div>

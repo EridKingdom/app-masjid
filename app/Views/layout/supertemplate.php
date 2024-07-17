@@ -89,7 +89,7 @@
                 <a class="nav-link link text-black text-primary display-4" href="<?= base_url('/pengajuan-perubahan'); ?>">Pengajuan Akun</a>
             </div>
             <div class="sidebar-login">
-                <a class="sidebar-login-tombol" href="<?= base_url('/login'); ?>">Admin Logout</a>
+                <a class="sidebar-login-tombol" href="<?= base_url('/login'); ?>">Logout</a>
             </div>
         </div>
         <script>

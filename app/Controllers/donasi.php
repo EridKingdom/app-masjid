@@ -8,7 +8,7 @@ use App\Models\DonasiModel;
 use CodeIgniter\Controller;
 use App\Models\ZakatModel;
 
-class DonasiZakat extends Controller
+class Donasi extends Controller
 {
     public function donasi()
     {
@@ -96,4 +96,26 @@ class DonasiZakat extends Controller
         $session->setFlashdata('success', 'Bukti transfer berhasil diupload.');
         return redirect()->to('/bukti-donasi');
     }
+    public function donasiZakat()
+    {
+        // Assuming you need to send some data to the view, similar to the `donasi` method
+        $tableMasjid = new DbDataMasjidModel();
+        $allMasjid = $tableMasjid->findAll();
+        $masjidOptions = array_map(function ($value) {
+            return [
+                'id' => $value['id'],
+                'nama_masjid' => $value['nama_masjid'],
+                'no_rekening' => $value['no_rekening'],
+                'nama_bank' => $value['nama_bank'],
+            ];
+        }, $allMasjid);
+
+        $data = ['masjidList' => $masjidOptions];
+            return view('donasiZakat', $data); // Ensure the view path matches the actual location of your view file
+    }
+    public function konfigurasiZakat()
+    {
+        return view('userprofile/konfigurasiZakat');
+    }
+    
 }

@@ -107,7 +107,7 @@ if ($id_user) {
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
                     <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
-                        <img class="profile-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
                         <div>
                             <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
                                 <strong><?= esc($masjid['nama_masjid']); ?></strong>
@@ -139,6 +139,7 @@ if ($id_user) {
                         <tr>
                             <th>Tanggal</th>
                             <th>Nama Donatur</th>
+                            <th>Jenis Donasi</th>
                             <th>Jumlah</th>
                             <th>Gambar Bukti</th>
                             <th>Keterangan</th>
@@ -150,7 +151,7 @@ if ($id_user) {
                                 <tr>
                                     <td><?= esc($item['create_at']); ?></td>
                                     <td><?= esc($item['nama_donatur']); ?></td>
-                                    <td><?= esc($item['nominal']); ?></td>
+                                    <td><?= esc($item['jenis_donasi']); ?></td>
                                     <td>
                                         <?php if (!empty($item['bukti_transfer'])) : ?>
                                             <a href="#" class="view-image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="<?= base_url('img/' . esc($item['bukti_transfer'])); ?>">
@@ -160,6 +161,7 @@ if ($id_user) {
                                             Belum Upload Bukti bayar
                                         <?php endif; ?>
                                     </td>
+                                    <td><?= esc($item['nominal']); ?></td>
                                     <td class="column-center">
                                         <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
                                         <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
@@ -183,6 +185,7 @@ if ($id_user) {
                                         <td>&nbsp;</td>
                                         <td>&nbsp;</td>
                                         <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
                                         <td class="column-center">
                                             <a class="ceklis">✔</a>
                                             <a class="silang">✘</a>
@@ -200,6 +203,9 @@ if ($id_user) {
                         <a class="btn btn-primary" href="/donasi/unverifikasi/all" onclick="return confirm('Are you sure you want to delete all donations?')">Batalkan Semua</a>
                     </div>
                 </table>
+            <div style="margin-top: 20px; text-align: center;">
+                <a class="btn btn-primary" href="<?= base_url('/konfigurasi-zakat'); ?>">Konfigurasi Donasi Zakat</a>
+            </div>
             </div>
         </div>
     </div>

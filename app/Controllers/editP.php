@@ -91,4 +91,8 @@ class editP extends BaseController
             return redirect()->to('/login')->with('error', 'User not logged in');
         }
     }
+    public function editDataPengurus()
+    {
+        return view('userprofile/editdatapengurus');
+    }
 }
