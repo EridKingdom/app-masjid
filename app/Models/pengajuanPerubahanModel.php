@@ -17,7 +17,6 @@ class PengajuanPerubahanModel extends Model
         'gambar_ktp',
         'no_telp',
         'alamat_pengurus',
-        'role',
         'password',
         'created_at',
         'updated_at'

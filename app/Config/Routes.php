@@ -58,6 +58,7 @@ $routes->get('/laporan/filter/(:num)/(:any)/(:any)?/(:any)?', 'laporan::laporanF
 $routes->get('/laporan/(:num)', 'laporan::index/$1');
 $routes->get('/editProfile', 'editP::index');
 $routes->get('/edit-data-pengurus', 'editP::editDataPengurus');
+$routes->post('/edit-data-pengurus/submit', 'editP::submitDataPengurus');
 $routes->post('/laporan/getData', 'Laporan::getData');
 $routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
 $routes->post('/login/auth', 'Login::auth');

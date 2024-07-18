@@ -122,22 +122,19 @@ if ($id_user) {
             <div class="card col-md-20 col-lg-9">
                 <div class="card-body">
                 <h3 class="text-center mb-3">Edit Data Pengurus</h3>
-                <form method="POST" action="" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label for="fotoKTP" class="form-label">Foto KTP</label>
-                    <input type="file" class="form-control" id="fotoKTP" name="foto_ktp" accept="image/*" aria-label="Upload Foto KTP">
-                </div>
+                <form method="POST" action="/edit-data-pengurus/submit" enctype="multipart/form-data">
+                    <input hidden="true" name="id_masjid" value="<?= esc($id_masjid ?? ''); ?>" required>
                  <div class="mb-3">
                     <label for="namaMasjid" class="form-label">Nama Masjid</label>
-                    <input type="text" class="form-control" id="namaMasjid" name="nama_masjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
+                    <input disabled type="text" class="form-control" id="namaMasjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
                 </div>
+                    <div class="mb-3">
+                        <label for="fotoKTP" class="form-label">Foto KTP</label>
+                        <input type="file" class="form-control" id="fotoKTP" name="gambar_ktp[]" accept="image/*" aria-label="Upload Foto KTP">
+                    </div>
                  <div class="mb-3">
                     <label for="namaPengurus" class="form-label">Nama Pengurus</label>
                     <input type="text" class="form-control" id="namaPengurus" name="nama_pengurus" required>
-                </div>
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -155,11 +152,11 @@ if ($id_user) {
                 <h4 class="text-center">Settingan Keamanan Akun</h4>
                 <div class="mb-3">
                     <label for="newUsername" class="form-label">Ubah Username</label>
-                    <input type="text" class="form-control" id="newUsername" name="new_username" required>
+                    <input type="text" class="form-control" id="newUsername" name="username" required>
                 </div>
                 <div class="mb-3">
                     <label for="newPassword" class="form-label">Password Lama</label>
-                    <input type="password" class="form-control" id="Password" name="password" required>
+                    <input type="password" class="form-control" id="Password" name="password_lama" required>
                 </div>
                 <div class="mb-3">
                     <label for="newPassword" class="form-label">Password Baru</label>

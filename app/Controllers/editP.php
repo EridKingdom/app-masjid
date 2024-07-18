@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\dbdatamasjidModel;
 use App\Models\tbkegiatanModel;
+use App\Models\PengajuanPerubahanModel;
+use App\Models\UserModel;
 
 class editP extends BaseController
 {
@@ -94,5 +96,70 @@ class editP extends BaseController
     public function editDataPengurus()
     {
         return view('userprofile/editdatapengurus');
+    }
+
+    public function  submitDataPengurus()
+    {
+        $newPassword = $this->request->getPost('new_password');
+        $confirmPassword = $this->request->getPost('confirm_password');
+        if($newPassword == $confirmPassword){
+            $password = $newPassword;
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Konfirmasi password tidak sama');
+        }
+        $namaPengurus = $this->request->getPost('nama_pengurus');
+        $idMasjid = $this->request->getPost('id_masjid');
+        $email = $this->request->getPost('email');
+        $noTelp = $this->request->getPost('no_telp');
+        $alamatPengurus = $this->request->getPost('alamat_pengurus');
+        $username = $this->request->getPost('username');
+
+        $passwordLama = $this->request->getPost('password_lama');
+        $ktp = $this->request->getFiles('gambar_ktp');
+        $uploadedKtpFileName = '';
+        foreach ($ktp['gambar_ktp'] as $file) {
+            if ($file->isValid() && !$file->hasMoved()) {
+                $newName = $file->getRandomName();
+                $file->move(FCPATH . 'dokumen', $newName);
+                $uploadedKtpFileName = $newName;
+            }
+        }
+
+        $pengajuan = new PengajuanPerubahanModel();
+        $userModel = new UserModel();
+        $session = session();
+        $userData = $session->get('user_data');
+        $id_user = $userData['id_user'] ?? null;
+        if($id_user) {
+            $user = $userModel->find($id_user);
+            if($user) {
+                if($user['password'] == $passwordLama) {
+                    $data = [
+                        'id_masjid' => $idMasjid,
+                        'status' => 'pengajuan',
+                        'nama_pengurus' => $namaPengurus,
+                        'username' => $username,
+                        'email' => $email,
+                        'no_telp' => $noTelp,
+                        'alamat_pengurus' => $alamatPengurus,
+                        'password' => $password,
+                        'gambar_ktp' => $uploadedKtpFileName,
+                    ];
+
+                    try {
+                        $pengajuan->insert($data);
+                        return redirect()->to('/profile')->with('message', 'Pengajuan sedang diproses');
+                    } catch (\ReflectionException $e) {
+                        return redirect()->back()->withInput()->with('error', $e->getMessage());
+                    }
+                } else {
+                    return redirect()->back()->withInput()->with('error', 'Password lama salah');
+                }
+            } else {
+                return redirect()->to('/')->with('error', 'User not logged in');
+            }
+        } else {
+            return redirect()->to('/')->with('error', 'User not logged in');
+        }
     }
 }
