@@ -32,7 +32,6 @@
                     <table class="table table-striped" id="sebelumperubahan-table">
                         <thead>
                             <tr>
-
                                 <th>Foto KTP</th>
                                 <th>Nama Masjid</th>
                                 <th>Nama Pengurus</th>
@@ -48,9 +47,28 @@
             </div>
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    const perubahanTableBody = document.getElementById('perubahan-table-body');
                     const sebelumperubahanTableBody = document.getElementById('sebelumperubahan-table-body');
 
+                    var data = JSON.parse(`<?= json_encode($userData) ?>`)
+
+
+                    // Create 10 empty rows for perubahan-table
+                    for (let i = 0; i < data.length; i++) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                                <div style="display: none;">` + data[i]["id_user"] + `</divsty>
+                                <td><input type="checkbox" name="checkbox" class="row-checkbox" value="` + data[i]["id_user"] + `"></td>
+                                <td><img src="/dokumen/` + data[i]["gambar_ktp"] + `"></td>
+                                <td>` + data[i]["nama_masjid"] + `</td>
+                                <td>` + data[i]["nama_pengurus"] + `</td>
+                                <td>` + data[i]["username"] + `</td>
+                                <td>` + data[i]["email"] + `</td>
+                                <td>` + data[i]["no_telp"] + `</td>
+                            `;
+                        perubahanTableBody.appendChild(tr);
+                    }
+
+                    const perubahanTableBody = document.getElementById('perubahan-table-body');
                     var data = JSON.parse(`<?= json_encode($userData) ?>`)
                     console.log(data)
 
@@ -58,17 +76,18 @@
                     for (let i = 0; i < data.length; i++) {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                                <td><input type="checkbox" class="row-checkbox"></td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
+                                <div style="display: none;">` + data[i]["id_ajukan"] + `</divsty>
+                                <td><input type="checkbox" name="checkbox" class="row-checkbox" value="` + data[i]["id_user"] + `"></td>
+                                <td><img src="/dokumen/` + data[i]["gambar_ktp"] + `"></td>
+                                <td>` + data[i]["nama_masjid"] + `</td>
+                                <td>` + data[i]["nama_pengurus"] + `</td>
+                                <td>` + data[i]["username"] + `</td>
+                                <td>` + data[i]["email"] + `</td>
+                                <td>` + data[i]["no_telp"] + `</td>
                             `;
                         perubahanTableBody.appendChild(tr);
                     }
-
+                    console.log(data)
                     // Add click event listener to each row in perubahan-table
                     perubahanTableBody.addEventListener('click', function(event) {
                         const target = event.target;
