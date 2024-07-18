@@ -171,6 +171,7 @@
                     <tbody id="calendar-body">
                     </tbody>
                 </table>
+
             </div>
         </div>
         <script>
@@ -219,6 +220,31 @@
 
             showCalendar(currentMonth, currentYear);
         </script>
+        <hr>
+        <h5 class="text-center">Jadwal Agenda</h5>
+        <div class="d-flex justify-content-center">
+            <div class="row justify-content-center my-2" style="max-width: 690px;">
+                <?php if (!empty($agenda)) : ?>
+                    <?php foreach ($agenda as $item) : ?>
+                        <?php if (strtotime($item['tgl']) > time()) : ?>
+                            <div class="col-12 mb-3 agenda-item">
+                                <div class="card">
+                                    <div class="card-content-text px-3">
+                                        <h3 class="card-title mbr-fonts-style mbr-white mt-3 mb-4 display-2">
+                                            <strong><?= esc($item['nama_agenda']); ?></strong>
+                                        </h3>
+                                        <p class="text-muted"><?= date('d M Y', strtotime($item['tgl'])); ?></p>
+                                        <div class="postingan"><?= nl2br(esc($item['deskripsi'])); ?></div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <p>Tidak Ada Agenda Mendatang</p>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->

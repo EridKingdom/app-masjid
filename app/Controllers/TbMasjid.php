@@ -71,4 +71,18 @@ class TbMasjid extends BaseController
 
         return view('superAdmin/daftarmasjid', $data);
     }
+
+    public function daftarmasjidWithStatus()
+    {
+        $keyword = $this->request->getVar('keyword'); // Mendapatkan keyword dari query string
+        $db_data_masjid = $this->dbdatamasjidModel->getMasjidWithUserStatus($keyword);
+
+        $data = [
+            'title' => 'Daftar Masjid dengan Status',
+            'db_data_masjid' => $db_data_masjid,
+            'showSearch' =>  true
+        ];
+
+        return view('superAdmin/daftarmasjid', $data);
+    }
 }

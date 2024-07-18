@@ -1,6 +1,19 @@
 <?= $this->extend('layout/template'); ?>
 <?= $this->Section('content'); ?>
 
+<?php
+// Ambil id_user dari sesi atau sumber lain
+$current_user_id = session()->get('id_user'); // Contoh mengambil dari sesi
+echo "Current User ID: " . $current_user_id . "<br>";
+
+// Periksa apakah data di $db_data_masjid ada
+if (empty($db_data_masjid)) {
+    echo "Tidak ada data masjid.";
+} else {
+    echo "Data masjid ditemukan.";
+}
+?>
+
 <section data-bs-version="5.1" class="features4 start cid-ueat2rmvUj" id="features04-v">
     <div class="mbr-overlay"></div>
     <div class="container">
@@ -11,22 +24,28 @@
         </div>
         <div class="row flex-nowrap overflow-auto">
             <?php foreach ($db_data_masjid as $masjid) : ?>
-                <div class="item features-image col-12 col-md-6 col-lg-3">
-                    <div class="item-wrapper">
-                        <div class="item-img">
-                            <img src="/img/<?= $masjid['sampul']; ?>" alt="Gambar masjid" data-slide-to="0" data-bs-slide-to="0">
-                        </div>
-                        <div class="item-content">
-                            <h5 class="item-title mbr-fonts-style display-2">
-                                <strong><?= $masjid['nama_masjid']; ?></strong>
-                            </h5>
-                            <p class="mbr-text mbr-fonts-style display-7"><?= $masjid['alamat_masjid']; ?></p>
-                            <div class="mbr-section-btn item-footer">
-                                <a href="<?= base_url('/profil/' . $masjid['id']); ?>" class="btn item-btn btn-primary display-7">Lihat Profil</a>
+                <?php
+                // Debugging data masjid
+                echo "Masjid ID User: " . $masjid['id_user'] . " - Status: " . $masjid['status'] . "<br>";
+                ?>
+                <?php if ($masjid['id_user'] == $current_user_id && $masjid['status'] == 'diterima') : ?>
+                    <div class="item features-image col-12 col-md-6 col-lg-3">
+                        <div class="item-wrapper">
+                            <div class="item-img">
+                                <img src="/img/<?= $masjid['sampul']; ?>" alt="Gambar masjid" data-slide-to="0" data-bs-slide-to="0">
+                            </div>
+                            <div class="item-content">
+                                <h5 class="item-title mbr-fonts-style display-2">
+                                    <strong><?= $masjid['nama_masjid']; ?></strong>
+                                </h5>
+                                <p class="mbr-text mbr-fonts-style display-7"><?= $masjid['alamat_masjid']; ?></p>
+                                <div class="mbr-section-btn item-footer">
+                                    <a href="<?= base_url('/profil/' . $masjid['id']); ?>" class="btn item-btn btn-primary display-7">Lihat Profil</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

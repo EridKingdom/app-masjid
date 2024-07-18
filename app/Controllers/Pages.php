@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\dbdatamasjidModel;
+use App\Models\DbDataMasjidModel;
 use App\Models\tbkegiatanModel;
 use App\Models\zakatModel;
 use App\Models\infakanakyatimModel;
@@ -17,7 +17,7 @@ class Pages extends BaseController
     public function __construct()
     {
         // Menginisialisasi model dalam satu konstruktor
-        $this->dbdatamasjidModel = new dbdatamasjidModel();
+        $this->dbdatamasjidModel = new DbDataMasjidModel();
         $this->tbkegiatanModel = new tbkegiatanModel();
         $this->zakatModel = new zakatModel();
         $this->infakanakyatimModel = new infakanakyatimModel();
@@ -26,7 +26,8 @@ class Pages extends BaseController
     public function index()
     {
         // Mengambil data dari kedua tabel
-        $db_data_masjid = $this->dbdatamasjidModel->findAll();
+        $current_user_id = session()->get('id_user');
+        $db_data_masjid = $this->dbdatamasjidModel->getMasjidByUserId($current_user_id);
         $kegiatanWithMasjid = $this->tbkegiatanModel->getKegiatanWithMasjid();
 
         // Mengambil tipe postingan unik
