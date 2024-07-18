@@ -51,8 +51,11 @@
                     const perubahanTableBody = document.getElementById('perubahan-table-body');
                     const sebelumperubahanTableBody = document.getElementById('sebelumperubahan-table-body');
 
+                    var data = JSON.parse(`<?= json_encode($userData) ?>`)
+                    console.log(data)
+
                     // Create 10 empty rows for perubahan-table
-                    for (let i = 0; i < 10; i++) {
+                    for (let i = 0; i < data.length; i++) {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                                 <td><input type="checkbox" class="row-checkbox"></td>
@@ -64,21 +67,6 @@
                                 <td>&nbsp;</td>
                             `;
                         perubahanTableBody.appendChild(tr);
-                    }
-
-                    // Create 10 empty rows for sebelumperubahan-table
-                    for (let i = 0; i < 10; i++) {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                                
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            `;
-                        sebelumperubahanTableBody.appendChild(tr);
                     }
 
                     // Add click event listener to each row in perubahan-table

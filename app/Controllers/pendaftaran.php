@@ -25,7 +25,32 @@ class Pendaftaran extends Controller
 
     public function pengajuan()
     {
-        return view('superAdmin/ajukan');
+        $db = \Config\Database::connect();
+        $sql = 'SELECT pengajuan_perubahan.id_ajuan, 
+                pengajuan_perubahan.nama_pengurus as pengurus_baru,
+                pengajuan_perubahan.email as email_baru,
+                pengajuan_perubahan.username as username_baru,
+                pengajuan_perubahan.gambar_ktp as gambar_ktp_baru,
+                pengajuan_perubahan.no_telp as no_telp_baru,
+                pengajuan_perubahan.alamat_pengurus as alamat_pengurus_baru,
+                user.nama_pengurus,
+                user.email,
+                user.username,
+                user.gambar_ktp,
+                user.no_telp,
+                user.alamat_pengurus,
+                db_data_masjid.nama_masjid
+                from pengajuan_perubahan INNER JOIN db_data_masjid ON db_data_masjid.id = pengajuan_perubahan.id_masjid INNER JOIN user ON db_data_masjid.id_user = user.id_user';
+
+        $userData = $db->query($sql)->getResultArray();
+
+        $data = ['userData' => $userData];
+        return view('superAdmin/ajukan', $data);
+    }
+
+    public  function  getDataPerubahanJson()
+    {
+
     }
 
     public function userRegisterAction()
