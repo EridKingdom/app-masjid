@@ -2,15 +2,14 @@
 <?= $this->Section('content'); ?>
 
 <?php
-// Ambil id_user dari sesi atau sumber lain
-$current_user_id = session()->get('id_user'); // Contoh mengambil dari sesi
-echo "Current User ID: " . $current_user_id . "<br>";
-
 // Periksa apakah data di $db_data_masjid ada
 if (empty($db_data_masjid)) {
     echo "Tidak ada data masjid.";
 } else {
-    echo "Data masjid ditemukan.";
+    // echo "Data masjid ditemukan.";
+    // echo "<pre>";
+    // print_r($db_data_masjid); // Debugging data masjid
+    // echo "</pre>";
 }
 ?>
 
@@ -24,11 +23,7 @@ if (empty($db_data_masjid)) {
         </div>
         <div class="row flex-nowrap overflow-auto">
             <?php foreach ($db_data_masjid as $masjid) : ?>
-                <?php
-                // Debugging data masjid
-                echo "Masjid ID User: " . $masjid['id_user'] . " - Status: " . $masjid['status'] . "<br>";
-                ?>
-                <?php if ($masjid['id_user'] == $current_user_id && $masjid['status'] == 'diterima') : ?>
+                <?php if ($masjid['status'] == 'diterima') : ?>
                     <div class="item features-image col-12 col-md-6 col-lg-3">
                         <div class="item-wrapper">
                             <div class="item-img">

@@ -55,6 +55,7 @@
                                     <th>No</th>
                                     <th>Gambar</th>
                                     <th>Nama Masjid</th>
+                                    <th>Nama Pengurus</th>
                                     <th>Provinsi</th>
                                     <th>Kota/Kab</th>
                                     <th>Alamat Masjid</th>
@@ -64,18 +65,20 @@
                             <tbody>
                                 <?php $i = 1; ?>
                                 <?php foreach ($db_data_masjid as $k) : ?>
-                                    <tr>
-                                        <th scope="row"><?= $i++; ?></th>
-                                        <td><img src="/img/<?= $k['sampul']; ?>" alt="Gambar tidak ditemukan" class="sampul"></td>
-                                        <td><?= $k['nama_masjid']; ?></td>
-                                        <td><?= $k['provinsi']; ?></td>
-                                        <td><?= $k['kota_kab']; ?></td>
-                                        <td><?= $k['alamat_masjid']; ?></td>
-                                        <td>
-                                            <a href="<?= base_url('/profil/' . $k['id']); ?>" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
-                                            <!-- SLUG NYA ERROR GIMANA MAU LANJUT <a href="/TbMasjid/?= $k['slug']; ?>" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a> -->
-                                        </td>
-                                    </tr>
+                                    <?php if ($k['status'] == 'diterima') : ?>
+                                        <tr>
+                                            <th scope="row"><?= $i++; ?></th>
+                                            <td><img src="/img/<?= $k['sampul']; ?>" alt="Gambar tidak ditemukan" class="sampul"></td>
+                                            <td><?= $k['nama_masjid']; ?></td>
+                                            <td><?= $k['nama_pengurus']; ?></td>
+                                            <td><?= $k['provinsi']; ?></td>
+                                            <td><?= $k['kota_kab']; ?></td>
+                                            <td><?= $k['alamat_masjid']; ?></td>
+                                            <td>
+                                                <a href="<?= base_url('/profil/' . $k['id']); ?>" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

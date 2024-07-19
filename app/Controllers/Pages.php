@@ -25,9 +25,16 @@ class Pages extends BaseController
 
     public function index()
     {
-        // Mengambil data dari kedua tabel
-        $current_user_id = session()->get('id_user');
-        $db_data_masjid = $this->dbdatamasjidModel->getMasjidByUserId($current_user_id);
+        // Mengambil data masjid dengan status 'diterima'
+        $db = \Config\Database::connect();
+        $builder = $db->table('db_data_masjid');
+        $builder->select('db_data_masjid.*, user.status');
+        $builder->join('user', 'user.id_user = db_data_masjid.id_user');
+        $builder->where('user.status', 'diterima');
+        $query = $builder->get();
+        $db_data_masjid = $query->getResultArray();
+
+        // Mengambil data kegiatan
         $kegiatanWithMasjid = $this->tbkegiatanModel->getKegiatanWithMasjid();
 
         // Mengambil tipe postingan unik
