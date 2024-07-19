@@ -34,8 +34,10 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Reset Password</h1>
                         </div>
-                        <form class="user" action="" method="POST">
+                        <form class="user" action="/lupa-password/ubah" method="POST">
                             <div class="form-group">
+                                <input value="<?= $user['id_user']; ?>" type="hidden" name="id_user">
+                                <input value="<?= $from ?>" type="hidden" name="from">
                                 <input type="password" class="form-control form-control-user mb-3" id="exampleInputPassword" name="password" placeholder="Password">
                                 <input type="password" class="form-control form-control-user mb-3" id="exampleInputPassword" name="confirm_password" placeholder="Konfirmasi Password">
                                 <input type="checkbox" onclick="togglePassword()"> Show Password
