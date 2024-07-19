@@ -171,7 +171,7 @@
             <div style="text-align: center;">
                 <button id="validate" type="submit" class="btn btn-primary">Validasi Perubahan</button>
                 <button id="reject" type="submit" class="btn btn-primary">Batalkan Perubahan</button>
-                <button type="submit" class="btn btn-primary">Ubah Password</button>
+                <a class="btn btn-danger" href="<?= base_url('/resetter-password') ?>">Pengajuan Lupa Password</a>
             </div>
 
         </div>
@@ -189,15 +189,15 @@
             event.preventDefault();
             let data = Array.from(document.querySelectorAll("input[type=checkbox][name=checkbox]:checked"), e => e.value);
             fetch("/pengajuan-perubahan/aksi", {
-                method: "POST",
-                body: JSON.stringify({
-                    ids: data,
-                    action: 'validate'
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            }).then((response) => response.json())
+                    method: "POST",
+                    body: JSON.stringify({
+                        ids: data,
+                        action: 'validate'
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                }).then((response) => response.json())
                 .then((json) => console.log(json))
                 .then((_) => location.reload());
         });
@@ -206,15 +206,15 @@
             event.preventDefault();
             let data = Array.from(document.querySelectorAll("input[type=checkbox][name=checkbox]:checked"), e => e.value);
             fetch("/pengajuan-perubahan/aksi", {
-                method: "POST",
-                body: JSON.stringify({
-                    ids: data,
-                    action: 'reject'
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            }).then((response) => response.json())
+                    method: "POST",
+                    body: JSON.stringify({
+                        ids: data,
+                        action: 'reject'
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                }).then((response) => response.json())
                 .then((json) => console.log(json))
                 .then((_) => location.reload());
         });
