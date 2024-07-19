@@ -43,7 +43,7 @@ class Pendaftaran extends Controller
                 user.alamat_pengurus,
                 db_data_masjid.nama_masjid
                 from pengajuan_perubahan INNER JOIN db_data_masjid ON db_data_masjid.id = pengajuan_perubahan.id_masjid INNER JOIN user ON db_data_masjid.id_user = user.id_user
-                where pengajuan_perubahan.status = "pengajuan";';
+                where pengajuan_perubahan.status = "pengajuan" or pengajuan_perubahan.status = "block";';
 
         $userData = $db->query($sql)->getResultArray();
 

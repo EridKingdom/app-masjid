@@ -3,9 +3,13 @@
 namespace App\Controllers;
 
 use App\Models\dbdatamasjidModel;
+use App\Models\UserModel;
+use CodeIgniter\API\ResponseTrait;
+
 
 class TbMasjid extends BaseController
 {
+    use ResponseTrait;
     protected $dbdatamasjidModel;
     public function __construct()
     {
@@ -37,6 +41,14 @@ class TbMasjid extends BaseController
         echo $slug;
     }
 
+    public function block()
+    {
+        $userIds = $this->request->getVar('userIds');
+        $userModel = new UserModel();
+        $userModel->update($userIds, ['status' => 'block']);
+        return $this->respond(['message' => 'success']);
+    }
+
     public function daftarmasjid()
     {
         $keyword = $this->request->getVar('keyword'); // Mendapatkan keyword dari query string
@@ -49,9 +61,12 @@ class TbMasjid extends BaseController
                 ->orLike('kota_kab', $keyword)
                 ->orLike('alamat_masjid', $keyword)
                 ->groupEnd()
+                ->join('user', 'user.id_user=db_data_masjid.id_user')
+                ->where('user.status', 'diterima')
                 ->findAll();
         } else {
-            $db_data_masjid = $this->dbdatamasjidModel->findAll();
+            $db_data_masjid = $this->dbdatamasjidModel->join('user', 'user.id_user=db_data_masjid.id_user')
+                ->where('user.status', 'diterima')->findAll();
         }
 
         $data = [

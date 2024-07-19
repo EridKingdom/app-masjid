@@ -33,7 +33,7 @@
                                 <?php $i = 1; ?>
                                 <?php foreach ($db_data_masjid as $k) : ?>
                                     <tr>
-                                        <td><input type="checkbox" class="selectItem"></td> <!-- Checkbox for each item -->
+                                        <td><input type="checkbox" class="selectItem" name="checkbox" value="<?= $k['id_user'] ?>"></td> <!-- Checkbox for each item -->
                                         <th scope="row"><?= $i++; ?></th>
                                         <td><img src="/img/<?= $k['sampul']; ?>" alt="Gambar tidak ditemukan" class="sampul"></td>
                                         <td><?= $k['nama_masjid']; ?></td>
@@ -63,10 +63,32 @@
         const kotaInput = document.getElementById('kota');
         const table = document.getElementById('masjidTable');
         const rows = table.getElementsByTagName('tr');
-
-        // Select all functionality
+        const blockButton =  document.getElementById('blockButton');
         const selectAllCheckbox = document.getElementById('selectAll');
         const itemCheckboxes = document.querySelectorAll('.selectItem');
+
+        blockButton.addEventListener('click', function (event) {
+           event.preventDefault();
+           let data = Array.from(document.querySelectorAll("input[type=checkbox][name=checkbox]:checked"), e => e.value);const checked = document.querySelectorAll('.selectItem:checked');
+            if(data.length > 0) {
+                fetch("/block", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        userIds: data,
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                }).then((response) => response.json())
+                    .then((json) => console.log(json))
+                    .then((_) => location.reload());
+            } else  {
+                alert("Tidak ada data yang dipilih");
+            }
+           console.log(data);
+
+
+        });
 
         selectAllCheckbox.addEventListener('change', function() {
             itemCheckboxes.forEach(checkbox => {

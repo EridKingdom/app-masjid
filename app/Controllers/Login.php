@@ -50,7 +50,12 @@ class Login extends Controller
                 elseif($user['status'] == 'ditolak') {
                     $session->setFlashdata('msg', 'Pendaftaran Anda ditolak');
                     return redirect()->back();
-                } else {
+                }
+                elseif($user['status'] == 'block') {
+                    $session->setFlashdata('msg', 'Akun anda sedang diblokir');
+                    return redirect()->back();
+                }
+                else {
                     $session->setFlashdata('msg', 'Pendaftaran Anda sedang diverifkasi');
                     return redirect()->back();
                 }

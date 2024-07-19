@@ -27,6 +27,7 @@ $routes->get('/donasi/unverifikasi/(:num)', 'verifikasiDonasi::unverifyDonasi/$1
 $routes->get('/donasi-zakat', 'Donasi::donasiZakat');
 $routes->get('/konfigurasi-zakat', 'Donasi::konfigurasiZakat');
 $routes->get('/TbMasjid', 'TbMasjid::index');
+$routes->post('/block', 'TbMasjid::block');
 $routes->get('/TbMasjid/(:segment)', 'TbMasjid::details/$1');
 $routes->get('/Daftar-Masjid', 'TbMasjid::daftarmasjid');
 
