@@ -63,6 +63,7 @@ $routes->post('/laporan/getData', 'Laporan::getData');
 $routes->get('/verifikasiDonasi', 'verifikasiDonasi::index');
 $routes->post('/login/auth', 'Login::auth');
 $routes->get('/lupa-password', 'Lupa::index');
+$routes->post('/lupa-password/submit', 'Lupa::forgotPasswordRequest');
 $routes->get('/reset-password', 'Lupa::lupa');
 $routes->get('/resetter-password', 'Lupa::resseter');
 $routes->get('/dashboardSuper', 'dashboardSuper::index');

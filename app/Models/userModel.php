@@ -14,6 +14,7 @@ class UserModel extends Model
         'email',
         'gambar_ktp',
         'status',
+        'status_password',
         'alamat_pengurus',
         'no_telp',
         'nama_pengurus',

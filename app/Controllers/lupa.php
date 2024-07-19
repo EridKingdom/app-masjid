@@ -12,6 +12,22 @@ class lupa extends Controller
         return view('auth/lupapassword');
     }
 
+    public function forgotPasswordRequest()
+    {
+        $username = $this->request->getVar('username');
+        $email = $this->request->getVar('email');
+        $userModel = new UserModel();
+        $user = $userModel->where('username', $username)->where('email', $email)->first();
+        if($user) {
+            $userModel->update($user['id_user'], ['status_password' => 'reset']);
+            return redirect()->to('/login')->with('success', 'Reset password berhasil diajukan untuk disetujui admin');
+
+        } else {
+            session()->setFlashdata('error', 'Username atau email tidak ditemukan');
+            return redirect()->back();
+        }
+    }
+
     public function lupa()
     {
         return view('superAdmin/resetpassword');

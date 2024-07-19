@@ -7,7 +7,7 @@
             <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Masukkan username dan email</h1>
             </div>
-            <form class="user" action="" method="POST">
+            <form class="user" action="/lupa-password/submit" method="POST">
                 <div class="form-group">
                     <input type="text" class="form-control form-control-user" id="exampleInputEmail" name="username" aria-describedby="emailHelp" placeholder="Username">
                 </div>
@@ -15,7 +15,7 @@
                     <input type="text" class="form-control form-control-user" id="exampleInputEmail" name="email" aria-describedby="emailHelp" placeholder="email">
                 </div>
                 <div class="tombollogin">
-                    <a class="btn btn-primary">Kirim</a>
+                    <button type="submit" class="btn btn-primary">Kirim</button>
                 </div>
             </form>
             <hr>
