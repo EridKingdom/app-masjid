@@ -16,7 +16,7 @@ class Pendaftaran extends Controller
     {
 
         $db = $db = \Config\Database::connect();
-        $sql = 'SELECT db_data_masjid.id, db_data_masjid.sampul, db_data_masjid.nama_masjid, db_data_masjid.surat_takmir, db_data_masjid.sertifikat, user.nama_pengurus, user.username, user.email, user.id_user  FROM db_data_masjid INNER JOIN user ON db_data_masjid.id_user=user.id_user where user.status = "pendaftaran";';
+        $sql = 'SELECT db_data_masjid.id, db_data_masjid.sampul, db_data_masjid.nama_masjid, db_data_masjid.surat_takmir, db_data_masjid.sertifikat, user.nama_pengurus, user.username, user.email, user.id_user  FROM db_data_masjid INNER JOIN user ON db_data_masjid.id_user=user.id_user where user.status = "pendaftaran" or user.status = "block";';
 
         $userMasjid = $db->query($sql)->getResultArray();
 
@@ -43,7 +43,7 @@ class Pendaftaran extends Controller
                 user.alamat_pengurus,
                 db_data_masjid.nama_masjid
                 from pengajuan_perubahan INNER JOIN db_data_masjid ON db_data_masjid.id = pengajuan_perubahan.id_masjid INNER JOIN user ON db_data_masjid.id_user = user.id_user
-                where pengajuan_perubahan.status = "pengajuan" or pengajuan_perubahan.status = "block";';
+                where pengajuan_perubahan.status = "pengajuan";';
 
         $userData = $db->query($sql)->getResultArray();
 
