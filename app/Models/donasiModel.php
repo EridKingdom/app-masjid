@@ -15,6 +15,7 @@ class DonasiModel extends Model
         'alamat',
         'jenis_donasi',
         'bukti_transfer',
+        'status',
         'nominal',
         'create_at',
         'update_at'

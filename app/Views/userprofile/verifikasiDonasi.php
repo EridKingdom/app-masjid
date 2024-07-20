@@ -154,7 +154,7 @@ if ($id_user) {
                                     <td><?= esc($item['jenis_donasi']); ?></td>
                                     <td>
                                         <?php if (!empty($item['bukti_transfer'])) : ?>
-                                            <a href="#" class="view-image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="<?= base_url('img/' . esc($item['bukti_transfer'])); ?>">
+                                            <a href="#" class="view-image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="<?= base_url('transfer/' . esc($item['bukti_transfer'])); ?>">
                                                 <?= esc($item['bukti_transfer']); ?>
                                             </a>
                                         <?php else : ?>
