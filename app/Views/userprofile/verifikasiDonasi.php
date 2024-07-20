@@ -149,7 +149,7 @@ if ($id_user) {
                         <?php if (!empty($donasi)) : ?>
                             <?php foreach ($donasi as $item) : ?>
                                 <tr>
-                                    <td><?= esc($item['create_at']); ?></td>
+                                    <td><?= esc($item['created_at']); ?></td>
                                     <td><?= esc($item['nama_donatur']); ?></td>
                                     <td><?= esc($item['jenis_donasi']); ?></td>
                                     <td>
@@ -161,7 +161,7 @@ if ($id_user) {
                                             Belum Upload Bukti bayar
                                         <?php endif; ?>
                                     </td>
-                                    <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
+                                    <td><?= 'Rp ' . number_format(esc($item['nominal']), 0, ',', '.'); ?></td>
                                     <td class="column-center">
                                         <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
                                         <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
