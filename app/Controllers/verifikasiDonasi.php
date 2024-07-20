@@ -2,12 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Models\kasmasjidModel;
 use App\Models\dbdatamasjidModel;
 use App\Models\DonasiModel;
-use App\Models\tbkegiatanModel;
-use App\Models\zakatModel;
 use App\Models\infakanakyatimModel;
+use App\Models\kasmasjidModel;
+use App\Models\zakatModel;
 
 class verifikasiDonasi extends BaseController
 {
@@ -52,20 +51,20 @@ class verifikasiDonasi extends BaseController
             $data = [
                 'tgl' => $donasi['created_at'],
                 'id_masjid' => $donasi['id_masjid'],
-                'keterangan' => 'Donasi dari '.$donasi['nama_donatur'],
+                'keterangan' => 'Donasi dari ' . $donasi['nama_donatur'],
                 'nominal' => $donasi['nominal'],
             ];
 
             $jenis = $donasi['jenis_donasi'];
 
-            if($jenis == 'pembangunan') {
+            if ($jenis == 'pembangunan') {
                 $data['jenis_kas'] = 'masuk';
                 $modelKasmasjid->save($data);
                 $this->donasiModel->update($id_donasi, $status);
 
             } else {
                 $modelInfakanakyatim->save($data);
-                $this->donasiModel->update($id_donasi,$status);
+                $this->donasiModel->update($id_donasi, $status);
             }
             return redirect()->back()->with('success', 'Donation verified successfully.');
         } else {
@@ -85,16 +84,26 @@ class verifikasiDonasi extends BaseController
     public function verifyAllDonasi()
     {
         $donasiAll = $this->donasiModel->findAll();
+        $modelKasmasjid = new kasmasjidModel();
+        $modelInfakanakyatim = new infakanakyatimModel();
         foreach ($donasiAll as $key => $donasi) {
             if ($donasi) {
-                $zakatData = [
+                $status = ['status' => 'verifikasi'];
+                $jenis = $donasi['jenis_donasi'];
+                $data = [
                     'tgl' => $donasi['created_at'],
                     'id_masjid' => $donasi['id_masjid'],
                     'keterangan' => $donasi['nama_donatur'],
                     'nominal' => $donasi['nominal'],
                 ];
-                if ($this->zakatModel->save($zakatData)) {
-                    $this->donasiModel->delete($donasi['id_donasi']);
+                if ($jenis == 'pembangunan') {
+                    $data['jenis_kas'] = 'masuk';
+                    $modelKasmasjid->save($data);
+                    $this->donasiModel->update($donasi['id_donasi'], $status);
+
+                } else {
+                    $modelInfakanakyatim->save($data);
+                    $this->donasiModel->update($donasi['id_donasi'], $status);
                 }
             }
         }
@@ -104,10 +113,10 @@ class verifikasiDonasi extends BaseController
 
     public function unverifyAllDonasi()
     {
-        if ($this->donasiModel->delete()) {
-            return redirect()->back()->with('success', 'All donations deleted successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Failed to delete all donations.');
+        $all = $this->donasiModel->findAll();
+        foreach ($all as $item) {
+            $this->donasiModel->delete($item['id_donasi']);
         }
+        return redirect()->back()->with('success', 'All donations deleted successfully.');
     }
 }
