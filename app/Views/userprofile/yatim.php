@@ -159,7 +159,7 @@ if ($id_user) {
                                 <th scope="row"><?= $i++; ?></th>
                                 <td><?= esc($k['tgl']); ?></td>
                                 <td><?= esc($k['keterangan']); ?></td>
-                                <td><?= esc($k['nominal']); ?></td>
+                                <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                                 <td><input type="checkbox" class="row-checkbox"></td>
                             </tr>
                         <?php endforeach; ?>

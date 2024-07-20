@@ -77,17 +77,45 @@
 
 <div class="menuprofil">
     <a href="<?= base_url('/profil-super/' . $masjid['id']); ?>" class="linkmenu">Kegiatan</a>
-    <a href="<?= base_url('/viewkasmasjid/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
-    <a href="<?= base_url('/viewzakat/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
-    <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
-    <a href="#" class="linkmenu">Biodata Pengurus</a>
+    <a href="<?= base_url('/view-kasmasjid-super/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
+    <a href="<?= base_url('/view-zakat-super/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
+    <a href="<?= base_url('/view-yatim-super/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
+    <a href="<?= base_url('/biodata-pengurus/' . $masjid['id']); ?>" class="linkdefault linkdefault-hover">Biodata Pengurus</a>
 </div>
 
-
 <section data-bs-version="5.1" class="article8 cid-ueavU2rDWq" id="article08-x">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="card-title text-center">Informasi Ketua Pengurus</h2>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="<?= base_url('dokumen/' . esc($pengurus['gambar_ktp'])); ?>" alt="Profile Image" class="img-fluid mx-auto d-block" style="width: 500px;">
+                        <div class="mt-4 text-start">
+                            <div class="card-text-grid">
+                                <p class="card-text">Nama Pengurus </p>
+                                <p class="card-text">: <?= esc($pengurus['nama_pengurus']); ?></p>
+                                <p class="card-text">No Telp</p>
+                                <p class="card-text">: <?= esc($pengurus['no_telp']); ?></p>
+                                <p class="card-text">Email</p>
+                                <p class="card-text">: <?= esc($pengurus['email']); ?></p>
+                                <p class="card-text">Alamat Pengurus </p>
+                                <p class="card-text">: <?= esc($pengurus['alamat_pengurus']); ?></p>
+                            </div>
+                        </div>
 
+                        <style>
+                            .card-text-grid {
+                                display: grid;
+                                grid-template-columns: auto 1fr;
+                                gap: 10px;
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-
-
 
 <?= $this->endSection('content'); ?>

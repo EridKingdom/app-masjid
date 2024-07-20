@@ -3,32 +3,43 @@
 
 
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
-
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
-
-        <div class="carousel-inner">
-            <div class="carousel-item slider-image item active">
-                <div class="item-wrapper">
-                    <img class="d-block w-100" src="<?= base_url(); ?>/assets/images/rayasumbar/mesra1.jpg" alt="Mobirise Website Builder">
-
-
-                </div>
-            </div>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item slider-image item">
-                    <div class="item-wrapper">
-                        <img class="d-block w-100" src="<?= base_url(); ?>/assets/images/rayasumbar/mesra2.jpg">
-
-                    </div>
-                </div>
-                <div class="carousel-item slider-image item">
-                    <div class="item-wrapper">
-                        <img class="d-block w-100" src="<?= base_url(); ?>/assets/images/rayasumbar/mesra3.jpg" alt="Mobirise Website Builder">
-
-                    </div>
+                <?php
+                // Menentukan apakah ada gambar untuk ditampilkan
+                $hasImages = !empty($masjid['gambar1']) || !empty($masjid['gambar2']) || !empty($masjid['gambar3']);
+                ?>
+                <div class="carousel-inner">
+                    <?php if ($hasImages) : ?>
+                        <div class="carousel-item active">
+                            <div class="item-wrapper">
+                                <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar1'])); ?>" alt="First Image">
+                            </div>
+                        </div>
+                        <?php if (!empty($masjid['gambar2'])) : ?>
+                            <div class="carousel-item">
+                                <div class="item-wrapper">
+                                    <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar2'])); ?>" alt="Second Image">
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($masjid['gambar3'])) : ?>
+                            <div class="carousel-item">
+                                <div class="item-wrapper">
+                                    <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar3'])); ?>" alt="Third Image">
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php else : ?>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                            <p>No images available.</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
+
         <a class="carousel-control carousel-control-prev" role="button" data-slide="prev" data-bs-slide="prev" href="#ueOkfUJH6x">
             <span class="mobi-mbri mobi-mbri-arrow-prev" aria-hidden="true"></span>
             <span class="sr-only visually-hidden">Previous</span>
@@ -39,6 +50,7 @@
         </a>
     </div>
 </section>
+
 
 <section data-bs-version="5.1" class="article11 cid-ueCj6ebiFP" id="article11-19">
     <div class="container-fluid">
@@ -94,7 +106,7 @@
                             <tr>
                                 <td><?= $k['tgl']; ?></td>
                                 <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
+                                <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

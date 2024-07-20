@@ -1,71 +1,72 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
+<!-- Tambahkan link rel di sini -->
+<link rel="stylesheet" href="<?= base_url(); ?>/assets/mobirise/css/mbr-additional.css?v=N4qxfg" type="text/css">
+
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
-    <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <?php
-                // Mengambil data user dari session
-                $session = session();
-                $userData = $session->get('user_data');
-                $id_user = $userData['id_user'] ?? null;
+    <div class="carousel slide" id="ueOkfUJH6x" data-bs-ride="carousel" data-bs-interval="5000">
+        <div class="carousel-inner">
+            <?php
+            // Mengambil data user dari session
+            $session = session();
+            $userData = $session->get('user_data');
+            $id_user = $userData['id_user'] ?? null;
 
-                // Fetch the masjid data from the database
-                $masjid = [];
-                if ($id_user) {
-                    $db = \Config\Database::connect();
-                    $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
-                    $result = $query->getRowArray();
-                    if ($result) {
-                        $masjid = $result;
-                    } else {
-                        echo "No data found for the given user ID.";
-                    }
+            // Fetch the masjid data from the database
+            $masjid = [];
+            if ($id_user) {
+                $db = \Config\Database::connect();
+                $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+                $result = $query->getRowArray();
+                if ($result) {
+                    $masjid = $result;
                 } else {
-                    echo "User ID not found in session.";
+                    echo "No data found for the given user ID.";
                 }
+            } else {
+                echo "User ID not found in session.";
+            }
 
-                // Determine if there are images to display
-                $hasImages = !empty($masjid['gambar1']) || !empty($masjid['gambar2']) || !empty($masjid['gambar3']);
-                ?>
-                <div class="carousel-inner">
-                    <?php if ($hasImages) : ?>
-                        <div class="carousel-item active">
-                            <div class="item-wrapper">
-                                <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar1'])); ?>" alt="First Image">
-                            </div>
+            // Determine if there are images to display
+            $hasImages = !empty($masjid['gambar1']) || !empty($masjid['gambar2']) || !empty($masjid['gambar3']);
+            ?>
+            <div class="carousel-inner">
+                <?php if ($hasImages) : ?>
+                    <div class="carousel-item active">
+                        <div class="item-wrapper">
+                            <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar1'])); ?>" alt="First Image">
                         </div>
-                        <?php if (!empty($masjid['gambar2'])) : ?>
-                            <div class="carousel-item">
-                                <div class="item-wrapper">
-                                    <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar2'])); ?>" alt="Second Image">
-                                </div>
+                    </div>
+                    <?php if (!empty($masjid['gambar2'])) : ?>
+                        <div class="carousel-item">
+                            <div class="item-wrapper">
+                                <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar2'])); ?>" alt="Second Image">
                             </div>
-                        <?php endif; ?>
-                        <?php if (!empty($masjid['gambar3'])) : ?>
-                            <div class="carousel-item">
-                                <div class="item-wrapper">
-                                    <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar3'])); ?>" alt="Third Image">
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php else : ?>
-                        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-                            <p>No images available.</p>
                         </div>
                     <?php endif; ?>
-                </div>
+                    <?php if (!empty($masjid['gambar3'])) : ?>
+                        <div class="carousel-item">
+                            <div class="item-wrapper">
+                                <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar3'])); ?>" alt="Third Image">
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php else : ?>
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                        <p>No images available.</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
-        <a class="carousel-control carousel-control-prev" role="button" data-slide="prev" data-bs-slide="prev" href="#ueOkfUJH6x">
-            <span class="mobi-mbri mobi-mbri-arrow-prev" aria-hidden="true"></span>
-            <span class="sr-only visually-hidden">Previous</span>
+        <a class="carousel-control-prev" role="button" data-bs-slide="prev" href="#ueOkfUJH6x">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
         </a>
-        <a class="carousel-control carousel-control-next" role="button" data-slide="next" data-bs-slide="next" href="#ueOkfUJH6x">
-            <span class="mobi-mbri mobi-mbri-arrow-next" aria-hidden="true"></span>
-            <span class="sr-only visually-hidden">Next</span>
+        <a class="carousel-control-next" role="button" data-bs-slide="next" href="#ueOkfUJH6x">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
         </a>
     </div>
 </section>
@@ -168,7 +169,7 @@ if ($id_user) {
                                 <th scope="row"><?= $i++; ?></th>
                                 <td><?= esc($k['tgl']); ?></td>
                                 <td><?= esc($k['keterangan']); ?></td>
-                                <td><?= esc($k['nominal']); ?></td>
+                                <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                                 <td><input type="checkbox" class="row-checkbox"></td>
                             </tr>
                         <?php endforeach; ?>
@@ -191,10 +192,9 @@ if ($id_user) {
                 </script>
                 <div style="text-align: right;">
                     <h4>Total Saldo Zakat: <span id="totalSaldo">Rp 00.00</span></h4>
-                    <a href="<?= base_url('/verifikasiDonasi/' . $masjid['id_masjid']); ?>" class="btn btn-primary">Verifikasi Pembayaran</a>
                     <button id="addButton" class="btn btn-primary">Tambahkan</button>
-                    <button class="btn btn-primary edit">Edit</button>
-                    <button class="btn btn-primary delete">Hapus</button> <!-- Added button for delete -->
+                    <button class="btn btn-secondary edit">Edit</button>
+                    <button class="btn btn-danger delete">Hapus</button> <!-- Added button for delete -->
                 </div>
             </div>
         </div>
@@ -288,7 +288,7 @@ if ($id_user) {
             let total = 0;
             Array.from(rows).forEach(function(row) {
                 const cells = row.getElementsByTagName('td');
-                const nominal = cells[2].textContent.trim();
+                const nominal = cells[3].textContent.trim();
                 if (nominal) {
                     total += parseFloat(nominal.replace(/[^0-9,-]+/g, ""));
                 }
@@ -332,41 +332,47 @@ if ($id_user) {
         const addButton = document.getElementById('addButton');
         const addModal = new bootstrap.Modal(document.getElementById('addModal'));
 
-        addButton.addEventListener('click', function() {
-            addModal.show();
-        });
+        if (addButton) {
+            addButton.addEventListener('click', function() {
+                addModal.show();
+            });
+        }
 
-        const editButton = document.querySelector('.btn-primary.edit');
+        const editButton = document.querySelector('.btn-secondary.edit');
         const editModal = new bootstrap.Modal(document.getElementById('editModal'));
 
-        editButton.addEventListener('click', function() {
-            const checkedRow = document.querySelector('input.row-checkbox:checked');
-            if (checkedRow) {
-                const row = checkedRow.closest('tr');
-                const cells = row.getElementsByTagName('td');
-                document.getElementById('editId').value = row.dataset.id;
-                document.getElementById('editTgl').value = cells[0].textContent.trim();
-                document.getElementById('editKeterangan').value = cells[1].textContent.trim();
-                document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
-                editModal.show();
-            } else {
-                alert('Pilih Data yang di edit.');
-            }
-        });
-
-        const deleteButton = document.querySelector('.btn-primary.delete');
-        deleteButton.addEventListener('click', function() {
-            const checkedRow = document.querySelector('input.row-checkbox:checked');
-            if (checkedRow) {
-                if (confirm('Apa Kamu Yakin Menghapus Data?')) {
+        if (editButton) {
+            editButton.addEventListener('click', function() {
+                const checkedRow = document.querySelector('input.row-checkbox:checked');
+                if (checkedRow) {
                     const row = checkedRow.closest('tr');
-                    const id = row.dataset.id;
-                    window.location.href = `/zakat2/deleteFormData/${id}`;
+                    const cells = row.getElementsByTagName('td');
+                    document.getElementById('editId').value = row.dataset.id;
+                    document.getElementById('editTgl').value = cells[0].textContent.trim();
+                    document.getElementById('editKeterangan').value = cells[1].textContent.trim();
+                    document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
+                    editModal.show();
+                } else {
+                    alert('Pilih Data yang di edit.');
                 }
-            } else {
-                alert('Please Pilih Data yang mau Dihapus.');
-            }
-        });
+            });
+        }
+
+        const deleteButton = document.querySelector('.btn-danger.delete');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', function() {
+                const checkedRow = document.querySelector('input.row-checkbox:checked');
+                if (checkedRow) {
+                    if (confirm('Apa Kamu Yakin Menghapus Data?')) {
+                        const row = checkedRow.closest('tr');
+                        const id = row.dataset.id;
+                        window.location.href = `/zakat2/deleteFormData/${id}`;
+                    }
+                } else {
+                    alert('Please Pilih Data yang mau Dihapus.');
+                }
+            });
+        }
     });
 </script>
 <script>

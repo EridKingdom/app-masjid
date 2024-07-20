@@ -1048,13 +1048,27 @@ span {
 }
 
 #calendar-header {
-  display: flex;
   justify-content: space-between;
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #ffffff;
   color: white;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+}
+
+#calendar-body td {
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+}
+
+#calendar-body td:hover {
+  background-color: #f0f0f0;
+}
+
+#calendar-body td.selected {
+  background-color: #d9e0e7;
+  color: rgb(0, 0, 0);
 }
 
 #calendar-dates table {

@@ -158,57 +158,58 @@
     <div class="container">
         <div class="row justify-content-left">
             <div class="card col-md-20 col-lg-9">
-                <div class="card-wrapper" style="height: 100%;">
-                    <div class="card-body">
-                        <h3 class="text-center mb-3">Detail Kas</h3> <!-- Added title above the table -->
-                        <form class="cari" role="search" method="GET">
-                            <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Kas Masjid" aria-label="Search">
-                        </form>
-                        <table id="kasTable" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Keterangan</th>
-                                    <th>Jenis Kas</th>
-                                    <th>Nominal</th>
-                                </tr>
-                            </thead>
-                            <tbody id="uangkas-table-body">
-                                <?php $i = 1; ?>
-                                <?php foreach ($kas_masjid as $k) : ?>
-                                    <tr>
-                                        <th scope="row"><?= $i++; ?></th>
-                                        <td><?= $k['tgl']; ?></td>
-                                        <td><?= $k['keterangan']; ?></td>
-                                        <td><?= $k['jenis_kas']; ?></td>
-                                        <td><?= $k['nominal']; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <script>
-                                const uangkastablebody = document.getElementById('uangkas-table-body');
-                                for (let i = 0; i < 10; i++) {
-                                    const tr = document.createElement('tr');
-                                    tr.innerHTML = `
+                <h3 class="text-center mb-3">Detail Kas</h3> <!-- Added title above the table -->
+                <div class="filter-buttons mb-3 text-center">
+                    <button id="filterPemasukan" class="btn btn-success">Pemasukan: <span id="totalPemasukan" class="text-white">Rp 0</span></button>
+                    <button id="filterPengeluaran" class="btn btn-danger">Pengeluaran: <span id="totalPengeluaran" class="text-white">Rp 0</span></button>
+                    <button id="filterSelisih" class="btn btn-secondary">Selisih: <span id="totalSelisih" class="text-white">Rp 0</span></button>
+                </div>
+                <form class="cari" role="search" method="GET">
+                    <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Kas Masjid" aria-label="Search">
+                </form>
+                <table id="kasTable" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Keterangan</th>
+                            <th>Jenis Kas</th>
+                            <th>Nominal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="uangkas-table-body">
+                        <?php $i = 1; ?>
+                        <?php foreach ($kas_masjid as $k) : ?>
+                            <tr>
+                                <th scope="row"><?= $i++; ?></th>
+                                <td><?= $k['tgl']; ?></td>
+                                <td><?= $k['keterangan']; ?></td>
+                                <td><?= $k['jenis_kas']; ?></td>
+                                <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <script>
+                        const uangkastablebody = document.getElementById('uangkas-table-body');
+                        for (let i = 0; i < 10; i++) {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                         `;
-                                    uangkastablebody.appendChild(tr);
-                                }
-                            </script>
-                        </table>
-                        <div id="pagination-container" class="pagination-container"></div>
-                        <div style="text-align: right;">
-                            <h4>Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
-                            <!-- Added button for donation -->
-                        </div>
-                    </div>
-
+                            uangkastablebody.appendChild(tr);
+                        }
+                    </script>
+                </table>
+                <div id="pagination-container" class="pagination-container"></div>
+                <div style="text-align: right;">
+                    <h4>Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
+                    <!-- Added button for donation -->
                 </div>
+
             </div>
         </div>
     </div>
@@ -301,6 +302,70 @@
 
         setupPagination();
         displayRows(currentPage);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterPemasukan = document.getElementById('filterPemasukan');
+        const filterPengeluaran = document.getElementById('filterPengeluaran');
+        const filterSelisih = document.getElementById('filterSelisih');
+        const rows = document.querySelectorAll('#uangkas-table-body tr');
+
+        let totalPemasukan = 0;
+        let totalPengeluaran = 0;
+
+        rows.forEach(row => {
+            const jenisKas = row.cells[3].textContent.trim().toLowerCase();
+            const nominalText = row.cells[4].textContent.trim();
+            const nominal = parseInt(nominalText.replace(/[^0-9]/g, ''), 10);
+
+            if (jenisKas === 'masuk') {
+                totalPemasukan += nominal;
+            } else if (jenisKas === 'keluar') {
+                totalPengeluaran += nominal;
+            }
+        });
+
+        const totalPemasukanElement = document.getElementById('totalPemasukan');
+        const totalPengeluaranElement = document.getElementById('totalPengeluaran');
+        const totalSelisihElement = document.getElementById('totalSelisih');
+
+        if (totalPemasukanElement) {
+            totalPemasukanElement.textContent = `Rp ${totalPemasukan.toLocaleString()}`;
+        } else {
+            console.error('totalPemasukan element not found');
+        }
+
+        if (totalPengeluaranElement) {
+            totalPengeluaranElement.textContent = `Rp ${totalPengeluaran.toLocaleString()}`;
+        } else {
+            console.error('totalPengeluaran element not found');
+        }
+
+        if (totalSelisihElement) {
+            const selisih = totalPemasukan - totalPengeluaran;
+            totalSelisihElement.textContent = `Rp ${selisih.toLocaleString()}`;
+        } else {
+            console.error('totalSelisih element not found');
+        }
+
+        filterPemasukan.addEventListener('click', function() {
+            rows.forEach(row => {
+                const jenisKas = row.cells[3].textContent.trim().toLowerCase();
+                row.style.display = (jenisKas === 'masuk') ? '' : 'none';
+            });
+        });
+
+        filterPengeluaran.addEventListener('click', function() {
+            rows.forEach(row => {
+                const jenisKas = row.cells[3].textContent.trim().toLowerCase();
+                row.style.display = (jenisKas === 'keluar') ? '' : 'none';
+            });
+        });
+
+        filterSelisih.addEventListener('click', function() {
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        });
     });
 </script>
 

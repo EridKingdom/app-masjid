@@ -139,7 +139,7 @@ if ($id_user) {
         <div class="row">
             <div class="content-wrap col-12 col-md-8">
                 <h2 class="judul">Konfigurasi Zakat Beras pada <?= esc($masjid['nama_masjid']); ?></h2>
-                <table class="table table-striped" id="infak-table">
+                <table class="table table-striped" id="beras-table">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -148,119 +148,40 @@ if ($id_user) {
                             <th>*</th> <!-- Added column for checkbox -->
                         </tr>
                     </thead>
-                    <tbody id="infak-table-body">
+                    <tbody id="beras-table-body">
+                        <?php $i = 1; ?>
+                        <?php foreach ($berasZakat as $beras) : ?>
+                            <tr data-id="<?= esc($beras['id_beras']); ?>">
+                                <th scope="row"><?= $i++; ?></th>
+                                <td><?= esc($beras['jenis_beras']); ?></td>
+                                <td><?= 'Rp ' . number_format(esc($beras['harga']), 0, ',', '.'); ?></td>
+                                <td><input type="checkbox" class="row-checkbox"></td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
-                    <script>
-                        const infakTableBody = document.getElementById('infak-table-body');
-                        for (let i = 0; i < 10; i++) {
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
+                </table>
+                <script>
+                    const berasTableBody = document.getElementById('beras-table-body');
+                    for (let i = 0; i < 10; i++) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td><input type="checkbox" class="row-checkbox"></td>
                         `;
-                            infakTableBody.appendChild(tr);
-                        }
-                    </script>
-                </table>
-                <div id="pagination" class="pagination"></div> <!-- Elemen untuk pagination -->
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const infakTableBody = document.getElementById('infak-table-body');
-                        const rows = infakTableBody.querySelectorAll('tr');
-                        const rowsPerPage = 10;
-                        const pagination = document.getElementById('pagination');
-                        let currentPage = 1;
-
-                        function displayRows(page) {
-                            const start = (page - 1) * rowsPerPage;
-                            const end = start + rowsPerPage;
-
-                            rows.forEach((row, index) => {
-                                row.style.display = (index >= start && index < end) ? '' : 'none';
-                            });
-                        }
-
-                        function setupPagination() {
-                            const pageCount = Math.ceil(rows.length / rowsPerPage);
-                            pagination.innerHTML = '';
-
-                            for (let i = 1; i <= pageCount; i++) {
-                                const pageButton = document.createElement('button');
-                                pageButton.textContent = i;
-                                pageButton.classList.add('page-btn');
-                                if (i === currentPage) {
-                                    pageButton.classList.add('active');
-                                }
-                                pageButton.addEventListener('click', function() {
-                                    currentPage = i;
-                                    displayRows(currentPage);
-                                    document.querySelectorAll('.page-btn').forEach(btn => btn.classList.remove('active'));
-                                    pageButton.classList.add('active');
-                                });
-                                pagination.appendChild(pageButton);
-                            }
-                        }
-
-                        displayRows(currentPage);
-                        setupPagination();
-
-                        // Add event listener to rows for checkbox toggle
-                        Array.from(rows).forEach(function(row) {
-                            row.addEventListener('click', function() {
-                                const checkbox = row.querySelector('.row-checkbox');
-                                const checkedRow = document.querySelector('input.row-checkbox:checked');
-                                if (checkedRow) checkedRow.checked = false;
-                                if (checkbox) {
-                                    checkbox.checked = !checkbox.checked;
-                                }
-                            });
-                        });
-
-                        const addButton = document.getElementById('addButton');
-                        const addModal = new bootstrap.Modal(document.getElementById('addModal'));
-
-                        addButton.addEventListener('click', function() {
-                            addModal.show();
-                        });
-
-                        const editButton = document.querySelector('.btn-primary.edit');
-                        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-
-                        editButton.addEventListener('click', function() {
-                            const checkedRow = document.querySelector('input.row-checkbox:checked');
-                            if (checkedRow) {
-                                const row = checkedRow.closest('tr');
-                                const cells = row.getElementsByTagName('td');
-                                document.getElementById('editId').value = row.dataset.id;
-                                document.getElementById('editjenisberas').value = cells[1].textContent.trim();
-                                document.getElementById('editNominal').value = cells[2].textContent.trim().replace(/[^0-9,-]+/g, "");
-                                editModal.show();
-                            } else {
-                                alert('Please select a row to edit.');
-                            }
-                        });
-
-                        const deleteButton = document.querySelector('.btn-primary.delete');
-                        deleteButton.addEventListener('click', function() {
-                            const checkedRow = document.querySelector('input.row-checkbox:checked');
-                            if (checkedRow) {
-                                if (confirm('Are you sure you want to delete this data?')) {
-                                    const row = checkedRow.closest('tr');
-                                    const id = row.dataset.id;
-                                    window.location.href = `/yatim/deleteFormData/${id}`;
-                                }
-                            } else {
-                                alert('Please select a row to delete.');
-                            }
-                        });
-                    });
+                        berasTableBody.appendChild(tr);
+                    }
                 </script>
+                <div id="pagination-controls" style="text-align: center;">
+                    <button id="prev-page" disabled>Previous</button>
+                    <span id="page-numbers"></span>
+                    <button id="next-page">Next</button>
+                </div>
                 <div style="text-align: right;">
                     <button id="addButton" class="btn btn-primary">Tambahkan</button>
-                    <button id="editModal" class="btn btn-primary edit">Edit</button>
-                    <button class="btn btn-primary delete">Hapus</button> <!-- Updated button for delete -->
+                    <button id="editButton" class="btn btn-secondary edit">Edit</button>
+                    <button class="btn btn-danger delete">Hapus</button> <!-- Updated button for delete -->
                 </div>
             </div>
         </div>
@@ -276,14 +197,14 @@ if ($id_user) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addForm" method="POST" action="">
+                <form id="addForm" method="POST" action="/donasi/handleFormData/<?= $masjid['id_masjid'] ?>">
                     <div class="mb-3">
-                        <label for="keterangan" class="form-label">Jenis Beras</label>
-                        <input type="text" class="form-control" id="keterangan" name="keterangan" required>
+                        <label for="jenis_beras" class="form-label">Jenis Beras</label>
+                        <input type="text" class="form-control" id="jenis_beras" name="jenis_beras" required>
                     </div>
                     <div class="mb-3">
-                        <label for="nominal" class="form-label">Harga per-KG</label>
-                        <input type="number" class="form-control" id="nominal" name="nominal" required>
+                        <label for="harga" class="form-label">Harga per-KG</label>
+                        <input type="number" class="form-control" id="harga" name="harga" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
@@ -300,17 +221,16 @@ if ($id_user) {
                 <h5 class="modal-title" id="editModalLabel">Edit Data Beras</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <div class="modal-body">
-                <form id="editForm" method="POST" action="/yatim/updateFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="editForm" method="POST" action="/donasi/updateFormData/<?= $masjid['id_masjid'] ?>">
                     <input type="hidden" id="editId" name="id_beras">
                     <div class="mb-3">
-                        <label for="keterangan" class="form-label">Jenis Beras</label>
-                        <input type="text" class="form-control" id="keterangan" name="keterangan" required>
+                        <label for="editjenisberas" class="form-label">Jenis Beras</label>
+                        <input type="text" class="form-control" id="editjenisberas" name="jenis_beras" required>
                     </div>
                     <div class="mb-3">
-                        <label for="nominal" class="form-label">Harga per-KG</label>
-                        <input type="number" class="form-control" id="nominal" name="nominal" required>
+                        <label for="editNominal" class="form-label">Harga per-KG</label>
+                        <input type="number" class="form-control" id="editNominal" name="harga" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
@@ -321,8 +241,45 @@ if ($id_user) {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const addButton = document.getElementById('addButton');
+        const editButton = document.getElementById('editButton');
+        const deleteButton = document.querySelector('.btn-danger.delete');
+        const addModal = new bootstrap.Modal(document.getElementById('addModal'));
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+
+        addButton.addEventListener('click', function() {
+            addModal.show();
+        });
+
+        editButton.addEventListener('click', function() {
+            const checkedRow = document.querySelector('input.row-checkbox:checked');
+            if (checkedRow) {
+                const row = checkedRow.closest('tr');
+                const cells = row.getElementsByTagName('td');
+                document.getElementById('editId').value = row.dataset.id;
+                document.getElementById('editjenisberas').value = cells[0].textContent.trim();
+                document.getElementById('editNominal').value = cells[1].textContent.trim().replace(/[^0-9,-]+/g, "");
+                editModal.show();
+            } else {
+                alert('Please select a row to edit.');
+            }
+        });
+
+        deleteButton.addEventListener('click', function() {
+            const checkedRow = document.querySelector('input.row-checkbox:checked');
+            if (checkedRow) {
+                if (confirm('Are you sure you want to delete this data?')) {
+                    const row = checkedRow.closest('tr');
+                    const id = row.dataset.id;
+                    window.location.href = `/donasi/deleteFormData/${id}`;
+                }
+            } else {
+                alert('Please select a row to delete.');
+            }
+        });
+
         const searchInput = document.getElementById('searchInput');
-        const tableBody = document.getElementById('infak-table-body');
+        const tableBody = document.getElementById('beras-table-body');
         const rows = tableBody.getElementsByTagName('tr');
         const totalSaldoElement = document.getElementById('totalSaldo');
 
@@ -373,7 +330,78 @@ if ($id_user) {
             calculateTotal();
         });
 
+        // Add event listener to rows for checkbox toggle
+        Array.from(rows).forEach(function(row) {
+            row.addEventListener('click', function() {
+                const checkbox = row.querySelector('.row-checkbox');
+                const checkedRow = document.querySelector('input.row-checkbox:checked');
+                if (checkedRow) checkedRow.checked = false;
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                }
+            });
+        });
+
         calculateTotal();
+
+        // Pagination
+        const rowsPerPage = 10;
+        const paginationControls = document.getElementById('pagination-controls');
+        const prevPageButton = document.getElementById('prev-page');
+        const nextPageButton = document.getElementById('next-page');
+        const pageNumbers = document.getElementById('page-numbers');
+        let currentPage = 1;
+
+        function displayRows(page) {
+            const start = (page - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = (index >= start && index < end) ? '' : 'none';
+            });
+
+            updatePageNumbers();
+            prevPageButton.disabled = page === 1;
+            nextPageButton.disabled = page === Math.ceil(rows.length / rowsPerPage);
+        }
+
+        function updatePageNumbers() {
+            pageNumbers.innerHTML = '';
+            for (let i = 1; i <= Math.ceil(rows.length / rowsPerPage); i++) {
+                const pageNumber = document.createElement('span');
+                pageNumber.textContent = i;
+                pageNumber.style.cursor = 'pointer';
+                pageNumber.style.margin = '0 5px';
+                pageNumber.style.padding = '5px 10px';
+                pageNumber.style.border = '1px solid #007bff';
+                pageNumber.style.borderRadius = '5px';
+                pageNumber.style.backgroundColor = i === currentPage ? '#007bff' : '#fff';
+                pageNumber.style.color = i === currentPage ? '#fff' : '#007bff';
+
+                pageNumber.addEventListener('click', function() {
+                    currentPage = i;
+                    displayRows(currentPage);
+                });
+
+                pageNumbers.appendChild(pageNumber);
+            }
+        }
+
+        prevPageButton.addEventListener('click', function() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayRows(currentPage);
+            }
+        });
+
+        nextPageButton.addEventListener('click', function() {
+            if (currentPage < Math.ceil(rows.length / rowsPerPage)) {
+                currentPage++;
+                displayRows(currentPage);
+            }
+        });
+
+        displayRows(currentPage);
     });
 </script>
 

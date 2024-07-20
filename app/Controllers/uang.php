@@ -52,6 +52,23 @@ class uang extends BaseController
             return redirect()->to('/path/to/error/page')->with('error', 'ID masjid tidak diberikan');
         }
     }
+    public function superkasmasjid($id = null)
+    {
+        if ($id !== null) {
+            $masjid = $this->dbdatamasjidModel->find($id);
+            $kas_masjid = $this->kasmasjidModel->where('id_masjid', $id)->findAll();
+
+            $data = [
+                'title' => 'Kas Masjid',
+                'masjid' => $masjid,
+                'kas_masjid' => $kas_masjid
+            ];
+
+            return view('viewsuper/uangkassuper', $data);
+        } else {
+            return redirect()->to('/path/to/error/page')->with('error', 'ID masjid tidak diberikan');
+        }
+    }
 
     public function handleFormData($masjid_id = null)
     {

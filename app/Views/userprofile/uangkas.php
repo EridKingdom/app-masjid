@@ -194,6 +194,12 @@ if ($id_user) {
         <div class="card col-md-20 col-lg-9">
             <br>
             <h3 class="text-center mb-3">Uang Kas Masjid <?= esc($masjid['nama_masjid']); ?></h3> <!-- Added title above the table -->
+            <!-- Added filter buttons above the table -->
+            <div class="filter-buttons mb-3 text-center">
+                <button id="filterPemasukan" class="btn btn-success">Pemasukan: <span id="totalPemasukan" class="text-white">Rp 0</span></button>
+                <button id="filterPengeluaran" class="btn btn-danger">Pengeluaran: <span id="totalPengeluaran" class="text-white">Rp 0</span></button>
+                <button id="filterSelisih" class="btn btn-secondary">Selisih: <span id="totalSelisih" class="text-white">Rp 0</span></button>
+            </div>
             <form class="cari" role="search" method="GET">
                 <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Kas Masjid" aria-label="Search">
             </form>
@@ -237,7 +243,7 @@ if ($id_user) {
                             <td><?= esc($k['tgl']); ?></td>
                             <td><?= esc($k['keterangan']); ?></td>
                             <td><?= esc($k['jenis_kas']); ?></td>
-                            <td><?= esc($k['nominal']); ?></td>
+                            <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     <?php
@@ -513,6 +519,8 @@ if ($id_user) {
     document.addEventListener('DOMContentLoaded', function() {
         const rows = document.getElementById('uangkas-table-body').querySelectorAll('tr');
         let totalSaldo = 0;
+        let totalPemasukan = 0;
+        let totalPengeluaran = 0;
 
         rows.forEach(row => {
             // Check if the row has the expected number of cells
@@ -523,8 +531,10 @@ if ($id_user) {
 
                 if (jenisKas === 'masuk') {
                     totalSaldo += nominal;
+                    totalPemasukan += nominal;
                 } else if (jenisKas === 'keluar') {
                     totalSaldo -= nominal;
+                    totalPengeluaran += nominal;
                 }
             } else {
                 console.log('Row does not have enough cells:', row);
@@ -532,11 +542,54 @@ if ($id_user) {
         });
 
         const totalSaldoElement = document.getElementById('totalSaldo');
+        const totalPemasukanElement = document.getElementById('totalPemasukan');
+        const totalPengeluaranElement = document.getElementById('totalPengeluaran');
+        const totalSelisihElement = document.getElementById('totalSelisih');
+
         if (totalSaldoElement) {
             totalSaldoElement.textContent = `Rp ${totalSaldo.toLocaleString()}`;
         } else {
             console.error('totalSaldo element not found');
         }
+
+        if (totalPemasukanElement) {
+            totalPemasukanElement.textContent = `Rp ${totalPemasukan.toLocaleString()}`;
+        } else {
+            console.error('totalPemasukan element not found');
+        }
+
+        if (totalPengeluaranElement) {
+            totalPengeluaranElement.textContent = `Rp ${totalPengeluaran.toLocaleString()}`;
+        } else {
+            console.error('totalPengeluaran element not found');
+        }
+
+        if (totalSelisihElement) {
+            const selisih = totalPemasukan - totalPengeluaran;
+            totalSelisihElement.textContent = `Rp ${selisih.toLocaleString()}`;
+        } else {
+            console.error('totalSelisih element not found');
+        }
+
+        filterPemasukan.addEventListener('click', function() {
+            rows.forEach(row => {
+                const jenisKas = row.cells[3].textContent.trim().toLowerCase();
+                row.style.display = (jenisKas === 'masuk') ? '' : 'none';
+            });
+        });
+
+        filterPengeluaran.addEventListener('click', function() {
+            rows.forEach(row => {
+                const jenisKas = row.cells[3].textContent.trim().toLowerCase();
+                row.style.display = (jenisKas === 'keluar') ? '' : 'none';
+            });
+        });
+
+        filterSelisih.addEventListener('click', function() {
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        });
     });
 </script>
 

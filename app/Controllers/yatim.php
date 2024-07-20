@@ -83,6 +83,24 @@ class Yatim extends BaseController
         }
     }
 
+    public function superyatim($id = null)
+    {
+        if ($id !== null) {
+            $masjid = $this->dbDataMasjidModel->find($id);
+            $infak_anak_yatim = $this->infakAnakYatimModel->where('id_masjid', $id)->findAll();
+
+            $data = [
+                'title' => 'Daftar Infak Anak Yatim',
+                'masjid' => $masjid,
+                'infak_anak_yatim' => $infak_anak_yatim
+            ];
+
+            return view('viewsuper/yatimsuper', $data);
+        } else {
+            return redirect()->to('/path/to/error/page')->with('error', 'ID masjid tidak diberikan');
+        }
+    }
+
     public function deleteFormData($id_infak)
     {
         $infak = $this->infakAnakYatimModel->find($id_infak);

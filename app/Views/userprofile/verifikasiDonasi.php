@@ -161,7 +161,7 @@ if ($id_user) {
                                             Belum Upload Bukti bayar
                                         <?php endif; ?>
                                     </td>
-                                    <td><?= esc($item['nominal']); ?></td>
+                                    <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                                     <td class="column-center">
                                         <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
                                         <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
@@ -203,9 +203,9 @@ if ($id_user) {
                         <a class="btn btn-primary" href="/donasi/unverifikasi/all" onclick="return confirm('Are you sure you want to delete all donations?')">Batalkan Semua</a>
                     </div>
                 </table>
-            <div style="margin-top: 20px; text-align: center;">
-                <a class="btn btn-primary" href="<?= base_url('/konfigurasi-zakat'); ?>">Konfigurasi Donasi Zakat</a>
-            </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <a class="btn btn-primary" href="<?= base_url('/konfigurasi-zakat'); ?>">Konfigurasi Donasi Zakat</a>
+                </div>
             </div>
         </div>
     </div>

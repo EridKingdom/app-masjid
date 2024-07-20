@@ -156,3 +156,29 @@ main {
 }
 
 /* Gaya untuk dropdown */
+.agenda-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
+.kontenAgenda {
+    margin-bottom: 10px;
+}
+
+.kontenAgenda p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.kontenAgenda strong {
+    display: block;
+}
+
+.kontenAgenda .text-muted {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}

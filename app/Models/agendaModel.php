@@ -18,6 +18,7 @@ class Agenda extends Model
     protected $fillable = [
         'id_masjid',
         'tgl',
+        'jam_agenda',
         'status',
         'nama_agenda',
         'created_at',

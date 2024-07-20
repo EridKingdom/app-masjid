@@ -77,10 +77,10 @@
 
 <div class="menuprofil">
     <a href="<?= base_url('/profil-super/' . $masjid['id']); ?>" class="linkdefault linkdefault-hover">Kegiatan</a>
-    <a href="<?= base_url('/viewkasmasjid/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
-    <a href="<?= base_url('/viewzakat/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
-    <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
-    <a href="#" class="linkmenu">Biodata Pengurus</a>
+    <a href="<?= base_url('/view-kasmasjid-super/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
+    <a href="<?= base_url('/view-zakat-super/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
+    <a href="<?= base_url('/view-yatim-super/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
+    <a href="<?= base_url('/biodata-pengurus/' . $masjid['id']); ?>" class="linkmenu">Biodata Pengurus</a>
 </div>
 
 

@@ -23,7 +23,7 @@
                             <tr>
                                 <td><?= $k['tgl']; ?></td>
                                 <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
+                                <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <?php

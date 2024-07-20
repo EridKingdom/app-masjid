@@ -5,8 +5,10 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\DbDataMasjidModel;
 use App\Models\DonasiModel;
+use App\Models\BerasZakatModel;
 use CodeIgniter\Controller;
 use App\Models\ZakatModel;
+
 
 class Donasi extends Controller
 {
@@ -111,11 +113,73 @@ class Donasi extends Controller
         }, $allMasjid);
 
         $data = ['masjidList' => $masjidOptions];
-            return view('donasiZakat', $data); // Ensure the view path matches the actual location of your view file
+        return view('donasiZakat', $data); // Ensure the view path matches the actual location of your view file
     }
     public function konfigurasiZakat()
     {
-        return view('userprofile/konfigurasiZakat');
+        $session = session();
+        $userData = $session->get('user_data');
+        $id_user = $userData['id_user'] ?? null;
+
+        $masjid = [];
+        if ($id_user) {
+            $db = \Config\Database::connect();
+            $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+            $result = $query->getRowArray();
+            if ($result) {
+                $masjid = $result;
+            }
+        }
+
+        $berasZakatModel = new BerasZakatModel();
+        $berasZakat = $berasZakatModel->where('id_masjid', $masjid['id_masjid'])->findAll();
+
+        $data = [
+            'masjid' => $masjid,
+            'berasZakat' => $berasZakat
+        ];
+
+        return view('userprofile/konfigurasiZakat', $data);
     }
-    
+
+    public function handleFormData($id_masjid)
+    {
+        $data = [
+            'id_masjid' => $id_masjid,
+            'jenis_beras' => $this->request->getVar('jenis_beras'),
+            'harga' => $this->request->getVar('harga')
+        ];
+
+        $berasZakatModel = new BerasZakatModel();
+        $berasZakatModel->insert($data);
+        session()->setFlashdata('success', 'Data berhasil ditambahkan');
+        return redirect()->to('/donasi/konfigurasiZakat');
+    }
+
+    public function updateFormData($id_masjid)
+    {
+        $id = $this->request->getVar('id_beras');
+        $data = [
+            'jenis_beras' => $this->request->getVar('jenis_beras'),
+            'harga' => $this->request->getVar('harga')
+        ];
+
+        $berasZakatModel = new BerasZakatModel();
+        $berasZakatModel->update($id, $data);
+        session()->setFlashdata('success', 'Data berhasil diedit');
+        return redirect()->to('/donasi/konfigurasiZakat');
+    }
+
+    public function deleteFormData($id_beras)
+    {
+        $berasZakatModel = new BerasZakatModel();
+        $berasZakat = $berasZakatModel->find($id_beras);
+        if ($berasZakat) {
+            $berasZakatModel->delete($id_beras);
+            session()->setFlashdata('success', 'Data berhasil dihapus');
+        } else {
+            session()->setFlashdata('error', 'Data tidak ditemukan');
+        }
+        return redirect()->to('/donasi/konfigurasiZakat');
+    }
 }

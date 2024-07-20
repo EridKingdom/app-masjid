@@ -1,4 +1,4 @@
-<?= $this->extend('layout/template'); ?>
+<?= $this->extend('layout/supertemplate'); ?>
 <?= $this->Section('content'); ?>
 
 
@@ -76,11 +76,11 @@
     </div>
 </section>
 <div class="menuprofil">
-    <a href="<?= base_url('/profil/' . $masjid['id']); ?>" class="linkmenu">Kegiatan</a>
-    <a href="<?= base_url('/viewkasmasjid/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
-    <a href="<?= base_url('/viewyatim/' . $masjid['id']); ?>" class="linkmenu">Infak Anak Yatim</a>
-    <a href="<?= base_url('/viewzakat/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
-    <a href="<?= base_url('/waktusholat/' . $masjid['id']); ?>" class="linkmenu">Details Waktu Sholat</a>
+    <a href="<?= base_url('/profil-super/' . $masjid['id']); ?>" class="linkmenu">Kegiatan</a>
+    <a href="<?= base_url('/view-kasmasjid-super/' . $masjid['id']); ?>" class="linkmenu">Uang Kas</a>
+    <a href="<?= base_url('/view-zakat-super/' . $masjid['id']); ?>" class="linkmenu">Zakat</a>
+    <a href="<?= base_url('/view-yatim-super/' . $masjid['id']); ?>" class="linkdefault linkdefault-hover">Infak Anak Yatim</a>
+    <a href="<?= base_url('/biodata-pengurus/' . $masjid['id']); ?>" class="linkmenu">Biodata Pengurus</a>
 </div>
 <section data-bs-version="5.1" class="header09 startm5 cid-ubP7pTTB9Y mbr-fullscreen" id="header09-c">
 
@@ -104,7 +104,7 @@
                             <tr>
                                 <td><?= $k['tgl']; ?></td>
                                 <td><?= $k['keterangan']; ?></td>
-                                <td><?= $k['nominal']; ?></td>
+                                <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

@@ -194,8 +194,10 @@ if ($id_user) {
     <div class="widget-calendar d-none d-md-block" style="position: absolute; right: 20px;"> <!-- Menambahkan kelas d-none d-md-block -->
         <div id="calendar-container">
             <div id="calendar-header">
+                <button id="prev-month" onclick="prevMonth()">&#9664;</button>
                 <span id="month-name"></span>
                 <span id="year"></span>
+                <button id="next-month" onclick="nextMonth()">&#9654;</button>
             </div>
             <div id="calendar-dates">
                 <table>
@@ -222,6 +224,7 @@ if ($id_user) {
             const today = new Date();
             let currentMonth = today.getMonth();
             let currentYear = today.getFullYear();
+            let selectedDate = null;
 
             function showCalendar(month, year) {
                 let firstDay = (new Date(year, month)).getDay();
@@ -251,6 +254,9 @@ if ($id_user) {
                                 cell.classList.add("bg-info");
                             }
                             cell.appendChild(cellText);
+                            cell.addEventListener('click', function() {
+                                selectDate(cell, date, month, year);
+                            });
                             row.appendChild(cell);
                             date++;
                         }
@@ -259,14 +265,52 @@ if ($id_user) {
                 }
             }
 
+            function selectDate(cell, date, month, year) {
+                if (selectedDate) {
+                    selectedDate.classList.remove('selected');
+                }
+                cell.classList.add('selected');
+                selectedDate = cell;
+                console.log(`Selected date: ${date} ${monthNames[month]} ${year}`);
+            }
+
+            function prevMonth() {
+                currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+                currentYear = (currentMonth === 11) ? currentYear - 1 : currentYear;
+                showCalendar(currentMonth, currentYear);
+                filterAgendaByMonth(currentMonth, currentYear);
+            }
+
+            function nextMonth() {
+                currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
+                currentYear = (currentMonth === 0) ? currentYear + 1 : currentYear;
+                showCalendar(currentMonth, currentYear);
+                filterAgendaByMonth(currentMonth, currentYear);
+            }
+
+            function filterAgendaByMonth(month, year) {
+                const agendaItems = document.querySelectorAll('.agenda-item');
+                agendaItems.forEach(item => {
+                    const itemMonth = parseInt(item.getAttribute('data-month'));
+                    const itemYear = parseInt(item.getAttribute('data-year'));
+                    if (itemMonth === month && itemYear === year) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            // Tampilkan kalender dan filter agenda berdasarkan bulan dan tahun saat ini
             showCalendar(currentMonth, currentYear);
+            filterAgendaByMonth(currentMonth, currentYear);
         </script>
         <hr>
         <h5 class="text-center">Jadwal Agenda</h5>
         <div class="d-flex justify-content-center">
-            <div class="row justify-content-center my-2" style="max-width: 690px;">
-                <?php if (!empty($agenda)) : ?>
-                    <?php foreach ($agenda as $item) : ?>
+            <div class="row justify-content-center my-2" style="max-width: 290px;">
+                <!-- <?php if (!empty($agenda)) : ?>
+                                <?php foreach ($agenda as $item) : ?>
                         <?php if (strtotime($item['tgl']) > time()) : ?>
                             <div class="col-12 mb-3 agenda-item">
                                 <div class="card">
@@ -283,18 +327,78 @@ if ($id_user) {
                     <?php endforeach; ?>
                 <?php else : ?>
                     <p>Tidak Ada Agenda Mendatang</p>
-                <?php endif; ?>
+                <?php endif; ?> -->
+                <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
+                    <div class="kontenAgenda">
+                        <input type="checkbox" id="agenda3" name="agenda[]" value="Lomba Azan">
+                        <label for="agenda3">
+                            <strong class="text-muted">07:00</strong>
+                            <strong>Lomba MTQ Tilawah</strong>
+                            <strong class="text-muted">20 July 2024</strong>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
+                    <div class="kontenAgenda">
+                        <input type="checkbox" id="agenda3" name="agenda[]" value="Lomba Azan">
+                        <label for="agenda3">
+                            <strong class="text-muted">15:00</strong>
+                            <strong>Tauziah Agama</strong>
+                            <strong class="text-muted">30 July 2024</strong>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-13 mb-3 agenda-item" data-month="7" data-year="2024">
+                    <div class="kontenAgenda">
+                        <input type="checkbox" id="agenda3" name="agenda[]" value="Lomba Azan">
+                        <label for="agenda3">
+                            <strong class="text-muted">20:00</strong>
+                            <strong>Tabliq Akbar</strong>
+                            <strong class="text-muted">30 Agustus 2024</strong>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="d-flex justify-content-center my-3">
-                <button onclick="window.location.href=''">
-                    <i class="fas fa-plus"></i>
-                </button>
-                <button onclick="window.location.href=''">
-                    <i class="fas fa-minus"></i>
-                </button>
+        </div>
+        <div class="d-flex justify-content-center my-3">
+            <button type="button" data-bs-toggle="modal" data-bs-target="#addAgendaModal">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button onclick="window.location.href=''">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addAgendaModal" tabindex="-1" aria-labelledby="addAgendaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAgendaModalLabel">Tambah Agenda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addAgendaForm">
+                        <div class="mb-3">
+                            <label for="tanggal" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nama_agenda" class="form-label">Nama Agenda</label>
+                            <input type="text" class="form-control" id="nama_agenda" name="nama_agenda" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jam_agenda" class="form-label">Jam Agenda</label>
+                            <input type="time" class="form-control" id="jam_agenda" name="jam_agenda" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
         <div class="row justify-content-center my-2" style="max-width: 690px;"> <!-- Menambahkan max-width untuk membatasi lebar -->
             <select id="filter-tipe-postingan" class="filterposting">

@@ -55,6 +55,23 @@ class zakat2 extends BaseController
             return redirect()->to('/path/to/error/page')->with('error', 'ID masjid tidak diberikan');
         }
     }
+    public function superzakat($id = null)
+    {
+        if ($id !== null) {
+            $masjid = $this->dbdatamasjidModel->find($id);
+            $zakat = $this->zakatModel->select('id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
+
+            $data = [
+                'title' => 'Daftar Zakat',
+                'masjid' => $masjid,
+                'zakat' => $zakat
+            ];
+
+            return view('viewsuper/zakatsuper', $data);
+        } else {
+            return redirect()->to('/path/to/error/page')->with('error', 'ID masjid tidak diberikan');
+        }
+    }
 
     public function handleFormData($id_masjid)
     {
