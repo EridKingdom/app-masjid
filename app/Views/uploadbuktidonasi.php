@@ -26,7 +26,7 @@
                     <tbody id="zakat-table-body">
                         <?php foreach ($donasi as $k) : ?>
                             <tr data-id="<?= $k['id_donasi']; ?>">
-                                <td><?= $k['create_at']; ?></td>
+                                <td><?= $k['created_at']; ?></td>
                                 <td><?= $k['nama_donatur']; ?></td>
                                 <td><?= $k['ho_telp']; ?></td>
                                 <td>

@@ -2,42 +2,40 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
+use App\Models\BerasZakatModel;
 use App\Models\DbDataMasjidModel;
 use App\Models\DonasiModel;
-use App\Models\BerasZakatModel;
-use CodeIgniter\Controller;
 use App\Models\ZakatModel;
+use CodeIgniter\Controller;
 
 
 class Donasi extends Controller
 {
-    public function donasi()
+    public function donasi($id)
     {
         $tableMasjid = new DbDataMasjidModel();
-        $allMasjid = $tableMasjid->findAll();
-        $masjidOptions = array_map(function ($value) {
-            return [
-                'id' => $value['id'],
-                'nama_masjid' => $value['nama_masjid'],
-            ];
-        }, $allMasjid);
-        $masjidBank = array_map(function ($value) {
-            return [
-                'id' => $value['id'],
-                'nama_masjid' => $value['nama_masjid'],
-                'no_rekening' => $value['no_rekening'],
-                'nama_bank' => $value['nama_bank'],
-            ];
-        }, $allMasjid);
-        $data = ['masjidList' => $masjidBank, 'masjidOptions' => $masjidOptions];
+        $masjid = $tableMasjid->find($id);
+        $data = ['masjid' => $masjid];
         return view('auth/donasi', $data);
     }
 
     public function storeDonasi()
     {
+
         $tbDonasi = new DonasiModel();
-        $tbDonasi->save($this->request->getPost());
+        $data = $this->request->getPost();
+
+
+        $transfer = $this->request->getFiles()['bukti_transfer'];
+        $uploadedFileName = '';
+
+        if ($transfer->isValid() && !$transfer->hasMoved()) {
+            $newName = $transfer->getRandomName();
+            $transfer->move(FCPATH . 'transfer', $newName); // Simpan file di folder imgpostingan
+            $uploadedFileName = $newName; // Simpan nama file
+        }
+        $data['bukti_transfer'] = $uploadedFileName;
+        $tbDonasi->save($data);
         $tbZakat = new ZakatModel();
         $zakat = $tbZakat->findAll();
 
@@ -50,6 +48,7 @@ class Donasi extends Controller
         $session->setFlashdata('success', '*');
         return redirect()->to('/bukti-donasi')->with('donasiData', $tbDonasi);
     }
+
     public function uploadbuktiDonasi()
     {
         $tbDonasi = new DonasiModel();
@@ -63,6 +62,7 @@ class Donasi extends Controller
         ];
         return view('uploadbuktidonasi', $data);
     }
+
     public function uploadBuktiTransfer()
     {
         $session = session();
@@ -98,6 +98,7 @@ class Donasi extends Controller
         $session->setFlashdata('success', 'Bukti transfer berhasil diupload.');
         return redirect()->to('/bukti-donasi');
     }
+
     public function donasiZakat()
     {
         // Assuming you need to send some data to the view, similar to the `donasi` method
@@ -115,6 +116,7 @@ class Donasi extends Controller
         $data = ['masjidList' => $masjidOptions];
         return view('donasiZakat', $data); // Ensure the view path matches the actual location of your view file
     }
+
     public function konfigurasiZakat()
     {
         $session = session();

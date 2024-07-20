@@ -13,6 +13,7 @@ class DonasiModel extends Model
         'nama_donatur',
         'ho_telp',
         'alamat',
+        'jenis_donasi',
         'bukti_transfer',
         'nominal',
         'create_at',

@@ -71,7 +71,7 @@
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
             </div>
-            <a href="<?= base_url('/donasi'); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi</a>
+            <a href="<?= base_url('/donasi/'.$masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi</a>
         </div>
     </div>
 </section>
