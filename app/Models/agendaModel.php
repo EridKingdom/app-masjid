@@ -4,11 +4,8 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-
-
 class AgendaModel extends Model
 {
-
     protected $table = 'agenda';
     protected $primaryKey = 'id_agenda';
     protected $keyType = 'int';
@@ -37,6 +34,7 @@ class AgendaModel extends Model
     // Kolom yang harus dianggap sebagai tanggal
     protected $dates = [
         'created_at',
-        'updated_at'
+        'updated_at',
+        'tgl'
     ];
 }

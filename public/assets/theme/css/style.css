@@ -1096,6 +1096,10 @@ span {
   background-color: #17a2b8;
   color: white;
 }
+.highlighted-date {
+  color: #0098fd !important;
+
+}
 
 @media (max-width: 600px) {
   .widget-calendar {
