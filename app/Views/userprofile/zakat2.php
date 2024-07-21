@@ -8,26 +8,6 @@
     <div class="carousel slide" id="ueOkfUJH6x" data-bs-ride="carousel" data-bs-interval="5000">
         <div class="carousel-inner">
             <?php
-            // Mengambil data user dari session
-            $session = session();
-            $userData = $session->get('user_data');
-            $id_user = $userData['id_user'] ?? null;
-
-            // Fetch the masjid data from the database
-            $masjid = [];
-            if ($id_user) {
-                $db = \Config\Database::connect();
-                $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid, gambar1, gambar2, gambar3 FROM db_data_masjid WHERE id_user = ?", [$id_user]);
-                $result = $query->getRowArray();
-                if ($result) {
-                    $masjid = $result;
-                } else {
-                    echo "No data found for the given user ID.";
-                }
-            } else {
-                echo "User ID not found in session.";
-            }
-
             // Determine if there are images to display
             $hasImages = !empty($masjid['gambar1']) || !empty($masjid['gambar2']) || !empty($masjid['gambar3']);
             ?>
@@ -71,37 +51,6 @@
     </div>
 </section>
 
-<?php
-// Mengambil data user dari session
-$session = session();
-$userData = $session->get('user_data');
-$id_user = $userData['id_user'] ?? null;
-
-// Fetch the masjid data from the database
-$masjid = [];
-if ($id_user) {
-    $db = \Config\Database::connect();
-    $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
-    $result = $query->getRowArray();
-    if ($result) {
-        $masjid = $result;
-    }
-}
-
-$gambar_masjid = '';
-$id_masjid = null;
-if ($id_user) {
-    $db = \Config\Database::connect();
-    $query = $db->query("SELECT id, nama_masjid, sampul FROM db_data_masjid WHERE id_user = ?", [$id_user]);
-    $result = $query->getRow();
-    if ($result) {
-        $id_masjid = $result->id;
-        $nama_masjid = $result->nama_masjid;
-        $gambar_masjid = $result->sampul;
-    }
-}
-?>
-
 <!-- Notification Element -->
 <?php if (session()->getFlashdata('success')) : ?>
     <script>
@@ -125,7 +74,7 @@ if ($id_user) {
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
                     <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
-                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($masjid['sampul'], ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
                         <div>
                             <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
                                 <strong><?= esc($masjid['nama_masjid']); ?></strong>
@@ -170,16 +119,7 @@ if ($id_user) {
                                 <th scope="row"><?= $i++; ?></th>
                                 <td><?= esc($k['tgl']); ?></td>
                                 <td><?= esc($k['keterangan']); ?></td>
-                                <td>
-                                    <?php
-                                    foreach ($berasZakat as $beras) {
-                                        if ($beras['id_masjid'] == $k['id_masjid']) {
-                                            echo esc($beras['jenis_beras']);
-                                            break;
-                                        }
-                                    }
-                                    ?>
-                                </td>
+                                <td><?= esc($k['jenis_beras']); ?></td>
                                 <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                                 <td><input type="checkbox" class="row-checkbox"></td>
                             </tr>
@@ -223,7 +163,7 @@ if ($id_user) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addForm" method="POST" action="/zakat2/handleFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="addForm" method="POST" action="/zakat2/handleFormData/<?= $masjid['id'] ?>">
                     <div class="mb-3">
                         <label for="tgl" class="form-label">Tanggal</label>
                         <input type="date" class="form-control" id="tgl" name="tgl" required>
@@ -256,7 +196,7 @@ if ($id_user) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editForm" method="POST" action="/zakat2/updateFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="editForm" method="POST" action="/zakat2/updateFormData/<?= $masjid['id'] ?>">
                     <input type="hidden" id="editId" name="id_zakat">
                     <div class="mb-3">
                         <label for="editTgl" class="form-label">Tanggal</label>

@@ -23,20 +23,21 @@ class zakat2 extends BaseController
     {
         if ($id !== null) {
             $masjid = $this->dbdatamasjidModel->find($id);
-            $zakat = $this->zakatModel->select('id_zakat, id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
-            $berasZakat = $this->berasZakatModel->findAll(); // Added this line
+            $zakat = $this->zakatModel->select('id_zakat, zakat.id_masjid, tgl, keterangan, nominal, beras_zakat.jenis_beras')
+                ->join('beras_zakat', 'beras_zakat.id_beras = zakat.id_beras')
+                ->where('zakat.id_masjid', $id)->findAll();
 
             // Debugging
             error_log(print_r($masjid, true));
             error_log(print_r($zakat, true));
-            error_log(print_r($berasZakat, true)); // Added this line
 
             $data = [
                 'title' => 'Daftar Zakat',
                 'masjid' => $masjid,
                 'zakat' => $zakat,
-                'berasZakat' => $berasZakat // Added this line
             ];
+
+            dd($data);
 
             return view('userprofile/zakat2', $data);
         } else {

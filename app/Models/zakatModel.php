@@ -12,6 +12,7 @@ class ZakatModel extends Model
         'tgl',
         'id_masjid',
         'keterangan',
+        'id_beras',
         'nominal',
         'created_at',
         'updated_at'
