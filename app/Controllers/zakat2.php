@@ -4,16 +4,19 @@ namespace App\Controllers;
 
 use App\Models\zakatModel;
 use App\Models\dbdatamasjidModel;
+use App\Models\BerasZakatModel; // Added this line
 
 class zakat2 extends BaseController
 {
     protected $zakatModel;
     protected $dbdatamasjidModel;
+    protected $berasZakatModel; // Added this line
 
     public function __construct()
     {
         $this->zakatModel = new zakatModel();
         $this->dbdatamasjidModel = new dbdatamasjidModel();
+        $this->berasZakatModel = new BerasZakatModel(); // Added this line
     }
 
     public function index($id = null)
@@ -21,15 +24,18 @@ class zakat2 extends BaseController
         if ($id !== null) {
             $masjid = $this->dbdatamasjidModel->find($id);
             $zakat = $this->zakatModel->select('id_zakat, id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
+            $berasZakat = $this->berasZakatModel->findAll(); // Added this line
 
             // Debugging
             error_log(print_r($masjid, true));
             error_log(print_r($zakat, true));
+            error_log(print_r($berasZakat, true)); // Added this line
 
             $data = [
                 'title' => 'Daftar Zakat',
                 'masjid' => $masjid,
-                'zakat' => $zakat
+                'zakat' => $zakat,
+                'berasZakat' => $berasZakat // Added this line
             ];
 
             return view('userprofile/zakat2', $data);

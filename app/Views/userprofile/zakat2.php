@@ -148,7 +148,7 @@ if ($id_user) {
     <div class="container-fluid">
         <div class="row">
             <div class="content-wrap col-12 col-md-8">
-                <h2 class="judul">Informasi Zakat Pada <?= esc($masjid['nama_masjid']); ?></h2>
+                <h2 class="judul">Informasi Zakat Fitah Pada <?= esc($masjid['nama_masjid']); ?></h2>
                 <form class="cari" role="search" method="GET">
                     <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Zakat" aria-label="Search">
                 </form>
@@ -158,6 +158,7 @@ if ($id_user) {
                             <th>No</th>
                             <th>Tanggal</th>
                             <th>Keterangan</th>
+                            <th>Jenis Berat</th>
                             <th>Nominal</th>
                             <th>*</th> <!-- Added column for checkbox -->
                         </tr>
@@ -169,6 +170,16 @@ if ($id_user) {
                                 <th scope="row"><?= $i++; ?></th>
                                 <td><?= esc($k['tgl']); ?></td>
                                 <td><?= esc($k['keterangan']); ?></td>
+                                <td>
+                                    <?php
+                                    foreach ($berasZakat as $beras) {
+                                        if ($beras['id_masjid'] == $k['id_masjid']) {
+                                            echo esc($beras['jenis_beras']);
+                                            break;
+                                        }
+                                    }
+                                    ?>
+                                </td>
                                 <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                                 <td><input type="checkbox" class="row-checkbox"></td>
                             </tr>
@@ -181,6 +192,7 @@ if ($id_user) {
                     for (let i = 0; i < 10; i++) {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
+                            <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
@@ -221,6 +233,10 @@ if ($id_user) {
                         <input type="text" class="form-control" id="keterangan" name="keterangan" required>
                     </div>
                     <div class="mb-3">
+                        <label for="editKeterangan" class="form-label">jenis Beras</label>
+                        <input type="text" class="form-control" id="editKeterangan" name="keterangan" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="nominal" class="form-label">Nominal</label>
                         <input type="number" class="form-control" id="nominal" name="nominal" required>
                     </div>
@@ -248,6 +264,10 @@ if ($id_user) {
                     </div>
                     <div class="mb-3">
                         <label for="editKeterangan" class="form-label">Keterangan</label>
+                        <input type="text" class="form-control" id="editKeterangan" name="keterangan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editKeterangan" class="form-label">jenis Beras</label>
                         <input type="text" class="form-control" id="editKeterangan" name="keterangan" required>
                     </div>
                     <div class="mb-3">
