@@ -97,6 +97,9 @@ $routes->get('/validasi-pendaftaran', 'Pendaftaran::pendaftaran');
 $routes->post('/validasi-pendaftaran/aksi', 'Pendaftaran::userRegisterAction');
 $routes->get('/pengajuan-perubahan', 'Pendaftaran::pengajuan');
 $routes->post('/pengajuan-perubahan/aksi', 'Pendaftaran::perubahanDataAction');
+$routes->get('/get-agenda/(:num)/(:any)', 'profile::getAgenda/$1/$2');
+$routes->post('/tambah-agenda/(:num)', 'profile::tambahAgenda/$1');
+$routes->post('/hapus-agenda', 'profile::hapusAgenda');
 
 
 

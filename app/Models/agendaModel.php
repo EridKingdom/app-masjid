@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 
 
-class Agenda extends Model
+class AgendaModel extends Model
 {
 
     protected $table = 'agenda';
@@ -14,8 +14,17 @@ class Agenda extends Model
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = true;
-    protected $dateFormat = 'Y-m-d H:i:s';
     protected $fillable = [
+        'id_masjid',
+        'tgl',
+        'jam_agenda',
+        'status',
+        'nama_agenda',
+        'created_at',
+        'updated_at'
+    ];
+
+    protected $allowedFields = [
         'id_masjid',
         'tgl',
         'jam_agenda',
@@ -27,7 +36,6 @@ class Agenda extends Model
 
     // Kolom yang harus dianggap sebagai tanggal
     protected $dates = [
-        'tgl',
         'created_at',
         'updated_at'
     ];
