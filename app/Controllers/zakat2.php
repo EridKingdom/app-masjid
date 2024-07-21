@@ -103,6 +103,7 @@ class zakat2 extends BaseController
             'tgl' => $this->request->getVar('tgl'),
             'keterangan' => $this->request->getVar('keterangan'),
             'id_beras' => $this->request->getVar('id_beras'),
+            'nominal' => $this->request->getVar('nominal'),
         ];
 
         $this->zakatModel->update($id, $data);
