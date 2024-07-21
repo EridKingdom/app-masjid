@@ -241,7 +241,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editNominal" class="form-label">Nominal</label>
-                            <input type="text" class="form-control" id="editNominal" name="nominal" readonly>
+                            <input type="text" class="form-control" id="editNominal" name="nominal" readonly required>
                         </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
@@ -257,7 +257,21 @@
             const rows = tableBody.getElementsByTagName('tr');
             const totalSaldoElement = document.getElementById('totalSaldo');
             const addJenisBeras = document.getElementById('addJenisBeras');
+            const editJenisBeras = document.getElementById('editJenisBeras');
+            editJenisBeras.addEventListener('change', function (event) {
+                let id = event.target.value;
+                console.log(id);
+                var data = JSON.parse(`<?= json_encode($beras) ?>`)
+                let selected = data.find((d) => d.id_beras == id);
+                const nominal = document.getElementById('editNominal');
+                if(selected) {
+                    nominal.value = selected.harga * 3;
 
+                } else {
+                    nominal.value = "";
+                }
+
+            });
 
             addJenisBeras.addEventListener('change', function (event) {
                 let id = event.target.value;
@@ -358,7 +372,7 @@
                         document.getElementById('editTgl').value = cells[0].textContent.trim();
                         document.getElementById('editKeterangan').value = cells[1].textContent.trim();
                         document.getElementById('editJenisBeras').value = cells[3].textContent.trim();
-                        document.getElementById('editNominal').value = cells[4].textContent.trim();
+                        document.getElementById('editNominal').value = cells[4].textContent.trim().replace(/[^0-9]/g, '');
                         console.log(document.getElementById('editNominal').value)
                         editModal.show();
                     } else {
