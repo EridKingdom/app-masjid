@@ -232,8 +232,128 @@ if ($id_user) {
             </div>
             <script>
 
-                document.addEventListener('DOMContentLoaded', function () {
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+                const today = new Date();
+                let currentMonth = today.getMonth();
+                let currentYear = today.getFullYear();
+                let selectedDate = null;
 
+                function prevMonth() {
+                    currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+                    currentYear = (currentMonth === 11) ? currentYear - 1 : currentYear;
+                    showCalendar(currentMonth, currentYear);
+                    filterAgendaByMonth(currentMonth, currentYear);
+                }
+
+                function nextMonth() {
+                    currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
+                    currentYear = (currentMonth === 0) ? currentYear + 1 : currentYear;
+                    showCalendar(currentMonth, currentYear);
+                    filterAgendaByMonth(currentMonth, currentYear);
+                }
+
+                function showCalendar(month, year) {
+                    let firstDay = (new Date(year, month)).getDay();
+                    let daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+                    let tbl = document.getElementById("calendar-body");
+                    tbl.innerHTML = "";
+
+                    document.getElementById("month-name").innerHTML = monthNames[month];
+                    document.getElementById("year").innerHTML = year;
+
+                    let date = 1;
+                    for (let i = 0; i < 6; i++) {
+                        let row = document.createElement("tr");
+                        for (let j = 0; j < 7; j++) {
+                            if (i === 0 && j < firstDay) {
+                                let cell = document.createElement("td");
+                                let cellText = document.createTextNode("");
+                                cell.appendChild(cellText);
+                                row.appendChild(cell);
+                            } else if (date > daysInMonth) {
+                                break;
+                            } else {
+                                let cell = document.createElement("td");
+                                let cellText = document.createTextNode(date);
+                                if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                                    cell.classList.add("bg-info");
+                                }
+                                cell.appendChild(cellText);
+                                cell.addEventListener('click', function () {
+                                    selectDate(cell, date, month, year);
+                                });
+                                row.appendChild(cell);
+                                date++;
+                            }
+                        }
+                        tbl.appendChild(row);
+                    }
+                }
+
+                function selectDate(cell, date, month, year) {
+                    if (selectedDate) {
+                        selectedDate.classList.remove('selected');
+                    }
+                    cell.classList.add('selected');
+                    selectedDate = cell;
+
+
+                    console.log(`Selected date: ${cell.innerHTML} ${monthNames[month]} ${year}`);
+
+                    let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + cell.innerHTML;
+
+                    fetch('/get-agenda/<?=$id_masjid?>/' + dateForm)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            let divAgenda = document.getElementById('agendaList');
+                            let agendaList = "";
+                            for (let i = 0; i < data.length; i++) {
+                                agendaList += `
+                                 <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
+                                    <div class="kontenAgenda">
+                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + data[i].id_agenda + `">
+                                        <label for="checkbox">
+                                            <strong class="text-muted">` + data[i].jam_agenda + `</strong>
+                                            <strong>` + data[i].nama_agenda + `</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                                `;
+                            }
+
+                            if (agendaList) {
+                                divAgenda.innerHTML = agendaList;
+                            } else {
+                                divAgenda.innerText = 'Tidak ada agenda.'
+                            }
+
+
+                        })
+                        .catch(error => console.error('Error fetching agenda:', error));
+                }
+
+                function filterAgendaByMonth(month, year) {
+                    const agendaItems = document.querySelectorAll('.agenda-item');
+                    agendaItems.forEach(item => {
+                        const itemMonth = parseInt(item.getAttribute('data-month'));
+                        const itemYear = parseInt(item.getAttribute('data-year'));
+                        if (itemMonth === month && itemYear === year) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Tampilkan kalender dan filter agenda berdasarkan bulan dan tahun saat ini
+                showCalendar(currentMonth, currentYear);
+                filterAgendaByMonth(currentMonth, currentYear);
+
+                document.addEventListener('DOMContentLoaded', function () {
                     const deleteAgenda = document.getElementById('deleteAgenda');
 
                     deleteAgenda.addEventListener('click', function (event) {
@@ -257,15 +377,6 @@ if ($id_user) {
                             alert('Tidak ada agenda yang dipilih');
                         }
                     });
-
-
-                    const monthNames = ["January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
-                    ];
-                    const today = new Date();
-                    let currentMonth = today.getMonth();
-                    let currentYear = today.getFullYear();
-                    let selectedDate = null;
 
                     fetch('/get-agenda/<?=$id_masjid?>/' + today.toISOString().split('T')[0])
                         .then(response => response.json())
@@ -295,119 +406,6 @@ if ($id_user) {
 
                         })
                         .catch(error => console.error('Error fetching agenda:', error));
-
-                    function showCalendar(month, year) {
-                        let firstDay = (new Date(year, month)).getDay();
-                        let daysInMonth = 32 - new Date(year, month, 32).getDate();
-
-                        let tbl = document.getElementById("calendar-body");
-                        tbl.innerHTML = "";
-
-                        document.getElementById("month-name").innerHTML = monthNames[month];
-                        document.getElementById("year").innerHTML = year;
-
-                        let date = 1;
-                        for (let i = 0; i < 6; i++) {
-                            let row = document.createElement("tr");
-                            for (let j = 0; j < 7; j++) {
-                                if (i === 0 && j < firstDay) {
-                                    let cell = document.createElement("td");
-                                    let cellText = document.createTextNode("");
-                                    cell.appendChild(cellText);
-                                    row.appendChild(cell);
-                                } else if (date > daysInMonth) {
-                                    break;
-                                } else {
-                                    let cell = document.createElement("td");
-                                    let cellText = document.createTextNode(date);
-                                    if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                                        cell.classList.add("bg-info");
-                                    }
-                                    cell.appendChild(cellText);
-                                    cell.addEventListener('click', function () {
-                                        selectDate(cell, date, month, year);
-                                    });
-                                    row.appendChild(cell);
-                                    date++;
-                                }
-                            }
-                            tbl.appendChild(row);
-                        }
-                    }
-
-                    function selectDate(cell, date, month, year) {
-                        if (selectedDate) {
-                            selectedDate.classList.remove('selected');
-                        }
-                        cell.classList.add('selected');
-                        selectedDate = cell;
-
-
-                        console.log(`Selected date: ${cell.innerHTML} ${monthNames[month]} ${year}`);
-
-                        let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + cell.innerHTML;
-
-                        fetch('/get-agenda/<?=$id_masjid?>/' + dateForm)
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log(data)
-                                let divAgenda = document.getElementById('agendaList');
-                                let agendaList = "";
-                                for (let i = 0; i < data.length; i++) {
-                                    agendaList += `
-                                 <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
-                                    <div class="kontenAgenda">
-                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + data[i].id_agenda + `">
-                                        <label for="checkbox">
-                                            <strong class="text-muted">` + data[i].jam_agenda + `</strong>
-                                            <strong>` + data[i].nama_agenda + `</strong>
-                                        </label>
-                                    </div>
-                                </div>
-                                `;
-                                }
-
-                                if (agendaList) {
-                                    divAgenda.innerHTML = agendaList;
-                                } else {
-                                    divAgenda.innerText = 'Tidak ada agenda.'
-                                }
-
-
-                            })
-                            .catch(error => console.error('Error fetching agenda:', error));
-                    }
-
-                    function prevMonth() {
-                        currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
-                        currentYear = (currentMonth === 11) ? currentYear - 1 : currentYear;
-                        showCalendar(currentMonth, currentYear);
-                        filterAgendaByMonth(currentMonth, currentYear);
-                    }
-
-                    function nextMonth() {
-                        currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
-                        currentYear = (currentMonth === 0) ? currentYear + 1 : currentYear;
-                        showCalendar(currentMonth, currentYear);
-                        filterAgendaByMonth(currentMonth, currentYear);
-                    }
-
-                    function filterAgendaByMonth(month, year) {
-                        const agendaItems = document.querySelectorAll('.agenda-item');
-                        agendaItems.forEach(item => {
-                            const itemMonth = parseInt(item.getAttribute('data-month'));
-                            const itemYear = parseInt(item.getAttribute('data-year'));
-                            if (itemMonth === month && itemYear === year) {
-                                item.style.display = 'block';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        });
-                    }
-
-                    // Tampilkan kalender dan filter agenda berdasarkan bulan dan tahun saat ini
-                    showCalendar(currentMonth, currentYear);
-                    filterAgendaByMonth(currentMonth, currentYear);
 
                 });
             </script>
