@@ -23,9 +23,11 @@ class zakat2 extends BaseController
     {
         if ($id !== null) {
             $masjid = $this->dbdatamasjidModel->find($id);
-            $zakat = $this->zakatModel->select('id_zakat, zakat.id_masjid, tgl, keterangan, nominal, beras_zakat.jenis_beras')
+            $zakat = $this->zakatModel->select('zakat.id_beras, id_zakat, zakat.id_masjid, tgl, keterangan, nominal, beras_zakat.jenis_beras')
                 ->join('beras_zakat', 'beras_zakat.id_beras = zakat.id_beras')
                 ->where('zakat.id_masjid', $id)->findAll();
+
+            $beras =  $this->berasZakatModel->where('id_masjid', $id)->findAll();
 
             // Debugging
             error_log(print_r($masjid, true));
@@ -35,9 +37,8 @@ class zakat2 extends BaseController
                 'title' => 'Daftar Zakat',
                 'masjid' => $masjid,
                 'zakat' => $zakat,
+                'beras' => $beras,
             ];
-
-            dd($data);
 
             return view('userprofile/zakat2', $data);
         } else {
@@ -84,6 +85,7 @@ class zakat2 extends BaseController
     {
         $data = [
             'id_masjid' => $id_masjid,
+            'id_beras' => $this->request->getPost('id_beras'),
             'tgl' => $this->request->getVar('tgl'),
             'keterangan' => $this->request->getVar('keterangan'),
             'nominal' => $this->request->getVar('nominal')
@@ -100,7 +102,7 @@ class zakat2 extends BaseController
         $data = [
             'tgl' => $this->request->getVar('tgl'),
             'keterangan' => $this->request->getVar('keterangan'),
-            'nominal' => $this->request->getVar('nominal')
+            'id_beras' => $this->request->getVar('id_beras'),
         ];
 
         $this->zakatModel->update($id, $data);
