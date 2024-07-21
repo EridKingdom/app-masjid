@@ -4,9 +4,9 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class DonasiZakataModel extends Model
+class DonasiZakatModel extends Model
 {
-    protected $table = 'donasi';
+    protected $table = 'donasi_zakat';
     protected $primaryKey = 'id_donasi';
     protected $allowedFields = [
         'id_masjid',
@@ -14,6 +14,7 @@ class DonasiZakataModel extends Model
         'nama_donatur',
         'ho_telp',
         'alamat',
+        'status',
         'bukti_transfer',
         'nominal',
         'create_at',

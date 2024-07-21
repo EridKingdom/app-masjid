@@ -146,7 +146,7 @@ if ($id_user) {
                         </tr>
                     </thead>
                     <tbody id="verifikasi-table-body">
-                        <!--
+
                         <?php if (!empty($donasi)) : ?>
                             <?php foreach ($donasi as $item) : ?>
                                 <tr>
@@ -164,8 +164,8 @@ if ($id_user) {
                                     </td>
                                     <td><?= 'Rp ' . number_format(esc($item['nominal']), 0, ',', '.'); ?></td>
                                     <td class="column-center">
-                                        <a class="ceklis" href="/donasi/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
-                                        <a class="silang" href="/donasi/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
+                                        <a class="ceklis" href="/donasi-zakat/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
+                                        <a class="silang" href="/donasi-zakat/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -175,7 +175,6 @@ if ($id_user) {
                                 <td colspan="5">Tidak ada data donasi.</td>
                             </tr>
                         <?php endif; ?>
-                        -->
                     </tbody>
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
@@ -202,8 +201,8 @@ if ($id_user) {
                         });
                     </script>
                     <div style="text-align: right;">
-                        <a class="btn btn-primary" href="/donasi/verifikasi/all" onclick="return confirm('Are you sure you want to verify all donations?')">Verifikasi Semua</a>
-                        <a class="btn btn-primary" href="/donasi/unverifikasi/all" onclick="return confirm('Are you sure you want to delete all donations?')">Batalkan Semua</a>
+                        <a class="btn btn-primary" href="/donasi-zakat/verifikasi/all" onclick="return confirm('Are you sure you want to verify all donations?')">Verifikasi Semua</a>
+                        <a class="btn btn-primary" href="/donasi-zakat/unverifikasi/all" onclick="return confirm('Are you sure you want to delete all donations?')">Batalkan Semua</a>
                     </div>
                 </table>
                 <div style="margin-top: 20px; text-align: center;">

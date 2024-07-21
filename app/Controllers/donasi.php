@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\BerasZakatModel;
 use App\Models\DbDataMasjidModel;
 use App\Models\DonasiModel;
+use App\Models\DonasiZakatModel;
 use App\Models\ZakatModel;
 use CodeIgniter\Controller;
 
@@ -47,6 +48,29 @@ class Donasi extends Controller
         $session = session();
         $session->setFlashdata('success', '*');
         return redirect()->to('/bukti-donasi')->with('donasiData', $tbDonasi);
+    }
+
+    public function storeDonasiZakat()
+    {
+
+        $tbDonasi = new DonasiZakatModel();
+        $data = $this->request->getPost();
+
+
+        $transfer = $this->request->getFiles()['bukti_transfer'];
+        $uploadedFileName = '';
+
+        if ($transfer->isValid() && !$transfer->hasMoved()) {
+            $newName = $transfer->getRandomName();
+            $transfer->move(FCPATH . 'transfer', $newName); // Simpan file di folder imgpostingan
+            $uploadedFileName = $newName; // Simpan nama file
+        }
+        $data['bukti_transfer'] = $uploadedFileName;
+
+        $tbDonasi->save($data);
+        $session = session();
+        $session->setFlashdata('success', 'Terima Kasih Telah Melakukan Donasi Zakat');
+        return redirect()->to('/login');
     }
 
     public function uploadbuktiDonasi()
@@ -99,21 +123,13 @@ class Donasi extends Controller
         return redirect()->to('/bukti-donasi');
     }
 
-    public function donasiZakat()
+    public function donasiZakat($id)
     {
-        // Assuming you need to send some data to the view, similar to the `donasi` method
         $tableMasjid = new DbDataMasjidModel();
-        $allMasjid = $tableMasjid->findAll();
-        $masjidOptions = array_map(function ($value) {
-            return [
-                'id' => $value['id'],
-                'nama_masjid' => $value['nama_masjid'],
-                'no_rekening' => $value['no_rekening'],
-                'nama_bank' => $value['nama_bank'],
-            ];
-        }, $allMasjid);
-
-        $data = ['masjidList' => $masjidOptions];
+        $modelBerasZakat = new BerasZakatModel();
+        $masjid = $tableMasjid->find($id);
+        $beras = $modelBerasZakat->where('id_masjid', $id)->findAll();
+        $data = ['masjid' => $masjid, 'beras' => $beras];
         return view('donasiZakat', $data); // Ensure the view path matches the actual location of your view file
     }
 

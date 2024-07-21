@@ -67,7 +67,7 @@
                         </div>
                         <button type="submit" class="tomboldonasi">Donasi</button>
                         <div class="teksbawah-center">
-                            <a class="small" href="<?= base_url('/donasi-zakat'); ?>">Ingin Donasi Zakat</a>
+                            <a class="small" href="<?= base_url('/donasi-zakat/' . $masjid['id']); ?>">Ingin Donasi Zakat</a>
                         </div>
                     </form>
                 </div>
