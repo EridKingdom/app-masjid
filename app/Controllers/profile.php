@@ -11,6 +11,7 @@ class profile extends BaseController
 {
     protected $dbdatamasjidModel;
     protected $tbkegiatanModel;
+    protected $agendaModel;
 
     public function __construct()
     {
@@ -24,7 +25,6 @@ class profile extends BaseController
     {
         $agenda = $this->agendaModel->where('tgl', $date)->where('id_masjid', $id_masjid)->findAll();
         return $this->response->setJSON($agenda);
-
     }
 
     public function tambahAgenda($id_masjid)
@@ -39,7 +39,7 @@ class profile extends BaseController
     {
 
         $ids = $this->request->getVar('ids');
-        if(count($ids) > 0) {
+        if (count($ids) > 0) {
             $this->agendaModel->delete($ids);
         }
         return $this->response->setJSON(['success' => true]);

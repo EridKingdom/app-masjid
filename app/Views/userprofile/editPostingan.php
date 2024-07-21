@@ -156,7 +156,7 @@ if ($id_user) {
                             <textarea class="form-control" id="deskripsiKegiatan" name="deskripsi_kegiatan" rows="3" required><?= esc($deskripsi_kegiatan); ?></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="postMedia" class="form-label">Tambahkan Foto/Video</label>
+                            <label for="postMedia" class="form-label">Tambahkan Foto</label>
                             <input class="form-control" type="file" id="postMedia" name="postMedia[]" multiple>
                         </div>
                         <div class="mb-3 text-center">

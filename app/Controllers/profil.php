@@ -5,12 +5,15 @@ namespace App\Controllers;
 use App\Models\dbdatamasjidModel;
 use App\Models\tbkegiatanModel;
 use App\Models\UserModel;
+use App\Models\AgendaModel;
+
 
 class Profil extends BaseController
 {
     protected $dbdatamasjidModel;
     protected $tbkegiatanModel;
     protected $UserModel;
+    protected $agendaModel;
 
     public function __construct()
     {
@@ -18,6 +21,7 @@ class Profil extends BaseController
         $this->dbdatamasjidModel = new dbdatamasjidModel();
         $this->tbkegiatanModel = new tbkegiatanModel();
         $this->UserModel = new UserModel();
+        $this->agendaModel = new AgendaModel();
     }
 
     public function index($id = null)
@@ -34,13 +38,20 @@ class Profil extends BaseController
                 // Mengambil kegiatan terkait
                 $tb_kegiatan = $this->tbkegiatanModel->where('id_masjid', $id)->findAll();
                 $tipe_postingan_list = $this->tbkegiatanModel->getUniqueTipePostingan();
+                $agenda = $this->agendaModel->where('id_masjid', $id)->findAll();
+
+                // Logging data untuk debugging
+                log_message('debug', 'Masjid: ' . print_r($masjid, true));
+                log_message('debug', 'Kegiatan: ' . print_r($tb_kegiatan, true));
+                log_message('debug', 'Agenda: ' . print_r($agenda, true));
 
                 // Menyiapkan data untuk view
                 $data = [
                     'title' => 'Profil Masjid',
                     'masjid' => $masjid,
                     'tb_kegiatan' => $tb_kegiatan,
-                    'tipe_postingan_list' => $tipe_postingan_list, // Menambahkan tipe postingan ke data
+                    'tipe_postingan_list' => $tipe_postingan_list,
+                    'agenda' => $agenda,
                 ];
 
                 return view('profil', $data);
@@ -53,6 +64,40 @@ class Profil extends BaseController
             log_message('error', $e->getMessage());
             // Menampilkan halaman kesalahan khusus
             return view('errors/custom_error', ['message' => $e->getMessage()]);
+        }
+    }
+
+    public function getAgenda($id_masjid, $date)
+    {
+        try {
+            $agenda = $this->agendaModel->where('tgl', $date)->where('id_masjid', $id_masjid)->findAll();
+            log_message('debug', 'Agenda: ' . print_r($agenda, true)); // Logging data agenda
+            return $this->response->setJSON($agenda);
+        } catch (\Exception $e) {
+            log_message('error', $e->getMessage());
+            return $this->response->setJSON(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function getAgendaByMonth($id_masjid, $month, $year)
+    {
+        try {
+            $agenda = $this->agendaModel->getAgendaByMonth($id_masjid, $month, $year);
+            return $this->response->setJSON($agenda);
+        } catch (\Exception $e) {
+            log_message('error', $e->getMessage());
+            return $this->response->setJSON(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function getHighlightedDates($id_masjid)
+    {
+        try {
+            $dates = $this->agendaModel->select('tgl')->where('id_masjid', $id_masjid)->findAll();
+            return $this->response->setJSON($dates);
+        } catch (\Exception $e) {
+            log_message('error', $e->getMessage());
+            return $this->response->setJSON(['error' => $e->getMessage()]);
         }
     }
 

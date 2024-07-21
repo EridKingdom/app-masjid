@@ -71,7 +71,7 @@
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
             </div>
-            <a href="<?= base_url('/donasi/'.$masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi</a>
+            <a href="<?= base_url('/donasi/' . $masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi</a>
         </div>
     </div>
 </section>
@@ -152,8 +152,10 @@
     <div class="widget-calendar" style="position: absolute; right: 20px;">
         <div id="calendar-container">
             <div id="calendar-header">
+                <button id="prev-month" onclick="prevMonth()">&#9664;</button>
                 <span id="month-name"></span>
                 <span id="year"></span>
+                <button id="next-month" onclick="nextMonth()">&#9654;</button>
             </div>
             <div id="calendar-dates">
                 <table>
@@ -171,79 +173,11 @@
                     <tbody id="calendar-body">
                     </tbody>
                 </table>
-
             </div>
         </div>
-        <script>
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-            const today = new Date();
-            let currentMonth = today.getMonth();
-            let currentYear = today.getFullYear();
-
-            function showCalendar(month, year) {
-                let firstDay = (new Date(year, month)).getDay();
-                let daysInMonth = 32 - new Date(year, month, 32).getDate();
-
-                let tbl = document.getElementById("calendar-body");
-                tbl.innerHTML = "";
-
-                document.getElementById("month-name").innerHTML = monthNames[month];
-                document.getElementById("year").innerHTML = year;
-
-                let date = 1;
-                for (let i = 0; i < 6; i++) {
-                    let row = document.createElement("tr");
-                    for (let j = 0; j < 7; j++) {
-                        if (i === 0 && j < firstDay) {
-                            let cell = document.createElement("td");
-                            let cellText = document.createTextNode("");
-                            cell.appendChild(cellText);
-                            row.appendChild(cell);
-                        } else if (date > daysInMonth) {
-                            break;
-                        } else {
-                            let cell = document.createElement("td");
-                            let cellText = document.createTextNode(date);
-                            if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                                cell.classList.add("bg-info");
-                            }
-                            cell.appendChild(cellText);
-                            row.appendChild(cell);
-                            date++;
-                        }
-                    }
-                    tbl.appendChild(row);
-                }
-            }
-
-            showCalendar(currentMonth, currentYear);
-        </script>
-        <hr>
-        <h5 class="text-center">Jadwal Agenda</h5>
-        <div class="d-flex justify-content-center">
-            <div class="row justify-content-center my-2" style="max-width: 690px;">
-                <?php if (!empty($agenda)) : ?>
-                    <?php foreach ($agenda as $item) : ?>
-                        <?php if (strtotime($item['tgl']) > time()) : ?>
-                            <div class="col-12 mb-3 agenda-item">
-                                <div class="card">
-                                    <div class="card-content-text px-3">
-                                        <h3 class="card-title mbr-fonts-style mbr-white mt-3 mb-4 display-2">
-                                            <strong><?= esc($item['nama_agenda']); ?></strong>
-                                        </h3>
-                                        <p class="text-muted"><?= date('d M Y', strtotime($item['tgl'])); ?></p>
-                                        <div class="postingan"><?= nl2br(esc($item['deskripsi'])); ?></div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <p>Tidak Ada Agenda Mendatang</p>
-                <?php endif; ?>
-            </div>
+        <div id="agenda-list">
+            <h5>Jadwal Agenda</h5>
+            <ul id="agenda-items"></ul>
         </div>
     </div>
 
@@ -316,6 +250,207 @@
                 item.style.display = 'none';
             }
         });
+    });
+</script>
+
+<script>
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+    let selectedDate = null;
+    let highlightedDates = [];
+
+    // Fetch highlighted dates from server
+    fetch(`/profil/getHighlightedDates/<?= $masjid['id'] ?>`)
+        .then(response => response.json())
+        .then(data => {
+            highlightedDates = data.map(item => item.tgl);
+            showCalendar(currentMonth, currentYear);
+            filterAgendaByMonth(currentMonth, currentYear);
+        })
+        .catch(error => console.error('Error fetching highlighted dates:', error));
+
+    function prevMonth() {
+        currentMonth = (currentMonth === 0) ? 11 : currentMonth - 1;
+        currentYear = (currentMonth === 11) ? currentYear - 1 : currentYear;
+        showCalendar(currentMonth, currentYear);
+        filterAgendaByMonth(currentMonth, currentYear);
+    }
+
+    function nextMonth() {
+        currentMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
+        currentYear = (currentMonth === 0) ? currentYear + 1 : currentYear;
+        showCalendar(currentMonth, currentYear);
+        filterAgendaByMonth(currentMonth, currentYear);
+    }
+
+    function showCalendar(month, year) {
+        let firstDay = (new Date(year, month)).getDay();
+        let daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+        let tbl = document.getElementById("calendar-body");
+        tbl.innerHTML = "";
+
+        document.getElementById("month-name").innerHTML = monthNames[month];
+        document.getElementById("year").innerHTML = year;
+
+        let date = 1;
+        for (let i = 0; i < 6; i++) {
+            let row = document.createElement("tr");
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDay) {
+                    let cell = document.createElement("td");
+                    let cellText = document.createTextNode("");
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                } else if (date > daysInMonth) {
+                    break;
+                } else {
+                    let cell = document.createElement("td");
+                    let cellText = document.createTextNode(date);
+                    if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                        cell.classList.add("bg-info");
+                    }
+
+                    // Check if the date is in the highlightedDates array
+                    let formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+                    if (highlightedDates.includes(formattedDate)) {
+                        cell.classList.add("highlighted-date");
+                    }
+
+                    cell.appendChild(cellText);
+                    cell.addEventListener('click', function() {
+                        selectDate(cell, date, month, year);
+                    });
+                    row.appendChild(cell);
+                    date++;
+                }
+            }
+            tbl.appendChild(row);
+        }
+    }
+
+    function selectDate(cell, date, month, year) {
+        if (selectedDate) {
+            selectedDate.classList.remove('selected');
+        }
+        cell.classList.add('selected');
+        selectedDate = cell;
+
+        let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + String(date).padStart(2, '0');
+
+        fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/${dateForm}`)
+            .then(response => response.json())
+            .then(data => {
+                let divAgenda = document.getElementById('agendaList');
+                let agendaList = "";
+                for (let i = 0; i < data.length; i++) {
+                    let time24 = data[i].jam_agenda;
+                    let time12 = convertTo12HourFormat(time24);
+                    agendaList += `
+                        <div class="col-13 mb-3 agenda-item" data-month="${month}" data-year="${year}">
+                            <div class="kontenAgenda">
+                                <input type="checkbox" class="checkbox" name="checkbox" value="${data[i].id_agenda}">
+                                <label for="checkbox">
+                                    <strong class="text-muted">${time12}</strong>
+                                    <strong>${data[i].nama_agenda}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (agendaList) {
+                    divAgenda.innerHTML = agendaList;
+                } else {
+                    divAgenda.innerText = 'Tidak ada agenda.';
+                }
+
+                function convertTo12HourFormat(time24) {
+                    const [hours, minutes] = time24.split(':');
+                    const period = hours >= 12 ? 'PM' : 'AM';
+                    const hours12 = hours % 12 || 12;
+                    return `${hours12}:${minutes} ${period}`;
+                }
+            })
+            .catch(error => console.error('Error fetching agenda:', error));
+    }
+
+    function filterAgendaByMonth(month, year) {
+        fetch(`/profil/getAgendaByMonth/<?= $masjid['id'] ?>/${month + 1}/${year}`)
+            .then(response => response.json())
+            .then(data => {
+                const agendaItems = document.querySelectorAll('.agenda-item');
+                agendaItems.forEach(item => {
+                    const itemMonth = parseInt(item.getAttribute('data-month'));
+                    const itemYear = parseInt(item.getAttribute('data-year'));
+                    if (itemMonth === month && itemYear === year) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching agenda by month:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteAgenda = document.getElementById('deleteAgenda');
+
+        deleteAgenda.addEventListener('click', function(event) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                let data = Array.from(document.querySelectorAll("input[type=checkbox][name=checkbox]:checked"), e => e.value);
+                if (data.length > 0) {
+                    fetch('/hapus-agenda', {
+                            method: "POST",
+                            body: JSON.stringify({
+                                ids: data
+                            }),
+                            headers: {
+                                "Content-type": "application/json; charset=UTF-8"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            location.reload();
+                        })
+                        .catch(error => console.error('Error deleting agenda:', error));
+                } else {
+                    alert('Tidak ada agenda yang dipilih');
+                }
+            }
+        });
+
+        fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/${today.toISOString().split('T')[0]}`)
+            .then(response => response.json())
+            .then(data => {
+                let divAgenda = document.getElementById('agendaList');
+                let agendaList = "";
+                for (let i = 0; i < data.length; i++) {
+                    let time24 = data[i].jam_agenda;
+                    let time12 = convertTo12HourFormat(time24);
+                    agendaList += `
+                        <div class="col-13 mb-3 agenda-item" data-month="${today.getMonth()}" data-year="${today.getFullYear()}">
+                            <div class="kontenAgenda">
+                                <input type="checkbox" class="checkbox" name="checkbox" value="${data[i].id_agenda}">
+                                <label for="checkbox">
+                                    <strong class="text-muted">${time12}</strong>
+                                    <strong>${data[i].nama_agenda}</strong>
+                                </label>
+                            </div>
+                        </div>`;
+                }
+
+                if (agendaList) {
+                    divAgenda.innerHTML = agendaList;
+                } else {
+                    divAgenda.innerText = 'Tidak ada agenda.';
+                }
+            })
+            .catch(error => console.error('Error fetching agenda:', error));
     });
 </script>
 

@@ -37,4 +37,11 @@ class AgendaModel extends Model
         'updated_at',
         'tgl'
     ];
+    public function getAgendaByMonth($id_masjid, $month, $year)
+    {
+        return $this->where('id_masjid', $id_masjid)
+            ->where('MONTH(tgl)', $month)
+            ->where('YEAR(tgl)', $year)
+            ->findAll();
+    }
 }
