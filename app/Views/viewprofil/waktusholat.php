@@ -56,19 +56,99 @@
         .carousel-container {
             position: relative;
         }
+
+        .masjid-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            /* Ensure it is above other elements */
+        }
+
+        .masjid-info img {
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .masjid-info h1 {
+            font-size: 3.5em;
+            margin: 10;
+        }
+
+        .card-sholat {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 80%;
+        }
+
+        .card-waktu-sholat {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            margin: 0 10px;
+            margin-left: 170vh;
+            margin-bottom: 15vh;
+        }
+
+        .cardjam {
+            background-color: green;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .cardjam h3 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        .cardjam p {
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+        .prayer-time {
+            margin: 10px 0;
+        }
+
+        .prayer-time span:first-child {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .prayer-time span:last-child {
+            display: block;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 
 <body>
     <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
         <div class="carousel-container">
+            <div class="masjid-info">
+                <img src="<?= base_url('img/' . esc($masjid['sampul'])); ?>" alt="Sampul Masjid">
+                <h1><?= esc($masjid['nama_masjid']); ?></h1>
+            </div>
             <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
                 <?php
                 // Menentukan apakah ada gambar untuk ditampilkan
                 $hasImages = !empty($masjid['gambar1']) || !empty($masjid['gambar2']) || !empty($masjid['gambar3']);
                 ?>
                 <div class="carousel-inner">
-                    <?php if ($hasImages) : ?>
+                    <?php if ($hasImages || !empty($tb_kegiatan)) : ?>
                         <div class="carousel-item active">
                             <div class="item-wrapper">
                                 <img class="d-block w-100" src="<?= base_url('img/' . esc($masjid['gambar1'])); ?>" alt="First Image">
@@ -88,6 +168,19 @@
                                 </div>
                             </div>
                         <?php endif; ?>
+                        <?php foreach ($tb_kegiatan as $kegiatan) : ?>
+                            <?php if (!empty($kegiatan['gambar_kegiatan'])) : ?>
+                                <div class="carousel-item">
+                                    <div class="item-wrapper">
+                                        <img class="d-block w-100" src="<?= base_url('imgpostingan/' . esc($kegiatan['gambar_kegiatan'])); ?>" alt="<?= esc($kegiatan['judul_kegiatan']); ?>">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5><?= esc($kegiatan['judul_kegiatan']); ?></h5>
+                                            <p><?= esc(explode("\n", $kegiatan['deskripsi_kegiatan'])[0]); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php else : ?>
                         <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
                             <p>No images available.</p>
@@ -104,13 +197,14 @@
                 <span class="sr-only visually-hidden">Next</span>
             </a>
             <div class="overlay">
-                <div class="content">
-                    <div class="card">
-                        <div class="card-header">
-                            <h1 id="current-time"></h1>
-                            <p id="current-day"></p>
-                        </div>
-                        <div class="card-body d-flex justify-content-around flex-wrap">
+                <div class="contentsolat">
+                    <div class="card-sholat">
+                        <div class="card-waktu-sholat">
+                            <div class="cardjam">
+                                <h3 id="current-time"></h3>
+                                <p id="current-day"></p>
+                            </div>
+                            <span class="prayer-time">Jadwal Sholat :</span>
                             <div class="prayer-time">
                                 <span>SHUBUH</span>
                                 <span id="subuh-time">5:12</span>
@@ -120,7 +214,7 @@
                                 <span id="zuhur-time">12:33</span>
                             </div>
                             <div class="prayer-time">
-                                <span>Ashar</span>
+                                <span>ASHAR</span>
                                 <span id="asar-time">15:50</span>
                             </div>
                             <div class="prayer-time">
