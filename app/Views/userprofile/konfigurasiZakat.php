@@ -105,8 +105,8 @@ if ($id_user) {
         <div class="row justify-content-center">
             <div class="title col-md-12 col-lg-10">
                 <?php if (!empty($masjid)) : ?>
-                    <div class="d-flex align-items-center"> <!-- Tambahkan div ini -->
-                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;"> <!-- Tambahkan margin-right -->
+                    <div class="d-flex align-items-center">
+                        <img class="profileHal-img" src="/img/<?= htmlspecialchars($gambar_masjid, ENT_QUOTES, 'UTF-8'); ?>" alt="Profile Logo" style="height: 120px; width: 120px; border-radius: 50%; margin-right: 50px;">
                         <div>
                             <h5 class="mbr-section-subtitle mbr-fonts-style mb-3 display-5">
                                 <strong><?= esc($masjid['nama_masjid']); ?></strong>
@@ -145,7 +145,7 @@ if ($id_user) {
                             <th>No</th>
                             <th>Jenis Beras</th>
                             <th>Harga Per-Kg</th>
-                            <th>*</th> <!-- Added column for checkbox -->
+                            <th>*</th>
                         </tr>
                     </thead>
                     <tbody id="beras-table-body">
@@ -181,7 +181,7 @@ if ($id_user) {
                 <div style="text-align: right;">
                     <button id="addButton" class="btn btn-primary">Tambahkan</button>
                     <button id="editButton" class="btn btn-secondary edit">Edit</button>
-                    <button class="btn btn-danger delete">Hapus</button> <!-- Updated button for delete -->
+                    <button class="btn btn-danger delete">Hapus</button>
                 </div>
             </div>
         </div>
@@ -197,7 +197,7 @@ if ($id_user) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addForm" method="POST" action="/donasi/handleFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="addForm" method="POST" action="/donasi/handleFormData/<?= $id_masjid ?>">
                     <div class="mb-3">
                         <label for="jenis_beras" class="form-label">Jenis Beras</label>
                         <input type="text" class="form-control" id="jenis_beras" name="jenis_beras" required>
@@ -222,7 +222,7 @@ if ($id_user) {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="editForm" method="POST" action="/donasi/updateFormData/<?= $masjid['id_masjid'] ?>">
+                <form id="editForm" method="POST" action="/donasi/updateFormData/<?= $id_masjid ?>">
                     <input type="hidden" id="editId" name="id_beras">
                     <div class="mb-3">
                         <label for="editjenisberas" class="form-label">Jenis Beras</label>

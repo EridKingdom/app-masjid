@@ -130,7 +130,7 @@ if ($id_user) {
     <div class="container-fluid">
         <div class="row">
             <div class="content-wrap col-16 col-md-12">
-                <h2 class="judul">verifikasi Donasi</h2>
+                <h2 class="judul">verifikasi Pembayaran Zakat</h2>
                 <form class="cari" role="search" method="GET">
                     <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Donatur" aria-label="Search">
                 </form>
@@ -139,19 +139,20 @@ if ($id_user) {
                         <tr>
                             <th>Tanggal</th>
                             <th>Nama Donatur</th>
-                            <th>Jenis Donasi</th>
+                            <th>Jenis Beras</th>
                             <th>Jumlah</th>
                             <th>Gambar Bukti</th>
                             <th>Keterangan</th>
                         </tr>
                     </thead>
                     <tbody id="verifikasi-table-body">
+                        <!--
                         <?php if (!empty($donasi)) : ?>
                             <?php foreach ($donasi as $item) : ?>
                                 <tr>
                                     <td><?= esc($item['created_at']); ?></td>
                                     <td><?= esc($item['nama_donatur']); ?></td>
-                                    <td><?= esc($item['jenis_donasi']); ?></td>
+                                    <td><?= esc($item['jenis_beras']); ?></td>
                                     <td>
                                         <?php if (!empty($item['bukti_transfer'])) : ?>
                                             <a href="#" class="view-image" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="<?= base_url('transfer/' . esc($item['bukti_transfer'])); ?>">
@@ -169,10 +170,12 @@ if ($id_user) {
                                 </tr>
                             <?php endforeach; ?>
                         <?php else : ?>
+                        
                             <tr>
                                 <td colspan="5">Tidak ada data donasi.</td>
                             </tr>
                         <?php endif; ?>
+                        -->
                     </tbody>
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
@@ -204,7 +207,8 @@ if ($id_user) {
                     </div>
                 </table>
                 <div style="margin-top: 20px; text-align: center;">
-                    <a class="btn btn-secondary" href="<?= base_url('/verifikasi-donasi-zakat/' . $id_masjid); ?>">Verifikasi Donasi Zakat</a>
+                    <a class="btn btn-primary" href="<?= base_url('/konfigurasi-zakat/' . $id_masjid); ?>">Konfigurasi Donasi Zakat</a>
+                    <a class="btn btn-primary" href="<?= base_url('/verifikasiDonasi/' . $id_masjid); ?>">Kembali</a>
                 </div>
             </div>
         </div>

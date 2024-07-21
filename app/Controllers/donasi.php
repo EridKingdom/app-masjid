@@ -117,7 +117,7 @@ class Donasi extends Controller
         return view('donasiZakat', $data); // Ensure the view path matches the actual location of your view file
     }
 
-    public function konfigurasiZakat()
+    public function konfigurasiZakat($id_masjid)
     {
         $session = session();
         $userData = $session->get('user_data');
@@ -126,7 +126,7 @@ class Donasi extends Controller
         $masjid = [];
         if ($id_user) {
             $db = \Config\Database::connect();
-            $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ?", [$id_user]);
+            $query = $db->query("SELECT id AS id_masjid, nama_masjid, deskripsi, alamat_masjid FROM db_data_masjid WHERE id_user = ? AND id = ?", [$id_user, $id_masjid]);
             $result = $query->getRowArray();
             if ($result) {
                 $masjid = $result;
@@ -134,11 +134,12 @@ class Donasi extends Controller
         }
 
         $berasZakatModel = new BerasZakatModel();
-        $berasZakat = $berasZakatModel->where('id_masjid', $masjid['id_masjid'])->findAll();
+        $berasZakat = $berasZakatModel->where('id_masjid', $id_masjid)->findAll();
 
         $data = [
             'masjid' => $masjid,
-            'berasZakat' => $berasZakat
+            'berasZakat' => $berasZakat,
+            'id_masjid' => $id_masjid // Send id_masjid to the view
         ];
 
         return view('userprofile/konfigurasiZakat', $data);
@@ -155,7 +156,7 @@ class Donasi extends Controller
         $berasZakatModel = new BerasZakatModel();
         $berasZakatModel->insert($data);
         session()->setFlashdata('success', 'Data berhasil ditambahkan');
-        return redirect()->to('/donasi/konfigurasiZakat');
+        return redirect()->back()->with('success', 'Data berhasil ditambahkan');
     }
 
     public function updateFormData($id_masjid)
@@ -169,7 +170,7 @@ class Donasi extends Controller
         $berasZakatModel = new BerasZakatModel();
         $berasZakatModel->update($id, $data);
         session()->setFlashdata('success', 'Data berhasil diedit');
-        return redirect()->to('/donasi/konfigurasiZakat');
+        return redirect()->back()->with('success', 'Data berhasil diEdit');
     }
 
     public function deleteFormData($id_beras)
@@ -182,6 +183,6 @@ class Donasi extends Controller
         } else {
             session()->setFlashdata('error', 'Data tidak ditemukan');
         }
-        return redirect()->to('/donasi/konfigurasiZakat');
+        return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 }

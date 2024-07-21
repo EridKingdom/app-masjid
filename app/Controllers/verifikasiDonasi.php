@@ -61,7 +61,6 @@ class verifikasiDonasi extends BaseController
                 $data['jenis_kas'] = 'masuk';
                 $modelKasmasjid->save($data);
                 $this->donasiModel->update($id_donasi, $status);
-
             } else {
                 $modelInfakanakyatim->save($data);
                 $this->donasiModel->update($id_donasi, $status);
@@ -100,7 +99,6 @@ class verifikasiDonasi extends BaseController
                     $data['jenis_kas'] = 'masuk';
                     $modelKasmasjid->save($data);
                     $this->donasiModel->update($donasi['id_donasi'], $status);
-
                 } else {
                     $modelInfakanakyatim->save($data);
                     $this->donasiModel->update($donasi['id_donasi'], $status);
@@ -118,5 +116,23 @@ class verifikasiDonasi extends BaseController
             $this->donasiModel->delete($item['id_donasi']);
         }
         return redirect()->back()->with('success', 'All donations deleted successfully.');
+    }
+    public function VerifikasiZakat($id_masjid)
+    {
+        // Mengambil data dari ketiga tabel berdasarkan id_masjid
+        $db_data_masjid = $this->dbdatamasjidModel->where('id', $id_masjid)->findAll();
+        $zakat = $this->zakatModel->where('id_masjid', $id_masjid)->findAll();
+        $donasi = $this->donasiModel->where('id_masjid', $id_masjid)->where('status', null)->findAll();
+
+        // Menggabungkan data dalam satu array
+        $data = [
+            'title' => 'verifikasi Pembayaran Zakat',
+            'db_data_masjid' => $db_data_masjid,
+            'zakat' => $zakat,
+            'donasi' => $donasi, // Menambahkan data donasi
+        ];
+
+        // Mengirim data ke view
+        return view('userprofile/verifikasiDZakat', $data);
     }
 }
