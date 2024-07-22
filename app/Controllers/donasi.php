@@ -22,10 +22,8 @@ class Donasi extends Controller
 
     public function storeDonasi()
     {
-
         $tbDonasi = new DonasiModel();
         $data = $this->request->getPost();
-
 
         $transfer = $this->request->getFiles()['bukti_transfer'];
         $uploadedFileName = '';
@@ -37,6 +35,7 @@ class Donasi extends Controller
         }
         $data['bukti_transfer'] = $uploadedFileName;
         $tbDonasi->save($data);
+
         $tbZakat = new ZakatModel();
         $zakat = $tbZakat->findAll();
 
@@ -45,17 +44,25 @@ class Donasi extends Controller
             'zakat' => $zakat,
             'showSearch' => false
         ];
+
         $session = session();
         $session->setFlashdata('success', '*');
-        return redirect()->to('/bukti-donasi')->with('donasiData', $tbDonasi);
+
+        // Pastikan id_masjid ada dalam data yang di-post
+        $id_masjid = $this->request->getPost('id_masjid');
+        if (!$id_masjid) {
+            // Tangani kasus di mana id_masjid tidak ada
+            $session->setFlashdata('error', 'ID Masjid tidak ditemukan.');
+            return redirect()->back()->withInput();
+        }
+
+        return redirect()->to("/profil/{$id_masjid}")->with('donasiData', $tbDonasi);
     }
 
     public function storeDonasiZakat()
     {
-
         $tbDonasi = new DonasiZakatModel();
         $data = $this->request->getPost();
-
 
         $transfer = $this->request->getFiles()['bukti_transfer'];
         $uploadedFileName = '';
@@ -70,7 +77,16 @@ class Donasi extends Controller
         $tbDonasi->save($data);
         $session = session();
         $session->setFlashdata('success', 'Terima Kasih Telah Melakukan Donasi Zakat');
-        return redirect()->to('/login');
+
+        // Pastikan id_masjid ada dalam data yang di-post
+        $id_masjid = $this->request->getPost('id_masjid');
+        if (!$id_masjid) {
+            // Tangani kasus di mana id_masjid tidak ada
+            $session->setFlashdata('error', 'ID Masjid tidak ditemukan.');
+            return redirect()->back()->withInput();
+        }
+
+        return redirect()->to("/profil/{$id_masjid}");
     }
 
     public function uploadbuktiDonasi()
