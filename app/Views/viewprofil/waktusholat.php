@@ -96,8 +96,8 @@
             text-align: center;
             width: 200px;
             margin: 0 10px;
-            margin-left: 170vh;
-            margin-bottom: 15vh;
+            margin-left: 150vh;
+            margin-bottom: 10vh;
         }
 
         .cardjam {
@@ -131,6 +131,37 @@
         .prayer-time span:last-child {
             display: block;
             font-size: 1.1em;
+        }
+
+        .opstion {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-right: 45vh;
+        }
+
+        .opstion p {
+            text-align: justify;
+        }
+
+
+        @media (max-width: 768px) {
+            .opstion {
+                display: none;
+            }
+        }
+
+        .p {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            max-width: 120vh !important;
         }
     </style>
 </head>
@@ -173,7 +204,7 @@
                                 <div class="carousel-item">
                                     <div class="item-wrapper">
                                         <img class="d-block w-100" src="<?= base_url('imgpostingan/' . esc($kegiatan['gambar_kegiatan'])); ?>" alt="<?= esc($kegiatan['judul_kegiatan']); ?>">
-                                        <div class="carousel-caption d-none d-md-block">
+                                        <div class="opstion">
                                             <h5><?= esc($kegiatan['judul_kegiatan']); ?></h5>
                                             <p><?= esc(explode("\n", $kegiatan['deskripsi_kegiatan'])[0]); ?></p>
                                         </div>

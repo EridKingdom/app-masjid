@@ -4,19 +4,19 @@ namespace App\Controllers;
 
 use App\Models\zakatModel;
 use App\Models\dbdatamasjidModel;
-use App\Models\BerasZakatModel; // Added this line
+use App\Models\BerasZakatModel;
 
 class zakat2 extends BaseController
 {
     protected $zakatModel;
     protected $dbdatamasjidModel;
-    protected $berasZakatModel; // Added this line
+    protected $berasZakatModel;
 
     public function __construct()
     {
         $this->zakatModel = new zakatModel();
         $this->dbdatamasjidModel = new dbdatamasjidModel();
-        $this->berasZakatModel = new BerasZakatModel(); // Added this line
+        $this->berasZakatModel = new BerasZakatModel();
     }
 
     public function index($id = null)
@@ -50,7 +50,9 @@ class zakat2 extends BaseController
     {
         if ($id !== null) {
             $masjid = $this->dbdatamasjidModel->find($id);
-            $zakat = $this->zakatModel->select('id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
+            $zakat = $this->zakatModel->select('zakat.id_beras, id_zakat, zakat.id_masjid, tgl, keterangan, nominal, beras_zakat.jenis_beras')
+                ->join('beras_zakat', 'beras_zakat.id_beras = zakat.id_beras')
+                ->where('zakat.id_masjid', $id)->findAll();
 
             $data = [
                 'title' => 'Daftar Zakat',
@@ -67,7 +69,9 @@ class zakat2 extends BaseController
     {
         if ($id !== null) {
             $masjid = $this->dbdatamasjidModel->find($id);
-            $zakat = $this->zakatModel->select('id_masjid, tgl, keterangan, nominal')->where('id_masjid', $id)->findAll();
+            $zakat = $this->zakatModel->select('zakat.id_beras, id_zakat, zakat.id_masjid, tgl, keterangan, nominal, beras_zakat.jenis_beras')
+                ->join('beras_zakat', 'beras_zakat.id_beras = zakat.id_beras')
+                ->where('zakat.id_masjid', $id)->findAll();
 
             $data = [
                 'title' => 'Daftar Zakat',

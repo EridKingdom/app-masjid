@@ -60,7 +60,10 @@ class Pages extends BaseController
 
     public function zakat()
     {
-        $zakat = $this->zakatModel->findAll();
+        $zakat = $this->zakatModel->select('zakat.id_beras, id_zakat, zakat.id_masjid, tgl, keterangan, nominal, beras_zakat.jenis_beras, db_data_masjid.nama_masjid')
+            ->join('beras_zakat', 'beras_zakat.id_beras = zakat.id_beras')
+            ->join('db_data_masjid', 'db_data_masjid.id = zakat.id_masjid') // Tambahkan join ini
+            ->findAll();
 
         // Menggabungkan data dalam satu array
         $data = [

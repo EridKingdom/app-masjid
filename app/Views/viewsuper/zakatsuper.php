@@ -96,14 +96,16 @@
                             <tr>
                                 <th>Tanggal</th>
                                 <th>Keterangan</th>
+                                <th>Jenis Beras</th>
                                 <th>Nominal</th>
                             </tr>
                         </thead>
                         <tbody id="zakat-table-body">
                             <?php foreach ($zakat as $k) : ?>
                                 <tr>
-                                    <td><?= $k['tgl']; ?></td>
-                                    <td><?= $k['keterangan']; ?></td>
+                                    <td><?= esc($k['tgl']); ?></td>
+                                    <td><?= esc($k['keterangan']); ?></td>
+                                    <td><?= esc($k['jenis_beras']); ?></td>
                                     <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                                 </tr>
                             <?php endforeach; ?>
@@ -122,6 +124,7 @@
                         for (let i = 0; i < 10; i++) {
                             const tr = document.createElement('tr');
                             tr.innerHTML = `
+                            <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
@@ -234,7 +237,7 @@
                 let total = 0;
                 Array.from(rows).forEach(function(row) {
                     const cells = row.getElementsByTagName('td');
-                    const nominal = cells[2].textContent.trim();
+                    const nominal = cells[3].textContent.trim();
                     if (nominal) {
                         total += parseFloat(nominal.replace(/[^0-9,-]+/g, ""));
                     }

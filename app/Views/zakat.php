@@ -13,14 +13,18 @@
                         <tr>
                             <th>Tanggal</th>
                             <th>Keterangan</th>
-                            <th>Nominal</th>
+                            <th>Amil dari </th>
+                            <th>Jenis Beras</th>
+                            <th>Nominal 3kg</th>
                         </tr>
                     </thead>
                     <tbody id="zakat-table-body">
                         <?php foreach ($zakat as $k) : ?>
                             <tr>
-                                <td><?= $k['tgl']; ?></td>
-                                <td><?= $k['keterangan']; ?></td>
+                                <td><?= esc($k['tgl']); ?></td>
+                                <td><?= esc($k['keterangan']); ?></td>
+                                <td><?= esc($k['nama_masjid']); ?></td>
+                                <td><?= esc($k['jenis_beras']); ?></td>
                                 <td><?= 'Rp ' . number_format(esc($k['nominal']), 0, ',', '.'); ?></td>
                             </tr>
                         <?php endforeach; ?>
@@ -30,7 +34,7 @@
                         $currentRowCount = count($zakat);
                         if ($currentRowCount < $rowsPerPage) {
                             for ($i = $currentRowCount; $i < $rowsPerPage; $i++) {
-                                echo "<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+                                echo "<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>";
                             }
                         }
                         ?>
@@ -123,7 +127,7 @@
             let total = 0;
             Array.from(rows).forEach(function(row) {
                 const cells = row.getElementsByTagName('td');
-                const nominal = cells[2].textContent.trim();
+                const nominal = cells[4].textContent.trim();
                 if (nominal) {
                     total += parseFloat(nominal.replace(/[^0-9,-]+/g, ""));
                 }

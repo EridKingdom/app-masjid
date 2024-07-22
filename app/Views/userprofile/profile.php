@@ -497,12 +497,12 @@ if ($id_user) {
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
         <div class="row justify-content-center my-2" style="max-width: 690px;">
             <!-- Menambahkan max-width untuk membatasi lebar -->
-            <select id="filter-tipe-postingan" class="filterposting">
-                <option value="">Semua Tipe Postingan</option>
+            <div class="filterposting">
+                <button class="filter-btn active" data-tipe="">Semua Tipe Postingan</button>
                 <?php foreach ($tipe_postingan_list as $tipe) : ?>
-                    <option value="<?= esc($tipe['tipe_postingan']); ?>"><?= esc($tipe['tipe_postingan']); ?></option>
+                    <button class="filter-btn" data-tipe="<?= esc($tipe['tipe_postingan']); ?>"><?= esc($tipe['tipe_postingan']); ?></button>
                 <?php endforeach; ?>
-            </select>
+            </div>
             <?php if (!empty($tb_kegiatan)) : ?>
                 <?php foreach ($tb_kegiatan as $k) : ?>
                     <div class="col-12 mb-3 kegiatan-item" data-tipe="<?= esc($k['tipe_postingan']); ?>">
@@ -557,16 +557,20 @@ if ($id_user) {
 </section>
 
 <script>
-    document.getElementById('filter-tipe-postingan').addEventListener('change', function() {
-        var selectedTipe = this.value;
-        var kegiatanItems = document.querySelectorAll('.kegiatan-item');
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            var selectedTipe = this.getAttribute('data-tipe');
+            var kegiatanItems = document.querySelectorAll('.kegiatan-item');
 
-        kegiatanItems.forEach(function(item) {
-            if (selectedTipe === "" || item.getAttribute('data-tipe') === selectedTipe) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
+            kegiatanItems.forEach(function(item) {
+                if (selectedTipe === "" || item.getAttribute('data-tipe') === selectedTipe) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
     });
 
