@@ -173,7 +173,7 @@
                 <img src="<?= base_url('img/' . esc($masjid['sampul'])); ?>" alt="Sampul Masjid">
                 <h1><?= esc($masjid['nama_masjid']); ?></h1>
             </div>
-            <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
+            <div class="carousel slide" id="ueOkfUJH6x" data-ride="carousel" data-interval="5000" data-bs-interval="5000">
                 <?php
                 // Menentukan apakah ada gambar untuk ditampilkan
                 $hasImages = !empty($masjid['gambar1']) || !empty($masjid['gambar2']) || !empty($masjid['gambar3']);
