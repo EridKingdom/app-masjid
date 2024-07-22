@@ -267,7 +267,7 @@
             cell.classList.add('selected');
             selectedDate = cell;
 
-            let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + String(date).padStart(2, '0');
+            let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + String(cell.innerHTML).padStart(2, '0');
 
             fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/${dateForm}`)
                 .then(response => response.json())
@@ -280,7 +280,6 @@
                         agendaList += `
                         <div class="col-13 mb-3 agenda-item" data-month="${month}" data-year="${year}">
                             <div class="kontenAgenda">
-                                <input type="checkbox" class="checkbox" name="checkbox" value="${data[i].id_agenda}">
                                 <label for="checkbox">
                                     <strong class="text-muted">${time12}</strong>
                                     <strong>${data[i].nama_agenda}</strong>
@@ -324,61 +323,6 @@
                 .catch(error => console.error('Error fetching agenda by month:', error));
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteAgenda = document.getElementById('deleteAgenda');
-
-            deleteAgenda.addEventListener('click', function(event) {
-                if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                    let data = Array.from(document.querySelectorAll("input[type=checkbox][name=checkbox]:checked"), e => e.value);
-                    if (data.length > 0) {
-                        fetch('/hapus-agenda', {
-                                method: "POST",
-                                body: JSON.stringify({
-                                    ids: data
-                                }),
-                                headers: {
-                                    "Content-type": "application/json; charset=UTF-8"
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                location.reload();
-                            })
-                            .catch(error => console.error('Error deleting agenda:', error));
-                    } else {
-                        alert('Tidak ada agenda yang dipilih');
-                    }
-                }
-            });
-
-            fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/${today.toISOString().split('T')[0]}`)
-                .then(response => response.json())
-                .then(data => {
-                    let divAgenda = document.getElementById('agendaList');
-                    let agendaList = "";
-                    for (let i = 0; i < data.length; i++) {
-                        let time24 = data[i].jam_agenda;
-                        let time12 = convertTo12HourFormat(time24);
-                        agendaList += `
-                        <div class="col-13 mb-3 agenda-item" data-month="${today.getMonth()}" data-year="${today.getFullYear()}">
-                            <div class="kontenAgenda">
-                                <input type="checkbox" class="checkbox" name="checkbox" value="${data[i].id_agenda}">
-                                <label for="checkbox">
-                                    <strong class="text-muted">${time12}</strong>
-                                    <strong>${data[i].nama_agenda}</strong>
-                                </label>
-                            </div>
-                        </div>`;
-                    }
-
-                    if (agendaList) {
-                        divAgenda.innerHTML = agendaList;
-                    } else {
-                        divAgenda.innerText = 'Tidak ada agenda.';
-                    }
-                })
-                .catch(error => console.error('Error fetching agenda:', error));
-        });
     </script>
 
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->
