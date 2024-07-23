@@ -34,6 +34,19 @@
                         <div class="text-center">
                             <h1 class="h4 text-gray-900 mb-4">Reset Password</h1>
                         </div>
+
+                        <!-- Alert Notification -->
+                        <?php if(session()->getFlashdata('success')): ?>
+                            <div class="alert alert-success">
+                                <?= session()->getFlashdata('success') ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if(session()->getFlashdata('warning')): ?>
+                            <div class="alert alert-warning">
+                                <?= session()->getFlashdata('warning') ?>
+                            </div>
+                        <?php endif; ?>
+
                         <form class="user" action="/lupa-password/ubah" method="POST">
                             <div class="form-group">
                                 <input value="<?= $user['id_user']; ?>" type="hidden" name="id_user">

@@ -20,8 +20,8 @@ class lupa extends Controller
         $user = $userModel->where('username', $username)->where('email', $email)->first();
         if($user) {
             $userModel->update($user['id_user'], ['status_password' => 'reset']);
-            return redirect()->to('/login')->with('success', 'Reset password berhasil diajukan untuk disetujui admin');
-
+            session()->setFlashdata('success', 'Reset password berhasil diajukan untuk disetujui admin');
+            return redirect()->to('/login');
         } else {
             session()->setFlashdata('error', 'Username atau email tidak ditemukan');
             return redirect()->back();
@@ -48,7 +48,8 @@ class lupa extends Controller
         $confirm_password = $this->request->getVar('confirm_password');
 
         if($password != $confirm_password) {
-            return redirect()->back()->with('warning', 'Konfirmasi password tidak sama');
+            session()->setFlashdata('warning', 'Konfirmasi password tidak sama');
+            return redirect()->back();
         }
 
         $userModel = new UserModel();
@@ -59,9 +60,11 @@ class lupa extends Controller
                 'status_password' => 'done'
             ];
             $userModel->update($user['id_user'], $data);
-            return redirect()->to($from == 'admin' ?'/resetter-password' : '/login')->with('success', 'Berhasil mengubah password');
+            session()->setFlashdata('success', 'Berhasil mengubah password');
+            return redirect()->to($from == 'admin' ? '/resetter-password' : '/login');
         } else {
-            return redirect()->back()->with('warning', 'User tidak ditemukan');
+            session()->setFlashdata('warning', 'User tidak ditemukan');
+            return redirect()->back();
         }
     }
 

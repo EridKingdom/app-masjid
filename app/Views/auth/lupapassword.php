@@ -7,6 +7,19 @@
             <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Masukkan username dan email</h1>
             </div>
+
+            <!-- Alert Notification -->
+            <?php if(session()->getFlashdata('success')): ?>
+                <div class="alert alert-success">
+                    <?= session()->getFlashdata('success') ?>
+                </div>
+            <?php endif; ?>
+            <?php if(session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger">
+                    <?= session()->getFlashdata('error') ?>
+                </div>
+            <?php endif; ?>
+
             <form class="user" action="/lupa-password/submit" method="POST">
                 <div class="form-group">
                     <input type="text" class="form-control form-control-user" id="exampleInputEmail" name="username" aria-describedby="emailHelp" placeholder="Username">
