@@ -11,12 +11,14 @@ class editP extends BaseController
 {
     protected $dbdatamasjidModel;
     protected $tbkegiatanModel;
+    protected $userModel;
 
     public function __construct()
     {
         // Menginisialisasi model dalam satu konstruktor
         $this->dbdatamasjidModel = new DbDataMasjidModel();
         $this->tbkegiatanModel = new tbkegiatanModel();
+        $this->userModel = new UserModel();
     }
 
     public function index()
@@ -56,7 +58,7 @@ class editP extends BaseController
         $session = session();
         $userData = $session->get('user_data');
         $id_user = $userData['id_user'] ?? null;
-        
+
 
         if ($id_user) {
             $data = $this->request->getPost();
@@ -64,25 +66,24 @@ class editP extends BaseController
 
             // Handle file uploads
             if ($files['sampul']->isValid() && !$files['sampul']->hasMoved()) {
-                    $newName = $files['sampul']->getRandomName();
-                    $files['sampul']->move(FCPATH . 'img', $newName);
-                    $data['sampul'] = $newName;
+                $newName = $files['sampul']->getRandomName();
+                $files['sampul']->move(FCPATH . 'img', $newName);
+                $data['sampul'] = $newName;
             }
             if ($files['gambar1']->isValid() && !$files['gambar1']->hasMoved()) {
-                    $newName = $files['gambar1']->getRandomName();
-                    $files['gambar1']->move(FCPATH . 'img', $newName);
-                    $data['gambar1'] = $newName;
-
+                $newName = $files['gambar1']->getRandomName();
+                $files['gambar1']->move(FCPATH . 'img', $newName);
+                $data['gambar1'] = $newName;
             }
             if ($files['gambar2']->isValid() && !$files['gambar2']->hasMoved()) {
-                    $newName = $files['gambar2']->getRandomName();
-                    $files['gambar2']->move(FCPATH . 'img', $newName);
-                    $data['gambar2'] = $newName;
+                $newName = $files['gambar2']->getRandomName();
+                $files['gambar2']->move(FCPATH . 'img', $newName);
+                $data['gambar2'] = $newName;
             }
             if ($files['gambar3']->isValid() && !$files['gambar3']->hasMoved()) {
-                    $newName = $files['gambar3']->getRandomName();
-                    $files['gambar3']->move(FCPATH . 'img', $newName);
-                    $data['gambar3'] = $newName;
+                $newName = $files['gambar3']->getRandomName();
+                $files['gambar3']->move(FCPATH . 'img', $newName);
+                $data['gambar3'] = $newName;
             }
             // Update the database
             $currentData = $this->dbdatamasjidModel->where('id_user', $id_user);
@@ -95,14 +96,25 @@ class editP extends BaseController
     }
     public function editDataPengurus()
     {
-        return view('userprofile/editdatapengurus');
+        $session = session();
+        $userData = $session->get('user_data');
+        $id_user = $userData['id_user'] ?? null;
+
+        if ($id_user) {
+            $user = $this->userModel->find($id_user);
+            $data = [
+                'user' => $user,
+                'id_masjid' => $this->dbdatamasjidModel->where('id_user', $id_user)->first()['id'] ?? null,
+            ];
+            return view('userprofile/editdatapengurus', $data);
+        }
     }
 
-    public function  submitDataPengurus()
+    public function submitDataPengurus()
     {
         $newPassword = $this->request->getPost('new_password');
         $confirmPassword = $this->request->getPost('confirm_password');
-        if($newPassword == $confirmPassword){
+        if ($newPassword == $confirmPassword) {
             $password = $newPassword;
         } else {
             return redirect()->back()->withInput()->with('error', 'Konfirmasi password tidak sama');
@@ -130,10 +142,10 @@ class editP extends BaseController
         $session = session();
         $userData = $session->get('user_data');
         $id_user = $userData['id_user'] ?? null;
-        if($id_user) {
+        if ($id_user) {
             $user = $userModel->find($id_user);
-            if($user) {
-                if($user['password'] == $passwordLama) {
+            if ($user) {
+                if ($user['password'] == $passwordLama) {
                     $data = [
                         'id_masjid' => $idMasjid,
                         'status' => 'pengajuan',

@@ -121,62 +121,73 @@ if ($id_user) {
         <div class="row justify-content-center">
             <div class="card col-md-20 col-lg-9">
                 <div class="card-body">
-                <h3 class="text-center mb-3">Edit Data Pengurus</h3>
-                <form method="POST" action="/edit-data-pengurus/submit" enctype="multipart/form-data">
-                    <input hidden="true" name="id_masjid" value="<?= esc($id_masjid ?? ''); ?>" required>
-                 <div class="mb-3">
-                    <label for="namaMasjid" class="form-label">Nama Masjid</label>
-                    <input disabled type="text" class="form-control" id="namaMasjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
-                </div>
-                    <div class="mb-3">
-                        <label for="fotoKTP" class="form-label">Foto KTP</label>
-                        <input type="file" class="form-control" id="fotoKTP" name="gambar_ktp[]" accept="image/*" aria-label="Upload Foto KTP">
-                    </div>
-                 <div class="mb-3">
-                    <label for="namaPengurus" class="form-label">Nama Pengurus</label>
-                    <input type="text" class="form-control" id="namaPengurus" name="nama_pengurus" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                 </div>
-                <div class="mb-3">
-                    <label for="noTelp" class="form-label">No Telp</label>
-                    <input type="text" class="form-control" id="noTelp" name="no_telp" required>
-                </div>
-                <div class="mb-3">
-                    <label for="username" class="form-label">Alamat Pengurus</label>
-                    <textarea class="form-control" id="alamatPengurus" name="alamat_pengurus" rows="3" required></textarea>
-                </div>
-                <hr>
-                <h4 class="text-center">Settingan Keamanan Akun</h4>
-                <div class="mb-3">
-                    <label for="newUsername" class="form-label">Ubah Username</label>
-                    <input type="text" class="form-control" id="newUsername" name="username" required>
-                </div>
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label">Password Lama</label>
-                    <input type="password" class="form-control" id="Password" name="password_lama" required>
-                </div>
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label">Password Baru</label>
-                    <input type="password" class="form-control" id="newPassword" name="new_password" required>
-                </div>
-                <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
-                    <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Ajukan Perubahan</button>
-                    <a href="<?= base_url('/profile'); ?>" class="btn btn-primary">Batalkan</a>
-                </div>
-                </form>
+                    <h3 class="text-center mb-3">Edit Data Pengurus</h3>
+                    <?php if (session()->getFlashdata('error')) : ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?= session()->getFlashdata('error'); ?>
+                        </div>
+                    <?php endif; ?>
+                    <form id="editDataPengurusForm" method="POST" action="/edit-data-pengurus/submit" enctype="multipart/form-data">
+                        <input hidden="true" name="id_masjid" value="<?= esc($id_masjid ?? ''); ?>" required>
+                        <div class="mb-3">
+                            <label for="namaMasjid" class="form-label">Nama Masjid</label>
+                            <input disabled type="text" class="form-control" id="namaMasjid" value="<?= esc($masjid['nama_masjid'] ?? ''); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fotoKTP" class="form-label">Foto KTP</label>
+                            <input type="file" class="form-control" id="fotoKTP" name="gambar_ktp[]" accept="image/*" aria-label="Upload Foto KTP">
+                        </div>
+                        <div class="mb-3">
+                            <label for="namaPengurus" class="form-label">Nama Pengurus</label>
+                            <input type="text" class="form-control" id="namaPengurus" name="nama_pengurus" value="<?= esc($user['nama_pengurus'] ?? ''); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<?= esc($user['email'] ?? ''); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="noTelp" class="form-label">No Telp</label>
+                            <input type="text" class="form-control" id="noTelp" name="no_telp" value="<?= esc($user['no_telp'] ?? ''); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Alamat Pengurus</label>
+                            <textarea class="form-control" id="alamatPengurus" name="alamat_pengurus" rows="3" required><?= esc($user['alamat_pengurus'] ?? ''); ?></textarea>
+                        </div>
+                        <hr>
+                        <h4 class="text-center">Settingan Keamanan Akun</h4>
+                        <div class="mb-3">
+                            <label for="newUsername" class="form-label">Ubah Username</label>
+                            <input type="text" class="form-control" id="newUsername" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Password Lama</label>
+                            <input type="password" class="form-control" id="Password" name="password_lama" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Password Baru</label>
+                            <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirm_password" required>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Ajukan Perubahan</button>
+                            <a href="<?= base_url('/profile'); ?>" class="btn btn-primary">Batalkan</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-
+<script>
+    document.getElementById('editDataPengurusForm').addEventListener('submit', function(event) {
+        if (!confirm('Apakah Anda yakin ingin mengajukan perubahan?')) {
+            event.preventDefault(); // Mencegah form dari submit jika pengguna memilih "No"
+        }
+    });
+</script>
 
 <?= $this->endSection('content'); ?>
