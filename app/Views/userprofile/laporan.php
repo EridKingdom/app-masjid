@@ -300,7 +300,14 @@ if ($id_user) {
                     bottomEnd: {
                         buttons: [{
                             extend: 'print',
-                            title: 'Laporan Kas Masjid',
+                            title: `
+                                <div style="text-align: center;">
+                                    <h2><?= $nama_masjid ?></h2>
+                                    <p><?= $masjid['alamat_masjid'] ?></p>
+                                    <h1>__________________________________________________________________</h1>
+                                    <h3>Laporan Kas Masjid</h3>
+                                </div>
+                            `,
                         }]
                     }
                 },
@@ -346,8 +353,14 @@ if ($id_user) {
                     bottomEnd: {
                         buttons: [{
                             extend: 'print',
-                            title: '<h3><?= $nama_masjid ?></h3><br/><p><?= $masjid['alamat_masjid'] ?></p></br><center><h5>Laporan Zakat</h5></center>',
-
+                            title: `
+                                <div style="text-align: center;">
+                                    <h2><?= $nama_masjid ?></h2>
+                                    <p><?= $masjid['alamat_masjid'] ?></p>
+                                    <h1>__________________________________________________________________</h1>
+                                    <h3>Laporan Zakat</h3>
+                                </div>
+                            `,
                         }]
                     }
                 },
@@ -392,8 +405,14 @@ if ($id_user) {
                     bottomEnd: {
                         buttons: [{
                             extend: 'print',
-                            title: '<h3><?= $nama_masjid ?></h3><br/><p><?= $masjid['alamat_masjid'] ?></p></br><center><h5>Laporan Kegiatan Masjid</h5></center>',
-
+                            title: `
+                                <div style="text-align: center;">
+                                    <h2><?= $nama_masjid ?></h2>
+                                    <p><?= $masjid['alamat_masjid'] ?></p>
+                                    <h1>__________________________________________________________________</h1>
+                                    <h3>Laporan Kegiatan Masjid</h3>
+                                </div>
+                            `,
                         }]
                     }
                 },
@@ -438,8 +457,14 @@ if ($id_user) {
                     bottomEnd: {
                         buttons: [{
                             extend: 'print',
-                            title: '<h3><?= $nama_masjid ?></h3><br/><p><?= $masjid['alamat_masjid'] ?></p></br><center><h5>Laporan Infak Anak Yatim</h5></center>',
-
+                            title: `
+                                <div style="text-align: center;">
+                                    <h2><?= $nama_masjid ?></h2>
+                                    <p><?= $masjid['alamat_masjid'] ?></p>
+                                    <h1>__________________________________________________________________</h1>
+                                    <h3>Laporan Infak Anak Yatim</h3>
+                                </div>
+                            `,
                         }]
                     }
                 },
