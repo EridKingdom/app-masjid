@@ -16,7 +16,7 @@ class dashboardSuper extends BaseController
         $modelUser =  new UserModel();
         $modelPengajuan = new PengajuanPerubahanModel();
         $pendaftaran =  $modelUser->where('status', 'pendaftaran')->orWhere('status', 'block')->countAllResults();
-        $pengajuan =  $modelPengajuan->where('status', null)->countAllResults();
+        $pengajuan =  $modelPengajuan->where('status', 'pengajuan')->countAllResults();
         $terdaftar = $modelUser->where('status', 'diterima')->countAllResults();
         $data = [
             'pendaftaran' => $pendaftaran,
