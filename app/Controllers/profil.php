@@ -39,7 +39,6 @@ class Profil extends BaseController
                 $tb_kegiatan = $this->tbkegiatanModel->where('id_masjid', $id)->findAll();
                 $tipe_postingan_list = $this->tbkegiatanModel->getUniqueTipePostingan();
                 $agenda = $this->agendaModel->where('id_masjid', $id)->findAll();
-
                 // Logging data untuk debugging
                 log_message('debug', 'Masjid: ' . print_r($masjid, true));
                 log_message('debug', 'Kegiatan: ' . print_r($tb_kegiatan, true));
@@ -70,12 +69,33 @@ class Profil extends BaseController
     public function getAgenda($id_masjid, $date)
     {
         try {
+            $sudah = [];
+            $belum = [];
             $agenda = $this->agendaModel->where('tgl', $date)->where('id_masjid', $id_masjid)->findAll();
+            if(date("Y-m-d") > $date) {
+                $sudah = $agenda;
+            } elseif (date("Y-m-d") < $date) {
+                $belum = $agenda;
+            } elseif (date("Y-m-d") == $date) {
+                $belum = array_values(array_filter($agenda, function ($a)
+                {
+                    if (time() <= strtotime($a['jam_agenda'])) {
+                        return $a;
+                    }
+                }));
+                $sudah = array_values(array_filter($agenda, function ($b)
+                {
+                    if (time() > strtotime($b['jam_agenda'])) {
+                        return $b;
+                    }
+                }));
+            }
+
             log_message('debug', 'Agenda: ' . print_r($agenda, true)); // Logging data agenda
-            return $this->response->setJSON($agenda);
+            return $this->response->setJSON(['belum' => $belum, 'sudah' => $sudah]);
         } catch (\Exception $e) {
             log_message('error', $e->getMessage());
-            return $this->response->setJSON(['error' => $e->getMessage()]);
+            return $this->response->setJSON(['error' => $e->getTraceAsString()]);
         }
     }
 

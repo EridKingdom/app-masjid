@@ -178,9 +178,9 @@
         <div id="agenda-list">
             <h5 style="text-align: center;">Jadwal Agenda</h5>
             <p><strong>Akan Dilaksanakan</strong></p>
-            <ul id="agenda-items"></ul>
+            <ul id="todo-agenda-items"></ul>
             <p><strong>Telah Dilaksanakan</strong></p>
-            <ul id="agenda-items"></ul>
+            <ul id="done-agenda-items"></ul>
         </div>
     </div>
     <script>
@@ -192,6 +192,72 @@
         let currentYear = today.getFullYear();
         let selectedDate = null;
         let highlightedDates = [];
+
+        document.addEventListener('DOMContentLoaded', function (event) {
+            setTimeout(function() {
+                fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/`+ today.toISOString().split('T')[0])
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        let doneDivAgenda = document.getElementById('done-agenda-items');
+                        let todoDivAgenda = document.getElementById('todo-agenda-items');
+                        let doneAgendaList = "";
+                        let todoAgendaList = "";
+                        let sudah = data["sudah"];
+                        let belum = data["belum"];
+                        for (let i = 0; i < sudah.length; i++) {
+                            let time24 = sudah[i].jam_agenda;
+                            let time12 = convertTo12HourFormat(time24);
+                            doneAgendaList += `
+                        <div class="col-13 mb-3 agenda-item">
+                            <div class="kontenAgenda">
+                                <label for="checkbox">
+                                    <strong class="text-muted">${time12}</strong>
+                                    <strong>${sudah[i].nama_agenda}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                        }
+
+                        if (doneAgendaList) {
+                            doneDivAgenda.innerHTML = doneAgendaList;
+                        } else {
+                            doneDivAgenda.innerHTML = 'Tidak ada agenda.';
+                        }
+
+                        for (let i = 0; i < belum.length; i++) {
+                            let time24 = belum[i].jam_agenda;
+                            let time12 = convertTo12HourFormat(time24);
+                            todoAgendaList += `
+                        <div class="col-13 mb-3 agenda-item">
+                            <div class="kontenAgenda">
+                                <label for="checkbox">
+                                    <strong class="text-muted">${time12}</strong>
+                                    <strong>${belum[i].nama_agenda}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                        }
+
+                        if (todoAgendaList) {
+                            todoDivAgenda.innerHTML = todoAgendaList;
+                        } else {
+                            todoDivAgenda.innerHTML = 'Tidak ada agenda.';
+                        }
+
+                        function convertTo12HourFormat(time24) {
+                            const [hours, minutes] = time24.split(':');
+                            const period = hours >= 12 ? 'PM' : 'AM';
+                            const hours12 = hours % 12 || 12;
+                            return `${hours12}:${minutes} ${period}`;
+                        }
+                    })
+                    .catch(error => console.error('Error fetching agenda:', error));
+            }, 1000);
+
+        })
 
         // Fetch highlighted dates from server
         fetch(`/profil/getHighlightedDates/<?= $masjid['id'] ?>`)
@@ -275,27 +341,53 @@
             fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/${dateForm}`)
                 .then(response => response.json())
                 .then(data => {
-                    let divAgenda = document.getElementById('agenda-items');
-                    let agendaList = "";
-                    for (let i = 0; i < data.length; i++) {
-                        let time24 = data[i].jam_agenda;
+                    console.log(data);
+                    let doneDivAgenda = document.getElementById('done-agenda-items');
+                    let todoDivAgenda = document.getElementById('todo-agenda-items');
+                    let doneAgendaList = "";
+                    let todoAgendaList = "";
+                    let sudah = data["sudah"];
+                    let belum = data["belum"];
+                    for (let i = 0; i < sudah.length; i++) {
+                        let time24 = sudah[i].jam_agenda;
                         let time12 = convertTo12HourFormat(time24);
-                        agendaList += `
+                        doneAgendaList += `
                         <div class="col-13 mb-3 agenda-item" data-month="${month}" data-year="${year}">
                             <div class="kontenAgenda">
                                 <label for="checkbox">
                                     <strong class="text-muted">${time12}</strong>
-                                    <strong>${data[i].nama_agenda}</strong>
+                                    <strong>${sudah[i].nama_agenda}</strong>
                                 </label>
                             </div>
                         </div>
                     `;
                     }
 
-                    if (agendaList) {
-                        divAgenda.innerHTML = agendaList;
+                    if (doneAgendaList) {
+                        doneDivAgenda.innerHTML = doneAgendaList;
                     } else {
-                        divAgenda.innerText = 'Tidak ada agenda.';
+                        doneDivAgenda.innerHTML = 'Tidak ada agenda.';
+                    }
+
+                    for (let i = 0; i < belum.length; i++) {
+                        let time24 = belum[i].jam_agenda;
+                        let time12 = convertTo12HourFormat(time24);
+                        todoAgendaList += `
+                        <div class="col-13 mb-3 agenda-item" data-month="${month}" data-year="${year}">
+                            <div class="kontenAgenda">
+                                <label for="checkbox">
+                                    <strong class="text-muted">${time12}</strong>
+                                    <strong>${belum[i].nama_agenda}</strong>
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                    }
+
+                    if (todoAgendaList) {
+                        todoDivAgenda.innerHTML = todoAgendaList;
+                    } else {
+                        todoDivAgenda.innerHTML = 'Tidak ada agenda.';
                     }
 
                     function convertTo12HourFormat(time24) {

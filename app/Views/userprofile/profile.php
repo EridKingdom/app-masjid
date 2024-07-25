@@ -326,33 +326,58 @@ if ($id_user) {
 
                 let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + cell.innerHTML;
 
-                fetch('/get-agenda/<?= $id_masjid ?>/' + dateForm)
+                fetch('/profil/getAgenda/<?= $id_masjid ?>/' + dateForm)
                     .then(response => response.json())
                     .then(data => {
-                        // ... existing code ...
-                        console.log(data)
-                        let divAgenda = document.getElementById('agendaList');
-                        let agendaList = "";
-                        for (let i = 0; i < data.length; i++) {
-                            let time24 = data[i].jam_agenda;
+                        console.log(data);
+                        let doneDivAgenda = document.getElementById('done-agenda-items');
+                        let todoDivAgenda = document.getElementById('todo-agenda-items');
+                        let doneAgendaList = "";
+                        let todoAgendaList = "";
+                        let sudah = data["sudah"];
+                        let belum = data["belum"];
+                        for (let i = 0; i < sudah.length; i++) {
+                            let time24 = sudah[i].jam_agenda;
                             let time12 = convertTo12HourFormat(time24);
-                            agendaList += `
+                            doneAgendaList += `
                                  <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
                                     <div class="kontenAgenda">
-                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + data[i].id_agenda + `">
+                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + sudah[i].id_agenda + `">
                                         <label for="checkbox">
                                             <strong class="text-muted">` + time12 + `</strong>
-                                            <strong>` + data[i].nama_agenda + `</strong>
+                                            <strong>` + sudah[i].nama_agenda + `</strong>
                                         </label>
                                     </div>
                                 </div>
                                 `;
                         }
 
-                        if (agendaList) {
-                            divAgenda.innerHTML = agendaList;
+                        if (doneAgendaList) {
+                            doneDivAgenda.innerHTML = doneAgendaList;
                         } else {
-                            divAgenda.innerText = 'Tidak ada agenda.'
+                            doneDivAgenda.innerHTML = 'Tidak ada agenda.';
+                        }
+
+                        for (let i = 0; i < belum.length; i++) {
+                            let time24 = belum[i].jam_agenda;
+                            let time12 = convertTo12HourFormat(time24);
+                            todoAgendaList += `
+                                 <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
+                                    <div class="kontenAgenda">
+                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + belum[i].id_agenda + `">
+                                        <label for="checkbox">
+                                            <strong class="text-muted">` + time12 + `</strong>
+                                            <strong>` + belum[i].nama_agenda + `</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                                `;
+                        }
+
+                        if (todoAgendaList) {
+                            todoDivAgenda.innerHTML = todoAgendaList;
+                        } else {
+                            todoDivAgenda.innerHTML = 'Tidak ada agenda.';
                         }
 
                         function convertTo12HourFormat(time24) {
@@ -361,9 +386,6 @@ if ($id_user) {
                             const hours12 = hours % 12 || 12;
                             return `${hours12}:${minutes} ${period}`;
                         }
-                        // ... existing code ...
-
-
                     })
                     .catch(error => console.error('Error fetching agenda:', error));
             }
@@ -414,32 +436,66 @@ if ($id_user) {
                     }
                 });
 
-                fetch('/get-agenda/<?= $id_masjid ?>/' + today.toISOString().split('T')[0])
+                fetch('/profil/getAgenda/<?= $id_masjid ?>/' + today.toISOString().split('T')[0])
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data)
-                        let divAgenda = document.getElementById('agendaList');
-                        let agendaList = "";
-                        for (let i = 0; i < data.length; i++) {
-                            agendaList += `
+                        console.log(data);
+                        let doneDivAgenda = document.getElementById('done-agenda-items');
+                        let todoDivAgenda = document.getElementById('todo-agenda-items');
+                        let doneAgendaList = "";
+                        let todoAgendaList = "";
+                        let sudah = data["sudah"];
+                        let belum = data["belum"];
+                        for (let i = 0; i < sudah.length; i++) {
+                            let time24 = sudah[i].jam_agenda;
+                            let time12 = convertTo12HourFormat(time24);
+                            doneAgendaList += `
                                  <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
-                        <div class="kontenAgenda">
-                            <input type="checkbox" class="checkbox" name="checkbox" value="` + data[i].id_agenda + `">
-                            <label for="checkbox">
-                                <strong class="text-muted">` + data[i].jam_agenda + `</strong>
-                                <strong>` + data[i].nama_agenda + `</strong>
-                            </label>
-                        </div>
-                    </div>`;
+                                    <div class="kontenAgenda">
+                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + sudah[i].id_agenda + `">
+                                        <label for="checkbox">
+                                            <strong class="text-muted">` + time12 + `</strong>
+                                            <strong>` + sudah[i].nama_agenda + `</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                                `;
                         }
 
-                        if (agendaList) {
-                            divAgenda.innerHTML = agendaList;
+                        if (doneAgendaList) {
+                            doneDivAgenda.innerHTML = doneAgendaList;
                         } else {
-                            divAgenda.innerText = 'Tidak ada agenda.'
+                            doneDivAgenda.innerHTML = 'Tidak ada agenda.';
                         }
 
+                        for (let i = 0; i < belum.length; i++) {
+                            let time24 = belum[i].jam_agenda;
+                            let time12 = convertTo12HourFormat(time24);
+                            todoAgendaList +=  `
+                                 <div class="col-13 mb-3 agenda-item" data-month="6" data-year="2024">
+                                    <div class="kontenAgenda">
+                                        <input type="checkbox" class="checkbox" name="checkbox" value="` + belum[i].id_agenda + `">
+                                        <label for="checkbox">
+                                            <strong class="text-muted">` + time12 + `</strong>
+                                            <strong>` + belum[i].nama_agenda + `</strong>
+                                        </label>
+                                    </div>
+                                </div>
+                                `;
+                        }
 
+                        if (todoAgendaList) {
+                            todoDivAgenda.innerHTML = todoAgendaList;
+                        } else {
+                            todoDivAgenda.innerHTML = 'Tidak ada agenda.';
+                        }
+
+                        function convertTo12HourFormat(time24) {
+                            const [hours, minutes] = time24.split(':');
+                            const period = hours >= 12 ? 'PM' : 'AM';
+                            const hours12 = hours % 12 || 12;
+                            return `${hours12}:${minutes} ${period}`;
+                        }
                     })
                     .catch(error => console.error('Error fetching agenda:', error));
 
@@ -450,14 +506,14 @@ if ($id_user) {
         <div class="d-flex justify-content-center">
             <div class="row justify-content-center my-2" style="max-width: 290px;">
             <p><strong>Akan Dilaksanakan</strong></p>
-                <div id="agendaList">
+                <div id="todo-agenda-items">
                     Tidak ada agenda.
                 </div>
             <br>
             <br>
             <p><strong>Telah Dilaksanakan</strong></p>
             <br>
-                <div id="agendaList">
+                <div id="done-agenda-items">
                     Tidak ada agenda.
                 </div>
             </div>

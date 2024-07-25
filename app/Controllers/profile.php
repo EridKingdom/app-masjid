@@ -20,13 +20,6 @@ class profile extends BaseController
         $this->tbkegiatanModel = new tbkegiatanModel();
         $this->agendaModel = new AgendaModel();
     }
-
-    public  function getAgenda($id_masjid, $date)
-    {
-        $agenda = $this->agendaModel->where('tgl', $date)->where('id_masjid', $id_masjid)->findAll();
-        return $this->response->setJSON($agenda);
-    }
-
     public function tambahAgenda($id_masjid)
     {
         $data = $this->request->getPost();
