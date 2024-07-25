@@ -449,10 +449,17 @@ if ($id_user) {
         <h5 class="text-center">Jadwal Agenda</h5>
         <div class="d-flex justify-content-center">
             <div class="row justify-content-center my-2" style="max-width: 290px;">
+            <p><strong>Akan Dilaksanakan</strong></p>
                 <div id="agendaList">
                     Tidak ada agenda.
                 </div>
-
+            <br>
+            <br>
+            <p><strong>Telah Dilaksanakan</strong></p>
+            <br>
+                <div id="agendaList">
+                    Tidak ada agenda.
+                </div>
             </div>
         </div>
         <div class="d-flex justify-content-center my-3">

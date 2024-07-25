@@ -177,6 +177,9 @@
         </div>
         <div id="agenda-list">
             <h5 style="text-align: center;">Jadwal Agenda</h5>
+            <p><strong>Akan Dilaksanakan</strong></p>
+            <ul id="agenda-items"></ul>
+            <p><strong>Telah Dilaksanakan</strong></p>
             <ul id="agenda-items"></ul>
         </div>
     </div>
