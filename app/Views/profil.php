@@ -71,7 +71,7 @@
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
             </div>
-            <a href="<?= base_url('/donasi/' . $masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi</a>
+            <a href="<?= base_url('/donasi/' . $masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi atau Bayar Zakat</a>
         </div>
     </div>
 </section>
@@ -193,9 +193,9 @@
         let selectedDate = null;
         let highlightedDates = [];
 
-        document.addEventListener('DOMContentLoaded', function (event) {
+        document.addEventListener('DOMContentLoaded', function(event) {
             setTimeout(function() {
-                fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/`+ today.toISOString().split('T')[0])
+                fetch(`/profil/getAgenda/<?= $masjid['id'] ?>/` + today.toISOString().split('T')[0])
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
@@ -417,7 +417,6 @@
                 })
                 .catch(error => console.error('Error fetching agenda by month:', error));
         }
-
     </script>
 
     <div class="d-flex justify-content-center"> <!-- Membungkus elemen row dengan d-flex justify-content-center -->

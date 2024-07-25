@@ -8,7 +8,7 @@
             <div class="col-12 content-head">
                 <div class="mbr-section-head mb-5">
                     <h3 class="mbr-section-title mbr-fonts-style align-center mb-0 display-1">
-                        <strong>Donasi</strong>
+                        <strong>Donasi Pembanguan atau Anak Yatim</strong>
                     </h3>
 
                 </div>
@@ -67,7 +67,7 @@
                     </div>
                     <button type="submit" class="tomboldonasi">Donasi</button>
                     <div class="teksbawah-center">
-                        <a class="small" href="<?= base_url('/donasi-zakat/' . $masjid['id']); ?>">Ingin Donasi Zakat</a>
+                        <a class="small" href="<?= base_url('/donasi-zakat/' . $masjid['id']); ?>">Ingin Membayar Zakat</a>
                     </div>
                 </form>
             </div>

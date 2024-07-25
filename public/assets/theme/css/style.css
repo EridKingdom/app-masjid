@@ -1589,7 +1589,6 @@ h1 {
 .donasi-form {
   background-color: rgba(255, 255, 255, 0); /* Background bening */
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .containerdonasi {
   max-width: 600px;
