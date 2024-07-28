@@ -130,9 +130,9 @@ if ($id_user) {
     <div class="container-fluid">
         <div class="row">
             <div class="content-wrap col-16 col-md-12">
-                <h2 class="judul">verifikasi Pembayaran Zakat</h2>
+                <h2 class="judul">Verifikasi Pembayaran Zakat</h2>
                 <form class="cari" role="search" method="GET">
-                    <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Donatur" aria-label="Search">
+                    <input class="form-control me-2" type="search" id="searchInput" name="keyword" placeholder="Cari Pembayar Zakat" aria-label="Search" onkeyup="filterTable()">
                 </form>
                 <table class="table table-striped" id="verifikasi-table">
                     <thead>
@@ -164,13 +164,13 @@ if ($id_user) {
                                     </td>
                                     <td><?= 'Rp ' . number_format(esc($item['nominal']), 0, ',', '.'); ?></td>
                                     <td class="column-center">
-                                        <a class="ceklis" href="/donasi-zakat/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to verify this donation?')">✔</a>
-                                        <a class="silang" href="/donasi-zakat/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Are you sure you want to delete this donation?')">✘</a>
+                                        <a class="ceklis" href="/donasi-zakat/verifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Apakah anda ingin verifikasi ?')">✔</a>
+                                        <a class="silang" href="/donasi-zakat/unverifikasi/<?= $item['id_donasi'] ?>" onclick="return confirm('Apakah anda ingin batalkan verifikasi ?')">✘</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else : ?>
-                        
+
                             <tr>
                                 <td colspan="5">Tidak ada data donasi.</td>
                             </tr>
@@ -201,8 +201,8 @@ if ($id_user) {
                         });
                     </script>
                     <div style="text-align: right;">
-                        <a class="btn btn-primary" href="/donasi-zakat/verifikasi/all" onclick="return confirm('Are you sure you want to verify all donations?')">Verifikasi Semua</a>
-                        <a class="btn btn-primary" href="/donasi-zakat/unverifikasi/all" onclick="return confirm('Are you sure you want to delete all donations?')">Batalkan Semua</a>
+                        <a class="btn btn-primary" href="/donasi-zakat/verifikasi/all" onclick="return confirm('Apakah anda yakin verifikasi semua?')">Verifikasi Semua</a>
+                        <a class="btn btn-primary" href="/donasi-zakat/unverifikasi/all" onclick="return confirm('Apakah anda yakin hapus semua?')">Batalkan Semua</a>
                     </div>
                 </table>
                 <div style="margin-top: 20px; text-align: center;">
@@ -251,6 +251,29 @@ if ($id_user) {
             alert('<?= session()->getFlashdata('error') ?>');
         <?php endif; ?>
     });
+</script>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('verifikasi-table');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            let tdArray = tr[i].getElementsByTagName('td');
+            let found = false;
+            for (let j = 0; j < tdArray.length; j++) {
+                if (tdArray[j]) {
+                    if (tdArray[j].innerText.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = found ? '' : 'none';
+        }
+    }
 </script>
 
 <?= $this->endSection('content'); ?>
