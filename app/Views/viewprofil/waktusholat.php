@@ -105,16 +105,16 @@
             border-radius: 10px;
             color: white;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 20px;
         }
 
         .cardjam h3 {
-            font-size: 1.5em;
+            font-size: 1.3em;
             margin: 0;
         }
 
         .cardjam p {
-            font-size: 1.2em;
+            font-size: 1.5em;
             margin: 0;
         }
 

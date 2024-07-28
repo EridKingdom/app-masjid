@@ -72,6 +72,10 @@
                 <?php endif; ?>
             </div>
             <a href="<?= base_url('/donasi/' . $masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi atau Bayar Zakat</a>
+            <br>
+            <div class="teksbawah-right">
+                <a href="<?= base_url('/tutor-donasi'); ?>" class="small">Petunjuk donasi atau Pembayaran Zakat</a>
+            </div>
         </div>
     </div>
 </section>

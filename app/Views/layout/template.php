@@ -67,16 +67,14 @@
                             </li>
                         <?php endif; ?>
                     </ul>
-
                     <div class="icons-menu">
-                        <a class="iconfont-wrapper" href="#">
+                        <a class="iconfont-wrapper" href="https://wa.me/085643221255" target="_blank">
                             <span class="p-2 mbr-iconfont mobi-mbri-phone mobi-mbri"></span>
                         </a>
-                        <a class="iconfont-wrapper" href="#">
+                        <a class="iconfont-wrapper" href="mailto:rugimaku@gmail.com">
                             <span class="p-2 mbr-iconfont mobi-mbri-letter mobi-mbri"></span>
                         </a>
                     </div>
-
                 </div>
             </div>
         </nav>

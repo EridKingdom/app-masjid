@@ -99,7 +99,7 @@ $routes->get('/pengajuan-perubahan', 'Pendaftaran::pengajuan');
 $routes->post('/pengajuan-perubahan/aksi', 'Pendaftaran::perubahanDataAction');
 $routes->post('/tambah-agenda/(:num)', 'profile::tambahAgenda/$1');
 $routes->post('/hapus-agenda', 'profile::hapusAgenda');
-
+$routes->get('/tutor-donasi', 'Tutordek::index');
 
 
 
