@@ -91,4 +91,38 @@ class Pages extends BaseController
     {
         echo $slug;
     }
+
+    public function searchMasjid()
+    {
+        $keyword = $this->request->getVar('keyword');
+        $provinsi = $this->request->getVar('provinsi');
+        $kota = $this->request->getVar('kota');
+
+        $db = \Config\Database::connect();
+        $builder = $db->table('db_data_masjid');
+        $builder->select('db_data_masjid.*, user.status, user.nama_pengurus');
+        $builder->join('user', 'user.id_user = db_data_masjid.id_user');
+        $builder->where('user.status', 'diterima');
+
+        if ($keyword) {
+            $builder->like('db_data_masjid.nama_masjid', $keyword);
+        }
+        if ($provinsi) {
+            $builder->like('db_data_masjid.provinsi', $provinsi);
+        }
+        if ($kota) {
+            $builder->like('db_data_masjid.kota_kab', $kota);
+        }
+
+        $query = $builder->get();
+        $db_data_masjid = $query->getResultArray();
+
+        $data = [
+            'title' => 'Daftar Masjid',
+            'db_data_masjid' => $db_data_masjid,
+            'showSearch' => true
+        ];
+
+        return view('pencarianmasjid/tbmasjid', $data);
+    }
 }

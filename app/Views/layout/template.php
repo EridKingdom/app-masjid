@@ -58,7 +58,7 @@
                     <ul class="navbar-nav mx-auto">
                         <?php if (isset($showSearch) && $showSearch === true) : ?>
                             <li class="nav-cari">
-                                <form class="cari" role="search" action="<?= base_url('/TbMasjid'); ?>" method="GET">
+                                <form class="cari" role="search" action="<?= base_url('/Pages/searchMasjid'); ?>" method="GET">
                                     <input class="form-control me-2" type="search" name="keyword" placeholder="CARI MASJID..." aria-label="Search">
                                     <button class="btn btn-outline-success tombolcari" type="submit">
                                         <i class="fas fa-search"></i> <!-- Ikon pencarian dari Font Awesome -->
