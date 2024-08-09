@@ -68,7 +68,7 @@
                     </div>
                     <button type="submit" class="tomboldonasi">Bayar</button>
                     <div class="teksbawah-center">
-                        <a class="small" href="<?= base_url('/donasi'); ?>">Ingin Donasi Pembangunan/Anak Yatim</a>
+                        <a class="small" href="<?= base_url('/donasi/' . $masjid['id']); ?>">Ingin Donasi Pembangunan/Anak Yatim</a>
                     </div>
                 </form>
 

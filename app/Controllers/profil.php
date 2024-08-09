@@ -35,6 +35,12 @@ class Profil extends BaseController
                     throw new \CodeIgniter\Exceptions\PageNotFoundException('Masjid dengan ID ' . $id . ' tidak ditemukan');
                 }
 
+                // Mengambil data pengurus terkait
+                $pengurus = $this->UserModel
+                    ->select('nama_pengurus, no_telp, email')
+                    ->where('id_user', $masjid['id_user'])
+                    ->first();
+
                 // Mengambil kegiatan terkait
                 $tb_kegiatan = $this->tbkegiatanModel->where('id_masjid', $id)->findAll();
                 $tipe_postingan_list = $this->tbkegiatanModel->getUniqueTipePostingan();
@@ -48,6 +54,7 @@ class Profil extends BaseController
                 $data = [
                     'title' => 'Profil Masjid',
                     'masjid' => $masjid,
+                    'pengurus' => $pengurus,
                     'tb_kegiatan' => $tb_kegiatan,
                     'tipe_postingan_list' => $tipe_postingan_list,
                     'agenda' => $agenda,

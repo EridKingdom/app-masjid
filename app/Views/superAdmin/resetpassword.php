@@ -47,12 +47,12 @@
                             </div>
                         <?php endif; ?>
 
-                        <form class="user" action="/lupa-password/ubah" method="POST">
+                        <form class="user" action="/lupa-password/ubah" method="POST" id="resetPasswordForm">
                             <div class="form-group">
                                 <input value="<?= $user['id_user']; ?>" type="hidden" name="id_user">
                                 <input value="<?= $from ?>" type="hidden" name="from">
-                                <input type="password" class="form-control form-control-user mb-3" id="exampleInputPassword" name="password" placeholder="Password">
-                                <input type="password" class="form-control form-control-user mb-3" id="exampleInputPassword" name="confirm_password" placeholder="Konfirmasi Password">
+                                <input type="password" class="form-control form-control-user mb-3" id="password" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control form-control-user mb-3" id="confirm_password" name="confirm_password" placeholder="Konfirmasi Password" required>
                                 <input type="checkbox" onclick="togglePassword()"> Show Password
                             </div>
                             <div class="text-center">
@@ -80,6 +80,16 @@
                 }
             });
         }
+
+        document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password.trim() === '' || confirmPassword.trim() === '') {
+                e.preventDefault();
+                alert('Harap isi kedua field password.');
+            }
+        });
     </script>
 </body>
 

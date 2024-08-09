@@ -50,6 +50,35 @@
     </div>
 </section>
 
+<style>
+    .donation-kontainer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .donation-btn {
+        width: 230px;
+        height: 50px;
+        margin-bottom: 5px;
+    }
+
+    .donation-guide {
+        text-align: right;
+    }
+
+    .donation-guide-link {
+        color: #007bff !important; /* Warna biru */
+        text-decoration: none; /* Menghilangkan garis bawah default */
+        transition: color 0.3s ease; /* Efek transisi untuk hover */
+    }
+
+    .donation-guide-link:hover {
+        color: #0056b3; /* Warna biru yang lebih gelap saat hover */
+        text-decoration: underline; /* Menambahkan garis bawah saat hover */
+    }
+</style>
+
 <section data-bs-version="5.1" class="article11 cid-ueCj6ebiFP" id="article11-19">
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -71,13 +100,18 @@
                     <p>No data available for the given ID.</p>
                 <?php endif; ?>
             </div>
-            <a href="<?= base_url('/donasi/' . $masjid['id']); ?>" class="btn btn-primary" style="float: right; width: 170px; height: 50px;">Donasi atau Bayar Zakat</a>
-            <br>
-            <div class="teksbawah-right">
-                <a href="<?= base_url('/tutor-donasi'); ?>" class="small">Petunjuk donasi atau Pembayaran Zakat</a>
+            <div class="d-flex justify-content-end">
+                <div class="donation-kontainer">
+                    <a href="<?= base_url('/donasi/' . $masjid['id']); ?>" class="btn btn-primary donation-btn">Donasi/Bayar Zakat</a>
+                    <div class="donation-guide">
+                        <a href="<?= base_url('/tutor-donasi'); ?>" class="small">Petunjuk donasi atau Pembayaran Zakat</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
+            
 </section>
 
 <div class="menuprofil">
@@ -441,9 +475,6 @@
                                     <span class="ml-2"><?= esc($masjid['nama_masjid']); ?></span>
                                 </div>
                                 <div class="dropdown">
-                                    <button class="btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: none; padding: 0;">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li><a class="dropdown-item" href="#">Edit Postingan</a></li>
                                         <li><a class="dropdown-item" href="#">Hapus Postingan</a></li>
@@ -479,6 +510,96 @@
         </div>
     </div>
 </section>
+
+<style>
+    .get-in-touch {
+        background-color: #9fe870;
+        color: black;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .contact-info {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        margin: 10px;
+    }
+
+    .icon-wrapper {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 15px;
+    }
+
+    .icon-wrapper i {
+        font-size: 24px;
+    }
+
+    .info-content {
+        text-align: left;
+    }
+
+    .info-content h3 {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .info-content p {
+        margin: 5px 0 0;
+        font-size: 14px;
+    }
+</style>
+
+<?php if (!empty($pengurus)) : ?>
+    <div class="get-in-touch">
+        <h2 class="section-title">INFORMASI PENGURUS</h2>
+        <div class="contact-info">
+            <div class="info-item">
+                <div class="icon-wrapper">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="info-content">
+                    <h3>PENGURUS</h3>
+                    <p><?= esc($pengurus['nama_pengurus']); ?></p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="icon-wrapper">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="info-content">
+                    <h3>PHONE</h3>
+                    <p><?= esc($pengurus['no_telp']); ?></p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="icon-wrapper">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="info-content">
+                    <h3>EMAIL</h3>
+                    <p><?= esc($pengurus['email']); ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
 <script>
     document.querySelectorAll('.filter-btn').forEach(button => {

@@ -47,6 +47,12 @@ class lupa extends Controller
         $password = $this->request->getVar('password');
         $confirm_password = $this->request->getVar('confirm_password');
 
+        // Add server-side validation
+        if (empty($password) || empty($confirm_password)) {
+            session()->setFlashdata('warning', 'Harap isi perubahan password.');
+            return redirect()->back();
+        }
+
         if($password != $confirm_password) {
             session()->setFlashdata('warning', 'Konfirmasi password tidak sama');
             return redirect()->back();

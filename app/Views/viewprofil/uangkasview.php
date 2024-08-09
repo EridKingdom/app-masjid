@@ -206,8 +206,9 @@
                 </table>
                 <div id="pagination-container" class="pagination-container"></div>
                 <div style="text-align: right;">
-                    <h4>Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
-                    <!-- Added button for donation -->
+                    <h4 id="totalSaldoDisplay">Total Saldo Masjid: <span id="totalSaldo">Rp 00.00</span></h4>
+                    <h4 id="totalPemasukanDisplay" style="display: none;">Total Pemasukan: <span id="totalPemasukanValue">Rp 0</span></h4>
+                    <h4 id="totalPengeluaranDisplay" style="display: none;">Total Pengeluaran: <span id="totalPengeluaranValue">Rp 0</span></h4>
                 </div>
 
             </div>
@@ -242,6 +243,8 @@
     document.addEventListener('DOMContentLoaded', function() {
         const rows = document.getElementById('uangkas-table-body').querySelectorAll('tr');
         let totalSaldo = 0;
+        let totalPemasukan = 0;
+        let totalPengeluaran = 0;
 
         rows.forEach(row => {
             // Check if the row has the expected number of cells
@@ -252,8 +255,10 @@
 
                 if (jenisKas === 'masuk') {
                     totalSaldo += nominal;
+                    totalPemasukan += nominal;
                 } else if (jenisKas === 'keluar') {
                     totalSaldo -= nominal;
+                    totalPengeluaran += nominal;
                 }
             } else {
                 console.log('Row does not have enough cells:', row);
@@ -261,10 +266,33 @@
         });
 
         const totalSaldoElement = document.getElementById('totalSaldo');
+        const totalPemasukanElement = document.getElementById('totalPemasukan');
+        const totalPengeluaranElement = document.getElementById('totalPengeluaran');
+        const totalSelisihElement = document.getElementById('totalSelisih');
+
         if (totalSaldoElement) {
             totalSaldoElement.textContent = `Rp ${totalSaldo.toLocaleString()}`;
         } else {
             console.error('totalSaldo element not found');
+        }
+
+        if (totalPemasukanElement) {
+            totalPemasukanElement.textContent = `Rp ${totalPemasukan.toLocaleString()}`;
+        } else {
+            console.error('totalPemasukan element not found');
+        }
+
+        if (totalPengeluaranElement) {
+            totalPengeluaranElement.textContent = `Rp ${totalPengeluaran.toLocaleString()}`;
+        } else {
+            console.error('totalPengeluaran element not found');
+        }
+
+        if (totalSelisihElement) {
+            const selisih = totalPemasukan - totalPengeluaran;
+            totalSelisihElement.textContent = `Rp ${selisih.toLocaleString()}`;
+        } else {
+            console.error('totalSelisih element not found');
         }
     });
 </script>
@@ -308,6 +336,9 @@
         const filterPengeluaran = document.getElementById('filterPengeluaran');
         const filterSelisih = document.getElementById('filterSelisih');
         const rows = document.querySelectorAll('#uangkas-table-body tr');
+        const totalSaldoDisplay = document.getElementById('totalSaldoDisplay');
+        const totalPemasukanDisplay = document.getElementById('totalPemasukanDisplay');
+        const totalPengeluaranDisplay = document.getElementById('totalPengeluaranDisplay');
 
         let totalPemasukan = 0;
         let totalPengeluaran = 0;
@@ -346,8 +377,15 @@
         } else {
             console.error('totalSelisih element not found');
         }
+        function showOnlyTotal(element) {
+            totalSaldoDisplay.style.display = 'none';
+            totalPemasukanDisplay.style.display = 'none';
+            totalPengeluaranDisplay.style.display = 'none';
+            element.style.display = 'block';
+        }
 
         filterPemasukan.addEventListener('click', function() {
+            showOnlyTotal(totalPemasukanDisplay);
             rows.forEach(row => {
                 const jenisKas = row.cells[3].textContent.trim().toLowerCase();
                 row.style.display = (jenisKas === 'masuk') ? '' : 'none';
@@ -355,6 +393,7 @@
         });
 
         filterPengeluaran.addEventListener('click', function() {
+            showOnlyTotal(totalPengeluaranDisplay);
             rows.forEach(row => {
                 const jenisKas = row.cells[3].textContent.trim().toLowerCase();
                 row.style.display = (jenisKas === 'keluar') ? '' : 'none';
@@ -362,10 +401,18 @@
         });
 
         filterSelisih.addEventListener('click', function() {
+            showOnlyTotal(totalSaldoDisplay);
             rows.forEach(row => {
                 row.style.display = '';
             });
         });
+
+        // Initially show only total saldo
+        showOnlyTotal(totalSaldoDisplay);
+
+        // Update total values in the new elements
+        document.getElementById('totalPemasukanValue').textContent = document.getElementById('totalPemasukan').textContent;
+        document.getElementById('totalPengeluaranValue').textContent = document.getElementById('totalPengeluaran').textContent;
     });
 </script>
 
