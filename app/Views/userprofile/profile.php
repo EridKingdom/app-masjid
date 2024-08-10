@@ -1,6 +1,12 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
+<?php
+// Mengurutkan kegiatan berdasarkan tanggal terbaru
+usort($tb_kegiatan, function($a, $b) {
+    return strtotime($b['tgl']) - strtotime($a['tgl']);
+});
+?>
 
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
 
@@ -30,7 +36,7 @@
 
                     // Fetch the kegiatan data from the database
                     if (isset($id_masjid)) {
-                        $query_kegiatan = $db->query("SELECT * FROM tb_kegiatan WHERE id_masjid = ? ORDER BY tgl DESC", [$id_masjid]);
+                        $query_kegiatan = $db->query("SELECT * FROM tb_kegiatan WHERE id_masjid = ?", [$id_masjid]);
                         $tb_kegiatan = $query_kegiatan->getResultArray();
                     }
                 } else {
@@ -326,6 +332,9 @@ if ($id_user) {
                 console.log(`Selected date: ${cell.innerHTML} ${monthNames[month]} ${year}`);
 
                 let dateForm = year + '-' + String((month + 1)).padStart(2, '0') + '-' + cell.innerHTML;
+                
+                // Set the value of the date input field
+                document.getElementById('tanggal').value = dateForm;
 
                 fetch('/profil/getAgenda/<?= $id_masjid ?>/' + dateForm)
                     .then(response => response.json())

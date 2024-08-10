@@ -8,7 +8,7 @@
             <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Registrasi akun masjid</h1>
             </div>
-            <form class="user" method="post" action="<?= base_url('/login/registrasi'); ?>" enctype="multipart/form-data">
+            <form class="user" method="post" action="<?= base_url('/login/registrasi'); ?>" enctype="multipart/form-data" id="registrationForm">
                 <div class="form-group row">
                     <div class="form-group">
                         <input type="text" class="form-control form-control-user" name="nama_masjid" placeholder="Nama Masjid/Musholla">
@@ -91,7 +91,7 @@
                     <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
                 </div>
                 <div class="tomboldaftar">
-                    <button type="submit" class="btn btn-primary btn-user btn-block">Daftarkan</button>
+                    <button type="submit" class="btn btn-primary btn-user btn-block" onclick="return validateForm()">Daftarkan</button>
                 </div>
             </form>
             <hr>
@@ -105,5 +105,20 @@
     </div>
 
 </div>
+
+<script>
+function validateForm() {
+    const form = document.getElementById('registrationForm');
+    const inputs = form.querySelectorAll('input, textarea, select');
+    for (let input of inputs) {
+        if (input.value.trim() === '') {
+            alert('Silahkan isi semua formulir.');
+            input.focus();
+            return false;
+        }
+    }
+    return true;
+}
+</script>
 
 <?= $this->endSection(); ?>
