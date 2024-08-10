@@ -10,6 +10,11 @@ if (empty($db_data_masjid)) {
     // echo "<pre>";
     // print_r($db_data_masjid); // Debugging data masjid
     // echo "</pre>";
+
+    // Mengurutkan kegiatan berdasarkan tanggal terbaru
+    usort($kegiatanWithMasjid, function($a, $b) {
+        return strtotime($b['tgl']) - strtotime($a['tgl']);
+    });
 }
 ?>
 
@@ -217,6 +222,7 @@ if (empty($db_data_masjid)) {
                                 <h3 class="card-title mbr-fonts-style mbr-white mt-3 mb-4 display-2">
                                     <strong><?= esc($kegiatan['judul_kegiatan']); ?></strong>
                                 </h3>
+                                <p class="text-muted"><?= esc($kegiatan['tgl']); ?></p>
                                 <div class="postingan"><?= nl2br(esc($kegiatan['deskripsi_kegiatan'])); ?></div> <!-- Menggunakan nl2br untuk mengubah newline menjadi <br> -->
                             </div>
                             <div class="d-flex justify-content-end mt-2 mb-2 px-3"> <!-- Menambahkan padding horizontal -->

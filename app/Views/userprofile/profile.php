@@ -1,6 +1,7 @@
 <?= $this->extend('layout/admintemplate'); ?>
 <?= $this->Section('content'); ?>
 
+
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
 
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
@@ -29,7 +30,7 @@
 
                     // Fetch the kegiatan data from the database
                     if (isset($id_masjid)) {
-                        $query_kegiatan = $db->query("SELECT * FROM tb_kegiatan WHERE id_masjid = ?", [$id_masjid]);
+                        $query_kegiatan = $db->query("SELECT * FROM tb_kegiatan WHERE id_masjid = ? ORDER BY tgl DESC", [$id_masjid]);
                         $tb_kegiatan = $query_kegiatan->getResultArray();
                     }
                 } else {

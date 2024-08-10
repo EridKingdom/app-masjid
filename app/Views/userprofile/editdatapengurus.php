@@ -157,7 +157,7 @@ if ($id_user) {
                         <h4 class="text-center">Settingan Keamanan Akun</h4>
                         <div class="mb-3">
                             <label for="newUsername" class="form-label">Ubah Username</label>
-                            <input type="text" class="form-control" id="newUsername" name="username" required>
+                            <input type="text" class="form-control" id="newUsername" name="username" value="<?= esc($user['username'] ?? ''); ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="newPassword" class="form-label">Password Lama</label>
@@ -184,8 +184,23 @@ if ($id_user) {
 
 <script>
     document.getElementById('editDataPengurusForm').addEventListener('submit', function(event) {
-        if (!confirm('Apakah Anda yakin ingin mengajukan perubahan?')) {
-            event.preventDefault(); // Mencegah form dari submit jika pengguna memilih "No"
+        // Check if all required fields are filled
+        let form = event.target;
+        let isValid = true;
+        form.querySelectorAll('[required]').forEach(function(input) {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.classList.add('is-invalid'); // Add Bootstrap invalid class
+            } else {
+                input.classList.remove('is-invalid'); // Remove Bootstrap invalid class
+            }
+        });
+
+        if (!isValid) {
+            event.preventDefault(); // Prevent form submission
+            alert('Please fill out all required fields.');
+        } else if (!confirm('Apakah Anda yakin ingin mengajukan perubahan?')) {
+            event.preventDefault(); // Prevent form submission if user cancels
         }
     });
 </script>

@@ -1,6 +1,13 @@
 <?= $this->extend('layout/template'); ?>
 <?= $this->Section('content'); ?>
 
+<?php
+// Mengurutkan kegiatan berdasarkan tanggal terbaru
+usort($tb_kegiatan, function($a, $b) {
+    return strtotime($b['tgl']) - strtotime($a['tgl']);
+});
+?>
+
 <section data-bs-version="5.1" class="slider3 cid-ueOcGCqmku" id="slider03-1o">
     <div class="carousel slide" id="ueOkfUJH6x" data-interval="5000" data-bs-interval="5000">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
